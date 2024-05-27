@@ -1,0 +1,11 @@
+{
+    "name": "BrewMethod",
+    "alias": "brewmethod",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\BrewMethod\\Providers\\BrewMethodServiceProvider"
+    ],
+    "files": []
+}

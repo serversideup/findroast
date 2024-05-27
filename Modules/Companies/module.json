@@ -1,11 +1,11 @@
 {
-    "name": "Companies",
-    "alias": "companies",
+    "name": "Company",
+    "alias": "company",
     "description": "",
     "keywords": [],
     "priority": 0,
     "providers": [
-        "Modules\\Companies\\Providers\\CompaniesServiceProvider"
+        "Modules\\Company\\Providers\\CompanyServiceProvider"
     ],
     "files": []
 }

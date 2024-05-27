@@ -1,4 +1,7 @@
 {
-    "Companies": true,
-    "Directory": true
+    "Company": true,
+    "Directory": true,
+    "DrinkOption": true,
+    "BrewMethod": true,
+    "Amenity": true
 }

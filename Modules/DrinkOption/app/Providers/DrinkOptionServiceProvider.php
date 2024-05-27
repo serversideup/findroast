@@ -1,15 +1,15 @@
 <?php
 
-namespace Modules\Companies\Providers;
+namespace Modules\DrinkOption\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
-class CompaniesServiceProvider extends ServiceProvider
+class DrinkOptionServiceProvider extends ServiceProvider
 {
-    protected string $moduleName = 'Companies';
+    protected string $moduleName = 'DrinkOption';
 
-    protected string $moduleNameLower = 'companies';
+    protected string $moduleNameLower = 'drinkoption';
 
     /**
      * Boot the application events.

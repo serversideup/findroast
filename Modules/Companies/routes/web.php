@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Companies\Http\Controllers\CompaniesController;
+use Modules\Company\Http\Controllers\CompanyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,5 +15,5 @@ use Modules\Companies\Http\Controllers\CompaniesController;
 */
 
 Route::group([], function () {
-    Route::resource('companies', CompaniesController::class)->names('companies');
+    Route::resource('company', CompanyController::class)->names('companies');
 });

@@ -1,10 +1,12 @@
 <template>
     <div class="bg-white w-full flex items-center justify-between px-5 py-2 border-b border-gray-100 z-50 fixed">
         <div class="flex items-center justify-between mx-auto w-full max-w-screen-xxl">
-            <Link href="/">
-                <img src="/images/logos/header-logo.svg" class="h-5"/>
-            </Link>
-
+            <div class="flex items-center w-64">
+                <Link href="/">
+                    <img src="/images/logos/header-logo.svg" class="h-5"/>
+                </Link>
+            </div>
+                
             <nav class="flex justify-between items-center">
                 <ul class="flex items-center space-x-6">
                     <li v-for="link in links">
@@ -15,7 +17,7 @@
                 </ul>
             </nav>
 
-            <div v-if="!user" class="flex items-center justify-end space-x-3">
+            <div v-if="!user" class="flex items-center justify-end space-x-3 w-64">
                 <SecondaryButton @click="promptLogin()">
                     Log In
                 </SecondaryButton>
@@ -47,6 +49,10 @@ const links = [
     {
         name: 'Find Coffee',
         path: '/directory'
+    },
+    {
+        name: 'Map',
+        path: '/map'
     },
     {
         name: 'Brew Log'

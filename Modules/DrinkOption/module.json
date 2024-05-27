@@ -1,0 +1,11 @@
+{
+    "name": "DrinkOption",
+    "alias": "drinkoption",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\DrinkOption\\Providers\\DrinkOptionServiceProvider"
+    ],
+    "files": []
+}

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Inertia\Inertia;
 
 class DirectoryController extends Controller
 {
@@ -14,7 +15,7 @@ class DirectoryController extends Controller
      */
     public function index()
     {
-        return view('directory::index');
+        return Inertia::render('Directory/Index');
     }
 
     /**

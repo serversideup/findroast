@@ -1,5 +1,5 @@
 {
-    "name": "nwidart/companies",
+    "name": "roastandbrew/company",
     "description": "",
     "authors": [
         {
@@ -17,14 +17,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Modules\\Companies\\": "app/",
-            "Modules\\Companies\\Database\\Factories\\": "database/factories/",
-            "Modules\\Companies\\Database\\Seeders\\": "database/seeders/"
+            "Modules\\Company\\": "app/",
+            "Modules\\Company\\Database\\Factories\\": "database/factories/",
+            "Modules\\Company\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Modules\\Companies\\Tests\\": "tests/"
+            "Modules\\Company\\Tests\\": "tests/"
         }
     }
 }

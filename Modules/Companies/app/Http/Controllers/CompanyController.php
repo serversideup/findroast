@@ -1,20 +1,21 @@
 <?php
 
-namespace Modules\Companies\Http\Controllers;
+namespace Modules\Company\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Inertia\Inertia;
 
-class CompaniesController extends Controller
+class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('companies::index');
+        return Inertia::render('Company/Index');
     }
 
     /**
@@ -22,7 +23,7 @@ class CompaniesController extends Controller
      */
     public function create()
     {
-        return view('companies::create');
+        return view('company::create');
     }
 
     /**
@@ -38,7 +39,7 @@ class CompaniesController extends Controller
      */
     public function show($id)
     {
-        return view('companies::show');
+        return view('company::show');
     }
 
     /**
@@ -46,7 +47,7 @@ class CompaniesController extends Controller
      */
     public function edit($id)
     {
-        return view('companies::edit');
+        return view('company::edit');
     }
 
     /**
