@@ -3,5 +3,8 @@
     "Directory": true,
     "DrinkOption": true,
     "BrewMethod": true,
-    "Amenity": true
+    "Amenity": true,
+    "Platform": true,
+    "Submission": true,
+    "Profile": true
 }

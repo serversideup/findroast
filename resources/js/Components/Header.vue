@@ -31,12 +31,14 @@
             </div>
         </div>
 
+        <LoginModal/>
         <!-- <AuthLogin/>
         <AuthRegister/> -->
     </div>
 </template>
 
 <script setup>
+import LoginModal from './Auth/LoginModal.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { computed } from 'vue';
