@@ -2,8 +2,12 @@
 
 namespace Modules\Company\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 // use Modules\Company\Database\Factories\CompanyFactory;
 
 class Company extends Model
@@ -35,6 +39,21 @@ class Company extends Model
         'yelp_url',
         'added_by',
     ];
+
+    /**
+     * Set the table associated with the model.
+     */
+    protected $table = 'companies';
+
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'company_favorite', 'company_id', 'user_id');
+    }
+
+    public function cafes(): HasMany
+    {
+        return $this->hasMany(Cafe::class);
+    }
 
     // protected static function newFactory(): CompanyFactory
     // {
