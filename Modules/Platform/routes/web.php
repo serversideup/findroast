@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Platform\Http\Controllers\BrewMethodController;
 use Modules\Platform\Http\Controllers\PlatformController;
+use Modules\Platform\Http\Middleware\CanManagePlatform;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +16,14 @@ use Modules\Platform\Http\Controllers\PlatformController;
 |
 */
 
-Route::group([], function () {
-    Route::resource('platform', PlatformController::class)->names('platform');
+Route::middleware([CanManagePlatform::class])->group(function () {
+    Route::get('/platform', [PlatformController::class, 'index'])
+        ->name('platform.index');
+
+    Route::get('/platform/brew-methods', [BrewMethodController::class, 'index'])
+        ->name('platform.brew-methods.index');
+    Route::get('/platform/brew-methods/create', [BrewMethodController::class, 'create'])
+        ->name('platform.brew-methods.create');
+    Route::post('/platform/brew-methods', [BrewMethodController::class, 'store'])
+        ->name('platform.brew-methods.store');
 });

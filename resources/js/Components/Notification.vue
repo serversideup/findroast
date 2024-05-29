@@ -24,7 +24,7 @@
                                 <p
                                     class="w-0 flex-1 text-sm font-medium text-gray-900"
                                 >
-                                    Discussion archived
+                                    {{ title }}
                                 </p>
                                 <button
                                     type="button"
@@ -57,6 +57,21 @@
 <script setup>
 import { ref } from "vue";
 import { XMarkIcon } from "@heroicons/vue/20/solid";
+import { useEventBus } from '@vueuse/core';
 
-const show = ref(true);
+const show = ref(false);
+
+const notificationBus = useEventBus('roast-notification');
+
+const listener = ( event, data ) => {
+    title.value = data.title;
+    
+    show.value = true;
+
+    setTimeout(() => {
+        show.value = false;
+    }, 3000);
+}
+
+notificationBus.on(listener);
 </script>

@@ -44,4 +44,17 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    protected $appends = [
+        'avatar'
+    ];
+
+    public function getAvatarAttribute()
+    {
+        if( $this->profile_picture == '' ){
+            return 'https://www.gravatar.com/avatar/'.md5( strtolower( trim( $this->email ) ) ).'?s=200';
+        }else{
+            return '';
+        }
+    }
 }

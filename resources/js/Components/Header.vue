@@ -26,26 +26,27 @@
                     Sign Up
                 </PrimaryButton>
             </div>
-            <div v-else>
-                <!-- <AppHeaderUserMenu/> -->
+            <div v-else class="flex items-center justify-end w-64">
+                <UserMenu/>
             </div>
         </div>
 
         <LoginModal/>
-        <!-- <AuthLogin/>
-        <AuthRegister/> -->
+        <RegisterModal/>
     </div>
 </template>
 
 <script setup>
 import LoginModal from './Auth/LoginModal.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import RegisterModal from './Auth/RegisterModal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
+import UserMenu from './Header/UserMenu.vue';
 import { computed } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { useEventBus } from '@vueuse/core';
 
-const user = computed(() => usePage().props.user);
+const user = computed(() => usePage().props.auth.user);
 
 const links = [
     {
