@@ -95,7 +95,9 @@ const close = () => {
 
 const submit = () => {
     form.post(route('login'), {
-        onFinish: () => form.reset('password'),
+        onFinish: () => {
+            close();
+        },
     });
 };
 

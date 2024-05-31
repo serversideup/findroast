@@ -1,5 +1,6 @@
 <template>
-    
+    <Hero/>
+    <!-- <Features/> -->
 </template>
 
 <script>
@@ -11,5 +12,6 @@ export default {
 </script>
 
 <script setup>
-
+import Hero from './Partials/Hero.vue';
+// import Features from './Partials/Features.vue';
 </script>

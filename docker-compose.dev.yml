@@ -1,3 +1,4 @@
+name: roast
 services:
   traefik:
     restart: "no"

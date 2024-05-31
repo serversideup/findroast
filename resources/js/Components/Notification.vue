@@ -15,7 +15,7 @@
                 leave-to-class="opacity-0"
             >
                 <div
-                    v-if="show"
+                    v-show="show"
                     class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5"
                 >
                     <div class="p-4">
@@ -60,6 +60,7 @@ import { XMarkIcon } from "@heroicons/vue/20/solid";
 import { useEventBus } from '@vueuse/core';
 
 const show = ref(false);
+const title = ref('');
 
 const notificationBus = useEventBus('roast-notification');
 

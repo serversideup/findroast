@@ -3,22 +3,25 @@
 namespace Modules\Company\Models;
 
 use App\Models\User;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\Company\Database\Factories\CompanyFactory;
 
 class Company extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [
         'name',
+        'status',
         'header_image',
         'logo',
         'slug',
@@ -36,7 +39,6 @@ class Company extends Model
         'facebook_url',
         'twitter_url',
         'instagram_url',
-        'yelp_url',
         'added_by',
     ];
 
@@ -44,6 +46,20 @@ class Company extends Model
      * Set the table associated with the model.
      */
     protected $table = 'companies';
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
 
     public function favorites(): BelongsToMany
     {

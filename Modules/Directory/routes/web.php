@@ -14,6 +14,8 @@ use Modules\Directory\Http\Controllers\DirectoryController;
 |
 */
 
+use Illuminate\Support\Facades\Http;
+
 Route::group([], function () {
     Route::resource('directory', DirectoryController::class)->names('directory');
 });

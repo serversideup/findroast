@@ -2,21 +2,41 @@
 
 namespace Modules\Company\Models;
 
-use Modules\Amenity\Models\Amenity;
-use Modules\BrewMethod\Models\BrewMethod;
-use Modules\DrinkOption\Models\DrinkOption;
+use Modules\Platform\Models\Amenity;
+use Modules\Platform\Models\BrewMethod;
+use Modules\Platform\Models\DrinkOption;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 // use Modules\Cafes\Database\Factories\CafeFactory;
 
 class Cafe extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'company_id',
+        'name',
+        'status',
+        'slug',
+        'google_place_id',
+        'yelp_url',
+        'primary_image',
+        'description',
+        'address',
+        'city',
+        'state',
+        'province',
+        'territory',
+        'country',
+        'zip',
+        'latitude',
+        'longitude',
+    ];
 
     /**
      * Set the table associated with the model.

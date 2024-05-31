@@ -51,6 +51,10 @@ const user = computed(() => usePage().props.auth.user);
 const links = [
     {
         name: 'Find Coffee',
+        path: '/offerings'
+    },
+    {
+        name: 'Directory',
         path: '/directory'
     },
     {
