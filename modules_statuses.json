@@ -3,5 +3,6 @@
     "Directory": true,
     "Platform": true,
     "Submission": true,
-    "Profile": true
+    "Profile": true,
+    "Offering": true
 }

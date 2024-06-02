@@ -4,6 +4,7 @@ namespace Modules\Company\Http\Actions;
 
 use Modules\Company\Http\Requests\StoreCompanyRequest;
 use Modules\Company\Models\Company;
+use Modules\Offering\Models\OfferingImportMap;
 
 class StoreCompany
 {
@@ -13,6 +14,7 @@ class StoreCompany
 
         $this->setLogo( $request, $company );
         $this->setHeaderImage( $request, $company );
+        $this->addOfferingImportMap( $request, $company );
     }
 
     private function persistCompany( $request )
@@ -70,5 +72,15 @@ class StoreCompany
                 'logo' => '/storage/'.$path,
             ]);
         }
+    }
+
+    private function addOfferingImportMap( $request, $company )
+    {
+        OfferingImportMap::create([
+            'company_id' => $company->id,
+            'enabled' => $request->input('offerings.enabled'),
+            'api_url' => $request->input('offerings.api_url'),
+            'day' => $request->input('offerings.day'),
+        ]);
     }
 }

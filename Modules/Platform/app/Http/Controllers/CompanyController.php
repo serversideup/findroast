@@ -36,7 +36,8 @@ class CompanyController extends Controller
 
     public function edit( Request $request, Company $company )
     {
-        // $company = ( new ShowCompany( $request, $company ) )->execute();
+        $company = ( new ShowCompany( $company ) )
+            ->execute(true);
 
         return Inertia::render('Platform/Companies/Edit', [
             'company' => $company,
@@ -45,7 +46,8 @@ class CompanyController extends Controller
 
     public function show( Request $request, Company $company )
     {
-        $company = ( new ShowCompany( $company ) )->execute();
+        $company = ( new ShowCompany( $company ) )
+            ->execute(true);
 
         return Inertia::render('Platform/Companies/Show', [
             'company' => $company,

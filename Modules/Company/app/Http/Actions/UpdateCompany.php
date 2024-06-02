@@ -4,6 +4,7 @@ namespace Modules\Company\Http\Actions;
 
 use Illuminate\Http\Request;
 use Modules\Company\Models\Company;
+use Modules\Offering\Models\OfferingImportMap;
 
 class UpdateCompany
 {
@@ -12,6 +13,7 @@ class UpdateCompany
         $this->updateCompany($request, $company);
         $this->setLogo( $request, $company );
         $this->setHeaderImage( $request, $company );
+        $this->updateOfferingImportMap( $request, $company );
     }
 
     private function updateCompany( $request, $company )
@@ -67,5 +69,16 @@ class UpdateCompany
                 'logo' => '/storage/'.$path,
             ]);
         }
+    }
+
+    private function updateOfferingImportMap( $request, $company )
+    {
+        OfferingImportMap::updateOrCreate([
+            'company_id' => $company->id,
+        ], [
+            'enabled' => $request->input('offerings.enabled'),
+            'api_url' => $request->input('offerings.api_url'),
+            'day' => $request->input('offerings.day'),
+        ]);
     }
 }

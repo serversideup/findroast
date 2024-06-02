@@ -11,7 +11,7 @@
         ]">
     </AdminHeader>
 
-    <div class="max-w-screen-xl mx-auto mt-5">
+    <div class="max-w-screen-xl mx-auto mt-5 lg:px-8">
         <form @submit.prevent="submit">
             <div class="grid grid-cols-2 gap-x-8">
                 <div class="space-y-12">
@@ -290,6 +290,55 @@
                     </div>
                 </div>
             </div>
+            <div class="grid grid-cols-2 gap-x-8 pt-12">
+                <div class="border-b border-gray-900/10 pb-12">
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">
+                        Offerings Information
+                    </h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">
+                       Settings to control how the company's roasts are synced to the offerings directory.
+                    </p>
+
+                    <div
+                        class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+                        <div class="sm:col-span-4">
+                            <InputLabel value="Enabled"/>
+                            <select
+                                v-model="form.offerings.enabled"
+                                class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
+                                <option value=""></option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+
+                        <div class="sm:col-span-4">
+                            <InputLabel value="API URL"/>
+                            <TextInput
+                                class="mt-1 block w-full"
+                                id="name"
+                                v-model="form.offerings.api_url"/>
+                        </div>
+
+                        <div class="sm:col-span-4">
+                            <InputLabel value="Day to Sync"/>
+                            <select
+                                v-model="form.offerings.day"
+                                class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
+                                <option value=""></option>
+                                <option value="sunday">Sunday</option>
+                                <option value="monday">Monday</option>
+                                <option value="tuesday">Tuesday</option>
+                                <option value="wednesday">Wednesday</option>
+                                <option value="thursday">Thursday</option>
+                                <option value="friday">Friday</option>
+                                <option value="saturday">Saturday</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="my-6 flex items-center justify-end gap-x-3">
                 <SecondaryLink :href="'/platform/companies'">
@@ -347,7 +396,12 @@ const form = useForm({
     country: company.value.country,
     facebook_url: company.value.facebook_url,
     instagram_url: company.value.instagram_url,
-    twitter_url: company.value.twitter_url
+    twitter_url: company.value.twitter_url,
+    offerings: {
+        enabled: company.value.offering_import_map?.enabled,
+        api_url: company.value.offering_import_map?.api_url,
+        day: company.value.offering_import_map?.day
+    }
 });
 
 const countries = useCountries();

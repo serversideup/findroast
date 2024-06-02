@@ -13,8 +13,12 @@ class ShowCompany
         $this->company = $company;
     }
 
-    public function execute()
+    public function execute( $admin = false )
     {
+        if( $admin ) {
+            $this->company->load('offeringImportMap');
+        }
+
         return $this->company;
     }
 }

@@ -18,7 +18,7 @@
         </template>
     </AdminHeader>
 
-    <div class="max-w-screen-xl mx-auto mt-5">
+    <div class="max-w-screen-xl mx-auto mt-5 lg:px-8">
         <div class="max-w-screen-md">
             <div class="px-4 sm:px-0">
                 <h3 class="text-base font-semibold leading-7 text-gray-900">
@@ -188,6 +188,50 @@
                         <dd
                             class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {{ company.twitter_url }}
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+
+        <hr/>
+        
+        <div class="max-w-screen-md mt-8">
+            <div class="px-4 sm:px-0">
+                <h3 class="text-base font-semibold leading-7 text-gray-900">
+                    Offerings Import Settings
+                </h3>
+                <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
+                    Is this company set up to import offerings?
+                </p>
+            </div>
+            <div class="mt-6 border-t border-gray-100">
+                <dl class="divide-y divide-gray-100">
+                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <dt class="text-sm font-medium leading-6 text-gray-900">
+                            Enabled
+                        </dt>
+                        <dd
+                            class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                            {{ company.offering_import_map?.enabled ? 'Yes' : 'No' }}
+                        </dd>
+                    </div>
+                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <dt class="text-sm font-medium leading-6 text-gray-900">
+                            API URL
+                        </dt>
+                        <dd
+                            class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                            {{ company.offering_import_map?.api_url }}
+                        </dd>
+                    </div>
+                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <dt class="text-sm font-medium leading-6 text-gray-900">
+                            Sync Day
+                        </dt>
+                        <dd
+                            class="mt-1 capitalize text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                            {{ company.offering_import_map?.day }}
                         </dd>
                     </div>
                 </dl>
