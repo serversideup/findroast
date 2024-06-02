@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 use Modules\Platform\Http\Controllers\AmenityController;
 use Modules\Platform\Http\Controllers\BrewMethodController;
+use Modules\Platform\Http\Controllers\CafesController;
 use Modules\Platform\Http\Controllers\CompanyController;
 use Modules\Platform\Http\Controllers\DrinkOptionController;
 use Modules\Platform\Http\Controllers\PlatformController;
@@ -19,7 +21,7 @@ use Modules\Platform\Http\Middleware\CanManagePlatform;
 |
 */
 
-Route::middleware([CanManagePlatform::class])->group(function () {
+Route::middleware([Authenticate::class, CanManagePlatform::class])->group(function () {
     Route::get('/platform', [PlatformController::class, 'index'])
         ->name('platform.index');
 
@@ -68,4 +70,17 @@ Route::middleware([CanManagePlatform::class])->group(function () {
         ->name('platform.companies.edit');
     Route::put('/platform/companies/{company}', [CompanyController::class, 'update'])
         ->name('platform.companies.update');
+
+    Route::get('/platform/companies/{company}/cafes', [CafesController::class, 'index'])
+        ->name('platform.companies.cafes.index');
+    Route::get('/platform/companies/{company}/cafes/create', [CafesController::class, 'create'])
+        ->name('platform.companies.cafes.create');
+    Route::post('/platform/companies/{company}/cafes', [CafesController::class, 'store'])
+        ->name('platform.companies.cafes.store');
+    Route::get('/platform/companies/{company}/cafes/{cafe}', [CafesController::class, 'show'])
+        ->name('platform.companies.cafes.show');
+    Route::get('/platform/companies/{company}/cafes/{cafe}/edit', [CafesController::class, 'edit'])
+        ->name('platform.companies.cafes.edit');
+    Route::put('/platform/companies/{company}/cafes/{cafe}', [CafesController::class, 'update'])
+        ->name('platform.companies.cafes.update');
 });

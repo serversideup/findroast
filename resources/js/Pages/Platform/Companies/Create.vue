@@ -11,160 +11,163 @@
     </AdminHeader>
 
     <div class="max-w-screen-xl mx-auto mt-5">
-        <form @submit.prevent="submit" class="max-w-screen-md">
-            <div class="space-y-12">
-                <div class="border-b border-gray-900/10 pb-12">
-                    <h2 class="text-base font-semibold leading-7 text-gray-900">
-                        Profile
-                    </h2>
-                    <p class="mt-1 text-sm leading-6 text-gray-600">
-                        Basic information regarding the company.
-                    </p>
+        <form @submit.prevent="submit">
+            <div class="grid grid-cols-2 gap-x-8">
+                <div class="space-y-12">
+                    <div class="border-b border-gray-900/10 pb-12">
+                        <h2 class="text-base font-semibold leading-7 text-gray-900">
+                            Profile
+                        </h2>
+                        <p class="mt-1 text-sm leading-6 text-gray-600">
+                            Basic information regarding the company.
+                        </p>
 
-                    <div
-                        class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                        <div class="sm:col-span-4">
-                            <InputLabel value="Status"/>
-                            <select
-                                v-model="form.status"
-                                class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
-                                <option value="draft">Draft</option>
-                                <option value="active">Active</option>
-                            </select>
-                        </div>
-
-                        <div class="sm:col-span-4">
-                            <InputLabel value="Company Name"/>
-                            <TextInput
-                                class="mt-1 block w-full"
-                                id="name"
-                                v-model="form.name"
-                                required
-                                autofocus/>
-                        </div>
-
-                        <div class="col-span-full">
-                            <InputLabel value="Description"/>
-                            <div class="mt-2">
-                                <TextAreaInput
-                                    class="block w-full"
-                                    id="description"
-                                    v-model="form.description"/>
+                        <div
+                            class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                            <div class="sm:col-span-4">
+                                <InputLabel value="Status"/>
+                                <select
+                                    v-model="form.status"
+                                    class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
+                                    <option value="draft">Draft</option>
+                                    <option value="active">Active</option>
+                                </select>
                             </div>
-                            <p class="mt-3 text-sm leading-6 text-gray-600">
-                                Write a short description for the company.
-                            </p>
-                        </div>
 
-                        <div class="sm:col-span-4">
-                            <InputLabel value="Roasts their own coffee"/>
-                            <select
-                                v-model="form.roaster"
-                                class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
-                            </select>
-                        </div>
-
-                        <div class="sm:col-span-4">
-                            <InputLabel value="Offers a subscription"/>
-                            <select
-                                v-model="form.subscription"
-                                class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
-                            </select>
-                        </div>
-
-                        <div class="col-span-full">
-                            <InputLabel value="Logo"/>
-                            <div class="mt-2 flex items-center gap-x-3">
-                                <input
-                                    class="absolute -top-[5000px]" 
-                                    @change="handleLogoChange( $event )" 
-                                    accept="image/*" 
-                                    id="company-logo" 
-                                    type="file"
-                                    ref="logoFile"/>
-
-                                <div 
-                                    class="w-12 h-12 flex items-center justify-center"
-                                    v-if="logoState == 'company-logo'">
-                                        <img :src="company.logo"/>
-                                </div>
-
-                                <div 
-                                    class="w-12 h-12 flex items-center justify-center"
-                                    v-if="logoState == 'selected-logo'">
-                                        <img :src="logoPreview"/>
-                                </div>
-
-                                <UserCircleIcon
-                                    class="h-12 w-12 text-gray-300"
-                                    aria-hidden="true"
-                                    v-show="logoState == 'no-logo'" />
-
-                                <button
-                                    type="button"
-                                    class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                                    @click="selectLogo()">
-                                    Change
-                                </button>
+                            <div class="sm:col-span-4">
+                                <InputLabel value="Company Name"/>
+                                <TextInput
+                                    class="mt-1 block w-full"
+                                    id="name"
+                                    v-model="form.name"
+                                    required
+                                    autofocus/>
                             </div>
-                        </div>
 
-                        <div class="col-span-full">
-                            <InputLabel value="Cover Photo"/>
-                            <div
-                                class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                                <div class="text-center">
-                                    <PhotoIcon
-                                        class="mx-auto h-12 w-12 text-gray-300"
-                                        aria-hidden="true" />
-                                    <div
-                                        class="mt-4 flex text-sm leading-6 text-gray-600">
-                                        <label
-                                            for="company-header-image"
-                                            class="relative cursor-pointer rounded-md bg-white font-semibold text-gray-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-gray-600 focus-within:ring-offset-2 hover:text-gray-500">
-                                            <span>Upload a file</span>
-                                            <input
-                                                @change="handleHeaderChange( $event )"
-                                                accept="image/*" 
-                                                id="company-header-image"
-                                                name="company-header-image"
-                                                type="file"
-                                                class="sr-only"
-                                                ref="headerFile" />
-                                        </label>
-                                        <p class="pl-1">or drag and drop</p>
+                            <div class="col-span-full">
+                                <InputLabel value="Description"/>
+                                <div class="mt-2">
+                                    <TextAreaInput
+                                        class="block w-full"
+                                        id="description"
+                                        v-model="form.description"/>
+                                </div>
+                                <p class="mt-3 text-sm leading-6 text-gray-600">
+                                    Write a short description for the company.
+                                </p>
+                            </div>
+
+                            <div class="sm:col-span-4">
+                                <InputLabel value="Roasts their own coffee"/>
+                                <select
+                                    v-model="form.roaster"
+                                    class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+
+                            <div class="sm:col-span-4">
+                                <InputLabel value="Offers a subscription"/>
+                                <select
+                                    v-model="form.subscription"
+                                    class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+
+                            <div class="col-span-full">
+                                <InputLabel value="Logo"/>
+                                <div class="mt-2 flex items-center gap-x-3">
+                                    <input
+                                        class="absolute -top-[5000px]" 
+                                        @change="handleLogoChange( $event )" 
+                                        accept="image/*" 
+                                        id="company-logo" 
+                                        type="file"
+                                        ref="logoFile"/>
+
+                                    <div 
+                                        class="w-12 h-12 flex items-center justify-center"
+                                        v-if="logoState == 'company-logo'">
+                                            <img :src="company.logo"/>
                                     </div>
-                                    <p class="text-xs leading-5 text-gray-600">
-                                        PNG, JPG, GIF up to 10MB
-                                    </p>
+
+                                    <div 
+                                        class="w-12 h-12 flex items-center justify-center"
+                                        v-if="logoState == 'selected-logo'">
+                                            <img :src="logoPreview"/>
+                                    </div>
+
+                                    <UserCircleIcon
+                                        class="h-12 w-12 text-gray-300"
+                                        aria-hidden="true"
+                                        v-show="logoState == 'no-logo'" />
+
+                                    <button
+                                        type="button"
+                                        class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                        @click="selectLogo()">
+                                        Change
+                                    </button>
                                 </div>
                             </div>
 
-                            <div v-if="headerState == 'company-header'" class="mt-2 h-[190px] rounded-lg"
-                                :style="{
-                                    'background-image': 'url('+company.header_image+')',
-                                    'background-size': 'cover',
-                                    'background-position': 'center'
-                                }">
+                            <div class="col-span-full">
+                                <InputLabel value="Cover Photo"/>
+                                <div
+                                    class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                    <div class="text-center">
+                                        <PhotoIcon
+                                            class="mx-auto h-12 w-12 text-gray-300"
+                                            aria-hidden="true" />
+                                        <div
+                                            class="mt-4 flex text-sm leading-6 text-gray-600">
+                                            <label
+                                                for="company-header-image"
+                                                class="relative cursor-pointer rounded-md bg-white font-semibold text-gray-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-gray-600 focus-within:ring-offset-2 hover:text-gray-500">
+                                                <span>Upload a file</span>
+                                                <input
+                                                    @change="handleHeaderChange( $event )"
+                                                    accept="image/*" 
+                                                    id="company-header-image"
+                                                    name="company-header-image"
+                                                    type="file"
+                                                    class="sr-only"
+                                                    ref="headerFile" />
+                                            </label>
+                                            <p class="pl-1">or drag and drop</p>
+                                        </div>
+                                        <p class="text-xs leading-5 text-gray-600">
+                                            PNG, JPG, GIF up to 10MB
+                                        </p>
+                                    </div>
+                                </div>
 
-                            </div>
+                                <div v-if="headerState == 'company-header'" class="mt-2 h-[190px] rounded-lg"
+                                    :style="{
+                                        'background-image': 'url('+company.header_image+')',
+                                        'background-size': 'cover',
+                                        'background-position': 'center'
+                                    }">
 
-                            <div v-if="headerState == 'selected-header'" class="mt-2 h-[190px] rounded-lg"
-                                :style="{
-                                    'background-image': 'url('+headerPreview+')',
-                                    'background-size': 'cover',
-                                    'background-position': 'center'
-                                }">
+                                </div>
 
+                                <div v-if="headerState == 'selected-header'" class="mt-2 h-[190px] rounded-lg"
+                                    :style="{
+                                        'background-image': 'url('+headerPreview+')',
+                                        'background-size': 'cover',
+                                        'background-position': 'center'
+                                    }">
+
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
+            </div>
+            <div class="grid grid-cols-2 gap-x-8 pt-12">
                 <div class="border-b border-gray-900/10 pb-12">
                     <h2 class="text-base font-semibold leading-7 text-gray-900">
                         Location Information
@@ -239,7 +242,8 @@
                         </div>
                     </div>
                 </div>
-
+            </div>
+            <div class="grid grid-cols-2 gap-x-8 pt-12">
                 <div class="border-b border-gray-900/10 pb-12">
                     <h2 class="text-base font-semibold leading-7 text-gray-900">
                         Online presence

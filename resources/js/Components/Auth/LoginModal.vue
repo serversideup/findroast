@@ -95,7 +95,7 @@ const close = () => {
 
 const submit = () => {
     form.post(route('login'), {
-        onFinish: () => {
+        onSuccess: () => {
             close();
         },
     });

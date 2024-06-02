@@ -6,297 +6,302 @@
         :breadcrumbs="[
             { label: 'Platform Settings', to: '/platform' },
             { label: 'Companies', to: '/platform/companies' },
-            { label: company.name, to: '#' }
+            { label: company.name, to: '/platform/companies/'+company.id },
+            { label: 'Edit '+company.name, to: '#' }
         ]">
     </AdminHeader>
 
-<div class="max-w-screen-xl mx-auto mt-5">
-    <form @submit.prevent="submit" class="max-w-screen-md">
-        <div class="space-y-12">
-            <div class="border-b border-gray-900/10 pb-12">
-                <h2 class="text-base font-semibold leading-7 text-gray-900">
-                    Profile
-                </h2>
-                <p class="mt-1 text-sm leading-6 text-gray-600">
-                    Basic information regarding the company.
-                </p>
-
-                <div
-                    class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div class="sm:col-span-4">
-                        <InputLabel value="Status"/>
-                        <select
-                            v-model="form.status"
-                            class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
-                            <option value="draft">Draft</option>
-                            <option value="active">Active</option>
-                        </select>
-                    </div>
-
-                    <div class="sm:col-span-4">
-                        <InputLabel value="Company Name"/>
-                        <TextInput
-                            class="mt-1 block w-full"
-                            id="name"
-                            v-model="form.name"
-                            required
-                            autofocus/>
-                    </div>
-
-                    <div class="col-span-full">
-                        <InputLabel value="Description"/>
-                        <div class="mt-2">
-                            <TextAreaInput
-                                class="block w-full"
-                                id="description"
-                                v-model="form.description"/>
-                        </div>
-                        <p class="mt-3 text-sm leading-6 text-gray-600">
-                            Write a short description for the company.
+    <div class="max-w-screen-xl mx-auto mt-5">
+        <form @submit.prevent="submit">
+            <div class="grid grid-cols-2 gap-x-8">
+                <div class="space-y-12">
+                    <div class="border-b border-gray-900/10 pb-12">
+                        <h2 class="text-base font-semibold leading-7 text-gray-900">
+                            Profile
+                        </h2>
+                        <p class="mt-1 text-sm leading-6 text-gray-600">
+                            Basic information regarding the company.
                         </p>
-                    </div>
 
-                    <div class="sm:col-span-4">
-                        <InputLabel value="Roasts their own coffee"/>
-                        <select
-                            v-model="form.roaster"
-                            class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
-                            <option value="1">Yes</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-
-                    <div class="sm:col-span-4">
-                        <InputLabel value="Offers a subscription"/>
-                        <select
-                            v-model="form.subscription"
-                            class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
-                            <option value="1">Yes</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-
-                    <div class="col-span-full">
-                        <InputLabel value="Logo"/>
-                        <div class="mt-2 flex items-center gap-x-3">
-                            <input
-                                class="absolute -top-[5000px]" 
-                                @change="handleLogoChange( $event )" 
-                                accept="image/*" 
-                                id="company-logo" 
-                                type="file"
-                                ref="logoFile"/>
-
-                            <div 
-                                class="w-12 h-12 flex items-center justify-center"
-                                v-if="logoState == 'company-logo'">
-                                    <img :src="company.logo"/>
-                            </div>
-
-                            <div 
-                                class="w-12 h-12 flex items-center justify-center"
-                                v-if="logoState == 'selected-logo'">
-                                    <img :src="logoPreview"/>
-                            </div>
-
-                            <UserCircleIcon
-                                class="h-12 w-12 text-gray-300"
-                                aria-hidden="true"
-                                v-show="logoState == 'no-logo'" />
-
-                            <button
-                                type="button"
-                                class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                                @click="selectLogo()">
-                                Change
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="col-span-full">
-                        <InputLabel value="Cover Photo"/>
                         <div
-                            class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                            <div class="text-center">
-                                <PhotoIcon
-                                    class="mx-auto h-12 w-12 text-gray-300"
-                                    aria-hidden="true" />
-                                <div
-                                    class="mt-4 flex text-sm leading-6 text-gray-600">
-                                    <label
-                                        for="company-header-image"
-                                        class="relative cursor-pointer rounded-md bg-white font-semibold text-gray-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-gray-600 focus-within:ring-offset-2 hover:text-gray-500">
-                                        <span>Upload a file</span>
-                                        <input
-                                            @change="handleHeaderChange( $event )"
-                                            accept="image/*" 
-                                            id="company-header-image"
-                                            name="company-header-image"
-                                            type="file"
-                                            class="sr-only"
-                                            ref="headerFile" />
-                                    </label>
-                                    <p class="pl-1">or drag and drop</p>
+                            class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                            <div class="sm:col-span-4">
+                                <InputLabel value="Status"/>
+                                <select
+                                    v-model="form.status"
+                                    class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
+                                    <option value="draft">Draft</option>
+                                    <option value="active">Active</option>
+                                </select>
+                            </div>
+
+                            <div class="sm:col-span-4">
+                                <InputLabel value="Company Name"/>
+                                <TextInput
+                                    class="mt-1 block w-full"
+                                    id="name"
+                                    v-model="form.name"
+                                    required
+                                    autofocus/>
+                            </div>
+
+                            <div class="col-span-full">
+                                <InputLabel value="Description"/>
+                                <div class="mt-2">
+                                    <TextAreaInput
+                                        class="block w-full"
+                                        id="description"
+                                        v-model="form.description"/>
                                 </div>
-                                <p class="text-xs leading-5 text-gray-600">
-                                    PNG, JPG, GIF up to 10MB
+                                <p class="mt-3 text-sm leading-6 text-gray-600">
+                                    Write a short description for the company.
                                 </p>
                             </div>
-                        </div>
 
-                        <div v-if="headerState == 'company-header'" class="mt-2 h-[190px] rounded-lg"
-                            :style="{
-                                'background-image': 'url('+company.header_image+')',
-                                'background-size': 'cover',
-                                'background-position': 'center'
-                            }">
+                            <div class="sm:col-span-4">
+                                <InputLabel value="Roasts their own coffee"/>
+                                <select
+                                    v-model="form.roaster"
+                                    class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
 
-                        </div>
+                            <div class="sm:col-span-4">
+                                <InputLabel value="Offers a subscription"/>
+                                <select
+                                    v-model="form.subscription"
+                                    class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
 
-                        <div v-if="headerState == 'selected-header'" class="mt-2 h-[190px] rounded-lg"
-                            :style="{
-                                'background-image': 'url('+headerPreview+')',
-                                'background-size': 'cover',
-                                'background-position': 'center'
-                            }">
+                            <div class="col-span-full">
+                                <InputLabel value="Logo"/>
+                                <div class="mt-2 flex items-center gap-x-3">
+                                    <input
+                                        class="absolute -top-[5000px]" 
+                                        @change="handleLogoChange( $event )" 
+                                        accept="image/*" 
+                                        id="company-logo" 
+                                        type="file"
+                                        ref="logoFile"/>
 
+                                    <div 
+                                        class="w-12 h-12 flex items-center justify-center"
+                                        v-if="logoState == 'company-logo'">
+                                            <img :src="company.logo"/>
+                                    </div>
+
+                                    <div 
+                                        class="w-12 h-12 flex items-center justify-center"
+                                        v-if="logoState == 'selected-logo'">
+                                            <img :src="logoPreview"/>
+                                    </div>
+
+                                    <UserCircleIcon
+                                        class="h-12 w-12 text-gray-300"
+                                        aria-hidden="true"
+                                        v-show="logoState == 'no-logo'" />
+
+                                    <button
+                                        type="button"
+                                        class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                        @click="selectLogo()">
+                                        Change
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                <InputLabel value="Cover Photo"/>
+                                <div
+                                    class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                    <div class="text-center">
+                                        <PhotoIcon
+                                            class="mx-auto h-12 w-12 text-gray-300"
+                                            aria-hidden="true" />
+                                        <div
+                                            class="mt-4 flex text-sm leading-6 text-gray-600">
+                                            <label
+                                                for="company-header-image"
+                                                class="relative cursor-pointer rounded-md bg-white font-semibold text-gray-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-gray-600 focus-within:ring-offset-2 hover:text-gray-500">
+                                                <span>Upload a file</span>
+                                                <input
+                                                    @change="handleHeaderChange( $event )"
+                                                    accept="image/*" 
+                                                    id="company-header-image"
+                                                    name="company-header-image"
+                                                    type="file"
+                                                    class="sr-only"
+                                                    ref="headerFile" />
+                                            </label>
+                                            <p class="pl-1">or drag and drop</p>
+                                        </div>
+                                        <p class="text-xs leading-5 text-gray-600">
+                                            PNG, JPG, GIF up to 10MB
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div v-if="headerState == 'company-header'" class="mt-2 h-[190px] rounded-lg"
+                                    :style="{
+                                        'background-image': 'url('+company.header_image+')',
+                                        'background-size': 'cover',
+                                        'background-position': 'center'
+                                    }">
+
+                                </div>
+
+                                <div v-if="headerState == 'selected-header'" class="mt-2 h-[190px] rounded-lg"
+                                    :style="{
+                                        'background-image': 'url('+headerPreview+')',
+                                        'background-size': 'cover',
+                                        'background-position': 'center'
+                                    }">
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="grid grid-cols-2 gap-x-8 pt-12">
+                <div class="border-b border-gray-900/10 pb-12">
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">
+                        Location Information
+                    </h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">
+                        Where is this company Located?
+                    </p>
 
-            <div class="border-b border-gray-900/10 pb-12">
-                <h2 class="text-base font-semibold leading-7 text-gray-900">
-                    Location Information
-                </h2>
-                <p class="mt-1 text-sm leading-6 text-gray-600">
-                    Where is this company Located?
-                </p>
+                    <div
+                        class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                        <div class="sm:col-span-3">
+                            <InputLabel value="Country"/>
+            
+                            <select
+                                v-model="form.country"
+                                class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
+                                <option value=""></option>
+                                <option v-for="country in countries"
+                                    :key="country.abbr"
+                                    :value="country.abbr"
+                                    v-text="country.name"></option>
+                            </select>
+                        </div>
 
-                <div
-                    class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div class="sm:col-span-3">
-                        <InputLabel value="Country"/>
-        
-                        <select
-                            v-model="form.country"
-                            class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
-                            <option value=""></option>
-                            <option v-for="country in countries"
-                                :key="country.abbr"
-                                :value="country.abbr"
-                                v-text="country.name"></option>
-                        </select>
+                        <div class="sm:col-span-2 sm:col-start-1">
+                            <InputLabel value="City"/>
+                            <div class="mt-1">
+                                <TextInput
+                                    class="block w-full"
+                                    id="city"
+                                    v-model="form.city"/>
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-2" v-if="form.country == 'US'">
+                            <InputLabel value="State"/>
+                            <select
+                                v-model="form.state"
+                                class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
+                                <option value=""></option>
+                                <option v-for="state in states"
+                                    :key="state.abbr"
+                                    :value="state.abbr"
+                                    v-text="state.name"></option>
+                            </select>
+                        </div>
+
+                        <div class="sm:col-span-2" v-if="form.country == 'AU'">
+                            <InputLabel value="Territory"/>
+                            <select
+                                v-model="form.territory"
+                                class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
+                                <option value=""></option>
+                                <option v-for="territory in territories"
+                                    :key="territory.abbr"
+                                    :value="territory.abbr"
+                                    v-text="territory.name"></option>
+                            </select>
+                        </div>
+
+                        <div class="sm:col-span-2" v-if="form.country == 'CA'">
+                            <InputLabel value="Province"/>
+                            <select
+                                v-model="form.province"
+                                class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
+                                <option value=""></option>
+                                <option v-for="province in provinces"
+                                    :key="province.abbr"
+                                    :value="province.abbr"
+                                    v-text="province.name"></option>
+                            </select>
+                        </div>
                     </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-x-8 pt-12">
+                <div class="border-b border-gray-900/10 pb-12">
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">
+                        Online presence
+                    </h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">
+                        Where can this company be found online?
+                    </p>
 
-                    <div class="sm:col-span-2 sm:col-start-1">
-                        <InputLabel value="City"/>
-                        <div class="mt-1">
+                    <div
+                        class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+                        <div class="sm:col-span-4">
+                            <InputLabel value="Website"/>
                             <TextInput
-                                class="block w-full"
-                                id="city"
-                                v-model="form.city"/>
+                                class="mt-1 block w-full"
+                                id="name"
+                                v-model="form.website"/>
+                        </div>
+
+                        <div class="sm:col-span-4">
+                            <InputLabel value="Facebook"/>
+                            <TextInput
+                                class="mt-1 block w-full"
+                                id="name"
+                                v-model="form.facebook_url"/>
+                        </div>
+
+                        <div class="sm:col-span-4">
+                            <InputLabel value="Instagram"/>
+                            <TextInput
+                                class="mt-1 block w-full"
+                                id="name"
+                                v-model="form.instagram_url"/>
+                        </div>
+
+                        <div class="sm:col-span-4">
+                            <InputLabel value="Twitter"/>
+                            <TextInput
+                                class="mt-1 block w-full"
+                                id="name"
+                                v-model="form.twitter"/>
                         </div>
                     </div>
-
-                    <div class="sm:col-span-2" v-if="form.country == 'US'">
-                        <InputLabel value="State"/>
-                        <select
-                            v-model="form.state"
-                            class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
-                            <option value=""></option>
-                            <option v-for="state in states"
-                                :key="state.abbr"
-                                :value="state.abbr"
-                                v-text="state.name"></option>
-                        </select>
-                    </div>
-
-                    <div class="sm:col-span-2" v-if="form.country == 'AU'">
-                        <InputLabel value="Territory"/>
-                        <select
-                            v-model="form.territory"
-                            class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
-                            <option value=""></option>
-                            <option v-for="territory in territories"
-                                :key="territory.abbr"
-                                :value="territory.abbr"
-                                v-text="territory.name"></option>
-                        </select>
-                    </div>
-
-                    <div class="sm:col-span-2" v-if="form.country == 'CA'">
-                        <InputLabel value="Province"/>
-                        <select
-                            v-model="form.province"
-                            class="mt-1 border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full">
-                            <option value=""></option>
-                            <option v-for="province in provinces"
-                                :key="province.abbr"
-                                :value="province.abbr"
-                                v-text="province.name"></option>
-                        </select>
-                    </div>
                 </div>
             </div>
 
-            <div class="border-b border-gray-900/10 pb-12">
-                <h2 class="text-base font-semibold leading-7 text-gray-900">
-                    Online presence
-                </h2>
-                <p class="mt-1 text-sm leading-6 text-gray-600">
-                    Where can this company be found online?
-                </p>
-
-                <div
-                    class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
-                    <div class="sm:col-span-4">
-                        <InputLabel value="Website"/>
-                        <TextInput
-                            class="mt-1 block w-full"
-                            id="name"
-                            v-model="form.website"/>
-                    </div>
-
-                    <div class="sm:col-span-4">
-                        <InputLabel value="Facebook"/>
-                        <TextInput
-                            class="mt-1 block w-full"
-                            id="name"
-                            v-model="form.facebook_url"/>
-                    </div>
-
-                    <div class="sm:col-span-4">
-                        <InputLabel value="Instagram"/>
-                        <TextInput
-                            class="mt-1 block w-full"
-                            id="name"
-                            v-model="form.instagram_url"/>
-                    </div>
-
-                    <div class="sm:col-span-4">
-                        <InputLabel value="Twitter"/>
-                        <TextInput
-                            class="mt-1 block w-full"
-                            id="name"
-                            v-model="form.twitter"/>
-                    </div>
-                </div>
+            <div class="my-6 flex items-center justify-end gap-x-3">
+                <SecondaryLink :href="'/platform/companies'">
+                    Cancel
+                </SecondaryLink>
+                <PrimaryButton
+                    type="submit">
+                    Save
+                </PrimaryButton>
             </div>
-        </div>
-
-        <div class="my-6 flex items-center justify-end gap-x-3">
-            <SecondaryLink :href="'/platform/companies'">
-                Cancel
-            </SecondaryLink>
-            <PrimaryButton
-                type="submit">
-                Save
-            </PrimaryButton>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 </template>
 
 <script>

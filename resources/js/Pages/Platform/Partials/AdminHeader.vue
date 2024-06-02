@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-screen-xl mx-auto mt-8">
+    <div class="max-w-screen-xl mx-auto mt-8 lg:px-8">
         <div>
             <nav class="sm:hidden" aria-label="Back">
                 <a
