@@ -2,6 +2,7 @@
 
 namespace Modules\Offering\Providers;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,6 +23,11 @@ class OfferingServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
+
+        $this->app->booted(function () {
+            $schedule = $this->app->make(Schedule::class);
+            $schedule->command('roast:sync-offerings')->daily();
+        });
     }
 
     /**
@@ -38,7 +44,9 @@ class OfferingServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+        $this->commands([
+            \Modules\Offering\Console\SyncOfferings::class,
+        ]);
     }
 
     /**

@@ -15,5 +15,5 @@ use Modules\Offering\Http\Controllers\OfferingController;
 */
 
 Route::group([], function () {
-    Route::resource('offering', OfferingController::class)->names('offering');
+    Route::resource('offerings', OfferingController::class)->names('offering');
 });
