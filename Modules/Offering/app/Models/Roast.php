@@ -19,10 +19,16 @@ class Roast extends Model
         'name',
         'url',
         'price',
-        'image',
+        'primary_image',
+        'primary_image_disk',
+        'details_card',
+        'details_card_disk',
         'type',
-        'first_seen',
-        'last_seen',
+        'first_seen_at',
+        'last_seen_at',
+        'in_stock',
+        'details_processed_at',
+        'last_synced_at'
     ];
 
     protected $table = 'roasts';
@@ -37,19 +43,28 @@ class Roast extends Model
         return $this->belongsToMany(FlavorNote::class, 'roast_flavor_notes');
     }
 
-    public function varietals()
+    public function varieties()
     {
-        return $this->belongsToMany(Varietal::class, 'roast_varetials');
+        return $this->belongsToMany(Variety::class, 'roast_varieties')
+            ->withTimestamps('created_at', 'updated_at');
     }
 
     public function processes()
     {
-        return $this->belongsToMany(Process::class, 'roast_processes');
+        return $this->belongsToMany(Process::class, 'roast_processes')
+            ->withTimestamps('created_at', 'updated_at');
     }
 
-    public function regions()
+    public function countries()
     {
-        return $this->belongsToMany(Country::class, 'roast_regions');
+        return $this->belongsToMany(Country::class, 'roast_countries')
+            ->withTimestamps('created_at', 'updated_at');
+    }
+
+    public function elevations()
+    {
+        return $this->belongsToMany(Elevation::class, 'roast_elevations')
+            ->withTimestamps('created_at', 'updated_at');
     }
 
     // protected static function newFactory(): RoastFactory

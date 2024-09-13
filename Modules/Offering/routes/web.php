@@ -13,7 +13,5 @@ use Modules\Offering\Http\Controllers\OfferingController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::group([], function () {
-    Route::resource('offerings', OfferingController::class)->names('offering');
-});
+Route::get('/offerings', [OfferingController::class, 'index'])
+    ->name('offerings.index');

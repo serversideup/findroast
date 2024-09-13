@@ -198,12 +198,20 @@
         
         <div class="max-w-screen-md mt-8">
             <div class="px-4 sm:px-0">
-                <h3 class="text-base font-semibold leading-7 text-gray-900">
-                    Offerings Import Settings
-                </h3>
-                <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
-                    Is this company set up to import offerings?
-                </p>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-base font-semibold leading-7 text-gray-900">
+                            Offerings Import Settings
+                        </h3>
+                        <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
+                            Is this company set up to import offerings?
+                        </p>
+                    </div>
+
+                    <PrimaryButton @click="syncCurrentOfferings">
+                       Sync Now
+                    </PrimaryButton>
+                </div>
             </div>
             <div class="mt-6 border-t border-gray-100">
                 <dl class="divide-y divide-gray-100">
@@ -234,6 +242,15 @@
                             {{ company.offering_import_map?.day }}
                         </dd>
                     </div>
+                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <dt class="text-sm font-medium leading-6 text-gray-900">
+                            Last Synced
+                        </dt>
+                        <dd
+                            class="mt-1 capitalize text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                            {{ formatDate( company.offering_import_map?.last_synced_at ) }}
+                        </dd>
+                    </div>
                 </dl>
             </div>
         </div>
@@ -250,10 +267,31 @@ export default {
 
 <script setup>
 import AdminHeader from '../Partials/AdminHeader.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import PrimaryLink from '@/Components/PrimaryLink.vue';
 import SecondaryLink from '@/Components/SecondaryLink.vue';
 import { computed } from "vue";
-import { Head, usePage } from "@inertiajs/vue3";
+import { Head, router, usePage } from "@inertiajs/vue3";
+import { useEventBus } from '@vueuse/core';
 
 const company = computed(() => usePage().props.company);
+
+const formatDate = (date) => {
+    if (!date) return null;
+
+    return new Date(date).toLocaleString();
+}
+
+const notificationBus = useEventBus('roast-notification');
+
+const syncCurrentOfferings = () => {
+    router.put(`/platform/companies/${company.value.id}/offerings/sync`, null, {
+        preserveScroll: true,
+        onSuccess: () => {
+            notificationBus.emit('roast-notification', {
+                title: 'Offerings Queued for Syncing'
+            });
+        }
+    });
+}
 </script>

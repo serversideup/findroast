@@ -7,6 +7,7 @@ use Modules\Platform\Http\Controllers\BrewMethodController;
 use Modules\Platform\Http\Controllers\CafesController;
 use Modules\Platform\Http\Controllers\CompanyController;
 use Modules\Platform\Http\Controllers\DrinkOptionController;
+use Modules\Platform\Http\Controllers\OfferingsController;
 use Modules\Platform\Http\Controllers\PlatformController;
 use Modules\Platform\Http\Middleware\CanManagePlatform;
 
@@ -70,6 +71,9 @@ Route::middleware([Authenticate::class, CanManagePlatform::class])->group(functi
         ->name('platform.companies.edit');
     Route::put('/platform/companies/{company}', [CompanyController::class, 'update'])
         ->name('platform.companies.update');
+
+    Route::put('/platform/companies/{company}/offerings/sync', [OfferingsController::class, 'sync'])
+        ->name('platform.companies.offerings.sync');
 
     Route::get('/platform/companies/{company}/cafes', [CafesController::class, 'index'])
         ->name('platform.companies.cafes.index');

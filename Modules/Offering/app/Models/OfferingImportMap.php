@@ -20,7 +20,7 @@ class OfferingImportMap extends Model
         'enabled',
         'api_url',
         'day',
-        'last_synced',
+        'last_synced_at',
     ];
 
     protected $table = 'offering_import_maps';

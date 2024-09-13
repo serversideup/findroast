@@ -392,7 +392,7 @@ const form = useForm({
     country: '',
     facebook_url: '',
     instagram_url: '',
-    twitter_url: ''
+    twitter_url: '',
     offerings: {
         enabled: 0,
         api_url: '',

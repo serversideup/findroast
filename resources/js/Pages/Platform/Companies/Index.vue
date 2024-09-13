@@ -8,7 +8,7 @@
             { label: 'Companies', to: '#'}
         ]">
         <template #actions>
-            <TextInput v-model="search" @keypress="searchCompanies" placeholder="Search companies..." class="mr-3"/>
+            <TextInput v-model="search" @keydown="searchCompanies" placeholder="Search companies..." class="mr-3"/>
 
             <PrimaryLink href="/platform/companies/create">
                 Add Company
@@ -139,7 +139,8 @@ const searchCompanies = useDebounceFn(() => {
         data: {
             search: search.value,
             page: 1
-        }
+        },
+        replace: true
     });
 }, 500)
 

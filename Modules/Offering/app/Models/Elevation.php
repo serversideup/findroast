@@ -4,9 +4,8 @@ namespace Modules\Offering\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\Offering\Database\Factories\ProcessFactory;
 
-class Process extends Model
+class Elevation extends Model
 {
     use HasFactory;
 
@@ -17,9 +16,5 @@ class Process extends Model
         'name'
     ];
 
-    protected $table = 'processes';
-    // protected static function newFactory(): ProcessFactory
-    // {
-    //     //return ProcessFactory::new();
-    // }
+    protected $table = 'elevations';
 }

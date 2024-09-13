@@ -4,5 +4,6 @@
     "Platform": true,
     "Submission": true,
     "Profile": true,
-    "Offering": true
+    "Offering": true,
+    "ModifiedRoastImages": true
 }

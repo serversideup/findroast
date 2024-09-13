@@ -6,6 +6,20 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use Modules\Offering\Http\Actions\Roasts\ExtractImageData;
+use Modules\Offering\Jobs\SyncRoast;
+use Modules\Offering\Models\Roast;
+use Illuminate\Support\Facades\Http;
+
+Route::get('/test', function () {
+    // Testing St. Frank. Need to build a page that
+    // shows all new coffees for the day and their attributes
+    // so we can test what comes in.
+        $roast = Roast::find(135);
+
+        SyncRoast::dispatch($roast);
+});
+
 Route::get('/', [DashboardController::class, 'index']);
 
 Route::get('/dashboard', function () {
