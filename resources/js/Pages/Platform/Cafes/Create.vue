@@ -425,7 +425,7 @@ const form = useForm({
     drink_options: [],
 });
 
-const countries = useCountries();
+const { countries } = useCountries();
 const states = useStates();
 const provinces = useProvinces();
 const territories = useTerritories();

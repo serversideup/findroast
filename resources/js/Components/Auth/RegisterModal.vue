@@ -118,9 +118,9 @@ const close = () => {
 
 const submit = () => {
     form.post(route('register'), {
-        onSuccess: () => {
+        onFinish: () => {
             close()
-        }
+        },
     });
 };
 

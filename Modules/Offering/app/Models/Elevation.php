@@ -4,6 +4,7 @@ namespace Modules\Offering\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Offering\Models\Roast;
 
 class Elevation extends Model
 {
@@ -17,4 +18,9 @@ class Elevation extends Model
     ];
 
     protected $table = 'elevations';
+
+    public function roasts()
+    {
+        return $this->belongsToMany(Roast::class, 'roast_elevations');
+    }
 }

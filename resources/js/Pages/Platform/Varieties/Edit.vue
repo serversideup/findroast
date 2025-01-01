@@ -1,0 +1,64 @@
+<template>
+    <Head title="Varieties" />
+
+    <AdminHeader 
+        :title="'Edit '+variety.name"
+        :breadcrumbs="[
+            { label: 'Platform Settings', to: '/platform' },
+            { label: 'Varieties', to: '/platform/varieties' },
+            { label: 'Edit '+variety.name, to: '#'}
+        ]"/>
+
+    <form class="max-w-screen-xl mx-auto mt-8 lg:px-8 flex flex-col space-y-4" @submit.prevent="submit()">
+        <div class="max-w-md">
+            <InputLabel for="name">Name</InputLabel>
+            <TextInput name="name" class="w-full mt-1" v-model="form.name"/>
+        </div>
+        <div class="max-w-md">
+            <InputLabel for="slug">Slug</InputLabel>
+            <TextInput name="slug" class="w-full mt-1" v-model="form.slug"/>
+        </div>
+        <div class="max-w-md mt-6 flex items-center justify-end gap-x-6">
+            <Link href="/platform/varieties" class="text-sm font-semibold leading-6 text-gray-900">Cancel</Link>
+            <PrimaryButton>Update</PrimaryButton>
+        </div>
+    </form>
+</template>
+
+<script>
+import AppLayout from '@/Layouts/AppLayout.vue';
+
+export default {
+    layout: AppLayout
+};
+</script>
+
+<script setup>
+import AdminHeader from '../Partials/AdminHeader.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
+import { computed } from 'vue';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
+import { useEventBus } from '@vueuse/core';
+
+const variety = computed(() => usePage().props.variety);
+
+const form = useForm({
+    _method: 'PUT',
+    name: variety.value.name,
+    slug: variety.value.slug
+});
+
+const notificationBus = useEventBus('roast-notification');
+
+const submit = () => {
+    router.post('/platform/varieties/'+variety.value.id, form.data(), {
+        onSuccess: () => {
+            notificationBus.emit('show', {
+                title: 'Variety Updated',
+            });
+        }
+    });
+};
+</script>

@@ -3,6 +3,7 @@
 namespace Modules\Company\Models;
 
 use App\Models\User;
+use Modules\Offering\Models\Roast;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -75,6 +76,11 @@ class Company extends Model
     public function offeringImportMap(): HasOne
     {
         return $this->hasOne(OfferingImportMap::class, 'company_id', 'id');
+    }
+
+    public function roasts(): HasMany
+    {
+        return $this->hasMany(Roast::class);
     }
 
     // protected static function newFactory(): CompanyFactory

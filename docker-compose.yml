@@ -1,15 +1,14 @@
 services:
-
   traefik:
-    image: traefik:v2.10
-
-  mariadb: 
-    image: mariadb:10.11
-
+    image: traefik:v3.1
   php:
-    build:
-      context: .
-      target: base
     depends_on:
       - traefik
-      - mariadb
+  schedule:
+    entrypoint: ''
+    command: ["php", "/var/www/html/artisan", "schedule:work"]
+  queue:
+    entrypoint: ''
+    command: ["php", "/var/www/html/artisan", "queue:work", "--tries=3"]
+    healthcheck:
+      disable: true

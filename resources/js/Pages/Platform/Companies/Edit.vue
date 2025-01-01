@@ -314,11 +314,19 @@
                         </div>
 
                         <div class="sm:col-span-4">
-                            <InputLabel value="API URL"/>
+                            <InputLabel value="Collection Job Class"/>
                             <TextInput
                                 class="mt-1 block w-full"
                                 id="name"
-                                v-model="form.offerings.api_url"/>
+                                v-model="form.offerings.collection_job_class"/>
+                        </div>
+
+                        <div class="sm:col-span-4">
+                            <InputLabel value="Roast Job Class"/>
+                            <TextInput
+                                class="mt-1 block w-full"
+                                id="name"
+                                v-model="form.offerings.roast_job_class"/>
                         </div>
 
                         <div class="sm:col-span-4">
@@ -399,8 +407,9 @@ const form = useForm({
     twitter_url: company.value.twitter_url,
     offerings: {
         enabled: company.value.offering_import_map?.enabled,
-        api_url: company.value.offering_import_map?.api_url,
-        day: company.value.offering_import_map?.day
+        day: company.value.offering_import_map?.day,
+        collection_job_class: company.value.offering_import_map?.collection_job_class,
+        roast_job_class: company.value.offering_import_map?.roast_job_class
     }
 });
 

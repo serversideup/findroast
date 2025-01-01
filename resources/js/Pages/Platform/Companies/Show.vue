@@ -226,11 +226,20 @@
                     </div>
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt class="text-sm font-medium leading-6 text-gray-900">
-                            API URL
+                            Collection Job Class
                         </dt>
                         <dd
                             class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                            {{ company.offering_import_map?.api_url }}
+                            {{ company.offering_import_map?.collection_job_class }}
+                        </dd>
+                    </div>
+                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <dt class="text-sm font-medium leading-6 text-gray-900">
+                            Roast Job Class
+                        </dt>
+                        <dd
+                            class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                            {{ company.offering_import_map?.roast_job_class }}
                         </dd>
                     </div>
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

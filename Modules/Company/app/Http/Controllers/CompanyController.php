@@ -7,62 +7,44 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Inertia\Inertia;
-
+use Modules\Company\Models\Company;
+use Modules\Company\Http\Actions\IndexCompanies;
+use Modules\Company\Http\Actions\ShowCompany;
 class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index( Request $request )
     {
-        return Inertia::render('Company/Index');
-    }
+        $companies = ( new IndexCompanies( $request) )->execute();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('company::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        //
+        return Inertia::render('Companies/Index', [
+            'companies' => fn() => $companies
+        ]);
     }
 
     /**
      * Show the specified resource.
      */
-    public function show($id)
+    public function show( Company $company )
     {
-        return view('company::show');
-    }
+        $company = Company::where('id', $company->id)
+            ->with('cafes')
+            ->with([
+                'roasts' => function($query) {
+                    $query->with('flavorNotes');
+                    $query->with('varieties');
+                    $query->with('processes');
+                    $query->with('countries');
+                    $query->with('elevations');
+                    $query->where('in_stock', 1);
+                }
+            ])
+            ->first();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('company::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id): RedirectResponse
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        //
+        return Inertia::render('Companies/Show', [
+            'company' => $company
+        ]);
     }
 }

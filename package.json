@@ -23,6 +23,7 @@
         "@headlessui/vue": "^1.7.22",
         "@heroicons/vue": "^2.1.3",
         "@vitejs/plugin-basic-ssl": "^1.1.0",
-        "@vueuse/core": "^10.10.0"
+        "@vueuse/core": "^10.10.0",
+        "momentum-modal": "^0.2.2"
     }
 }

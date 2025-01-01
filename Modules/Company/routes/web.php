@@ -14,6 +14,7 @@ use Modules\Company\Http\Controllers\CompanyController;
 |
 */
 
-Route::group([], function () {
-    Route::resource('company', CompanyController::class)->names('companies');
-});
+Route::get('/companies', [CompanyController::class, 'index'])
+    ->name('companies.index');
+Route::get('/companies/{company}', [CompanyController::class, 'show'])
+    ->name('companies.show');

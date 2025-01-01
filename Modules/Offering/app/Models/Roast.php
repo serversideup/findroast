@@ -19,6 +19,7 @@ class Roast extends Model
         'name',
         'url',
         'price',
+        'currency',
         'primary_image',
         'primary_image_disk',
         'details_card',

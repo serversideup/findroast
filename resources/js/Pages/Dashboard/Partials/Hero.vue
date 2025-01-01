@@ -15,7 +15,7 @@
                     </p>
                     <div class="mt-10 flex items-center gap-x-4">
                         <PrimaryLink
-                            href="/directory">
+                            href="/offerings">
                             Browse Current Offerings
                         </PrimaryLink>
                         <SecondaryLink

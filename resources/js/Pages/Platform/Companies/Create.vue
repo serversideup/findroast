@@ -313,14 +313,6 @@
                         </div>
 
                         <div class="sm:col-span-4">
-                            <InputLabel value="API URL"/>
-                            <TextInput
-                                class="mt-1 block w-full"
-                                id="name"
-                                v-model="form.offerings.api_url"/>
-                        </div>
-
-                        <div class="sm:col-span-4">
                             <InputLabel value="Day to Sync"/>
                             <select
                                 v-model="form.offerings.day"
@@ -335,6 +327,23 @@
                                 <option value="saturday">Saturday</option>
                             </select>
                         </div>
+
+                        <div class="sm:col-span-4">
+                            <InputLabel value="Collection Job Class"/>
+                            <TextInput
+                                class="mt-1 block w-full"
+                                id="name"
+                                v-model="form.offerings.collection_job_class"/>
+                        </div>
+
+                        <div class="sm:col-span-4">
+                            <InputLabel value="Roast Job Class"/>
+                            <TextInput
+                                class="mt-1 block w-full"
+                                id="name"
+                                v-model="form.offerings.roast_job_class"/>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -395,12 +404,13 @@ const form = useForm({
     twitter_url: '',
     offerings: {
         enabled: 0,
-        api_url: '',
-        day: ''
+        day: '',
+        collection_job_class: '',
+        roast_job_class: ''
     }
 });
 
-const countries = useCountries();
+const { countries } = useCountries();
 const states = useStates();
 const provinces = useProvinces();
 const territories = useTerritories();

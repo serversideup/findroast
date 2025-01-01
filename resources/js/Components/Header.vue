@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white w-full flex items-center justify-between px-5 py-2 border-b border-gray-100 z-50 fixed">
+    <div class="bg-white w-full flex items-center justify-between px-5 border-b border-gray-100 z-50 fixed h-16">
         <div class="flex items-center justify-between mx-auto w-full max-w-screen-xxl">
             <div class="flex items-center w-64">
                 <Link href="/">
@@ -51,11 +51,12 @@ const user = computed(() => usePage().props.auth.user);
 const links = [
     {
         name: 'Current Offerings',
-        path: '/offerings'
+        path: '/offerings',
+        route: 'offerings.index'
     },
     {
-        name: 'Directory',
-        path: '/directory'
+        name: 'Companies',
+        path: '/companies'
     },
     {
         name: 'Map',

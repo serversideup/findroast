@@ -14,10 +14,17 @@ class Process extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'name'
+        'name',
+        'slug'
     ];
 
     protected $table = 'processes';
+
+    public function roasts()
+    {
+        return $this->belongsToMany(Roast::class, 'roast_processes');
+    }
+
     // protected static function newFactory(): ProcessFactory
     // {
     //     //return ProcessFactory::new();

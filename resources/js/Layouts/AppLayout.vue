@@ -8,7 +8,7 @@
         </main>
 
         <Notification/>
-
+        <Modal/>
         <!-- <CompaniesCreateModal/>-->
         <!-- <GlobalNotification/>
         <ContributionsModal/>
@@ -21,4 +21,5 @@
 <script setup>
 import Header from '@/Components/Header.vue';
 import Notification from '@/Components/Notification.vue';
+import { Modal } from 'momentum-modal'
 </script>

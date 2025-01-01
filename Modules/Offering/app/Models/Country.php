@@ -4,7 +4,7 @@ namespace Modules\Offering\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\Offering\Database\Factories\CountryFactory;
+use Modules\Offering\Models\Roast;
 
 class Country extends Model
 {
@@ -14,7 +14,8 @@ class Country extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'name'
+        'name',
+        'slug'
     ];
 
     protected $table = 'countries';
@@ -24,8 +25,8 @@ class Country extends Model
         return $this->hasMany(Region::class);
     }
     
-    // protected static function newFactory(): CountryFactory
-    // {
-    //     //return CountryFactory::new();
-    // }
+    public function roasts()
+    {
+        return $this->belongsToMany(Roast::class, 'roast_countries');
+    }
 }

@@ -6,9 +6,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "based/momentum-modal": "^0.3.0",
         "cviebrock/eloquent-sluggable": "^11.0",
+        "html2text/html2text": "^4.3",
         "inertiajs/inertia-laravel": "^1.0",
         "intervention/image": "^3.7",
+        "ivopetkov/html5-dom-document-php": "2.*",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
@@ -26,7 +29,7 @@
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
         "phpunit/phpunit": "^11.0.1",
-        "serversideup/spin": "^2.0@beta",
+        "serversideup/spin": "^2.1",
         "spatie/laravel-ignition": "^2.4"
     },
     "autoload": {

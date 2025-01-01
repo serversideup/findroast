@@ -6,9 +6,15 @@ use Modules\Platform\Http\Controllers\AmenityController;
 use Modules\Platform\Http\Controllers\BrewMethodController;
 use Modules\Platform\Http\Controllers\CafesController;
 use Modules\Platform\Http\Controllers\CompanyController;
+use Modules\Platform\Http\Controllers\CountryController;
 use Modules\Platform\Http\Controllers\DrinkOptionController;
+use Modules\Platform\Http\Controllers\ElevationController;
+use Modules\Platform\Http\Controllers\FlavorNoteController;
 use Modules\Platform\Http\Controllers\OfferingsController;
 use Modules\Platform\Http\Controllers\PlatformController;
+use Modules\Platform\Http\Controllers\ProcessController;
+use Modules\Platform\Http\Controllers\RoastController;
+use Modules\Platform\Http\Controllers\VarietyController;
 use Modules\Platform\Http\Middleware\CanManagePlatform;
 
 /*
@@ -87,4 +93,42 @@ Route::middleware([Authenticate::class, CanManagePlatform::class])->group(functi
         ->name('platform.companies.cafes.edit');
     Route::put('/platform/companies/{company}/cafes/{cafe}', [CafesController::class, 'update'])
         ->name('platform.companies.cafes.update');
+
+    Route::get('/platform/countries', [CountryController::class, 'index'])
+        ->name('platform.countries.index');
+    Route::get('/platform/countries/{country}/edit', [CountryController::class, 'edit'])
+        ->name('platform.countries.edit');
+    Route::put('/platform/countries/{country}', [CountryController::class, 'update'])
+        ->name('platform.countries.update');
+
+    Route::get('/platform/processes', [ProcessController::class, 'index'])
+        ->name('platform.processes.index');
+    Route::get('/platform/processes/{process}/edit', [ProcessController::class, 'edit'])
+        ->name('platform.processes.edit');
+    Route::put('/platform/processes/{process}', [ProcessController::class, 'update'])
+        ->name('platform.processes.update');
+
+    Route::get('/platform/elevations', [ElevationController::class, 'index'])
+        ->name('platform.elevations.index');
+    Route::get('/platform/elevations/{elevation}/edit', [ElevationController::class, 'edit'])
+        ->name('platform.elevations.edit');
+    Route::put('/platform/elevations/{elevation}', [ElevationController::class, 'update'])
+        ->name('platform.elevations.update');
+
+    Route::get('/platform/flavor-notes', [FlavorNoteController::class, 'index'])
+        ->name('platform.flavor-notes.index');
+    Route::get('/platform/flavor-notes/{flavorNote}/edit', [FlavorNoteController::class, 'edit'])
+        ->name('platform.flavor-notes.edit');
+    Route::put('/platform/flavor-notes/{flavorNote}', [FlavorNoteController::class, 'update'])
+        ->name('platform.flavor-notes.update');
+
+    Route::get('/platform/varieties', [VarietyController::class, 'index'])
+        ->name('platform.varieties.index');
+    Route::get('/platform/varieties/{variety}/edit', [VarietyController::class, 'edit'])
+        ->name('platform.varieties.edit');
+    Route::put('/platform/varieties/{variety}', [VarietyController::class, 'update'])
+        ->name('platform.varieties.update');
+
+    Route::get('/platform/roasts', [RoastController::class, 'index'])
+        ->name('platform.roasts.index');
 });

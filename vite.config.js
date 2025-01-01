@@ -1,15 +1,23 @@
+import fs from 'fs';
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
-import basicSsl from '@vitejs/plugin-basic-ssl'
-
-const host = 'vite.dev.test'
 
 export default defineConfig({
+    server: {
+        host: '0.0.0.0',
+        hmr: {
+            host: 'vite.dev.test',
+            clientPort: 443,
+        },
+        https: {
+            key: fs.readFileSync('/usr/src/app/.infrastructure/conf/traefik/dev/certificates/local-dev-key.pem'),
+            cert: fs.readFileSync('/usr/src/app/.infrastructure/conf/traefik/dev/certificates/local-dev.pem'),
+        },
+    },
     plugins: [
-        basicSsl(),
         laravel({
-            input: 'resources/js/app.js',
+            input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
         }),
         vue({
@@ -21,11 +29,4 @@ export default defineConfig({
             },
         }),
     ],
-    server: {
-        host,
-        hmr: { 
-            host,
-            clientPort: 443
-        },
-    },
 });

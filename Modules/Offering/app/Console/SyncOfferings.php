@@ -4,7 +4,7 @@ namespace Modules\Offering\Console;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Modules\Offering\Jobs\SyncCompanyOfferings;
+use Modules\Company\Models\Company;
 use Modules\Offering\Models\OfferingImportMap;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -38,10 +38,18 @@ class SyncOfferings extends Command
 
         $importMaps = OfferingImportMap::where( 'enabled', 1 )
             ->where( 'day', strtolower( $day ) )
+            ->with('company')
             ->get();
 
         foreach( $importMaps as $importMap ) {
-            SyncCompanyOfferings::dispatch( $importMap );
+            $company = Company::find($importMap->company_id);
+
+            $jobClass = 'Modules\Offering\Jobs\\'.$importMap->collection_job_class;
+            $jobClass::dispatch($company);
+
+            $importMap->update([
+                'last_synced_at' => Carbon::now()
+            ]);
         }
     }
 

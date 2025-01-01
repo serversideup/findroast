@@ -79,8 +79,9 @@ class StoreCompany
         OfferingImportMap::create([
             'company_id' => $company->id,
             'enabled' => $request->input('offerings.enabled'),
-            'api_url' => $request->input('offerings.api_url'),
             'day' => $request->input('offerings.day'),
+            'collection_job_class' => $request->input('offerings.collection_job_class'),
+            'roast_job_class' => $request->input('offerings.roast_job_class'),
         ]);
     }
 }

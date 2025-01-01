@@ -1,61 +1,53 @@
-name: roast
 services:
   traefik:
-    restart: "no"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080" # Uncomment to enable Traefik's dashboard
     networks:
       development:
         aliases:
-          - roast.dev.test
-    ports:
-      # Listen on port 80, default for HTTP, necessary to redirect to HTTPS
-      - target: 80
-        published: 80
-        mode: host
-      # Listen on port 443, default for HTTPS
-      - target: 443
-        published: 443
-        mode: host
-      - target: 8080
-        published: 8080
-        mode: host
+          - laravel.dev.test
+          - vite.dev.test
+          - mailpit.dev.test
+          - reverb.dev.test
     volumes:
-      # Add Docker as a mounted volume, so that Traefik can read the labels of other services
+      # Mount the Docker socket as read-only so Traefik can listen to events
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./.infrastructure/conf/traefik/dev/traefik.yml:/traefik.yml:ro
       - ./.infrastructure/conf/traefik/dev/traefik-certs.yml:/traefik-certs.yml
       - ./.infrastructure/conf/traefik/dev/certificates/:/certificates
-
   php:
     build:
       target: development
-      context: .
       args:
         USER_ID: ${SPIN_USER_ID}
         GROUP_ID: ${SPIN_GROUP_ID}
+      dockerfile: Dockerfile.php
     volumes:
       - .:/var/www/html/
-    hostname: roast.dev.test
-    environment:
-      SSL_MODE: "full"
     networks:
       - development
     depends_on:
       - traefik
-      - mariadb
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.roast.rule=HostRegexp(`roast.dev.test`, `{subdomain:roast-([a-z]+)}.521dev.co`)"
-      - "traefik.http.routers.roast.entrypoints=websecure"
-      - "traefik.http.routers.roast.tls=true"
-      - "traefik.http.services.roast.loadbalancer.server.port=8443"
-      - "traefik.http.services.roast.loadbalancer.server.scheme=https"
-  
+      - "traefik.http.routers.laravel-web.rule=Host(`roast.dev.test`) || HostRegexp(`^.+\\.ngrok-free\\.app$$`)"
+      - "traefik.http.routers.laravel-web.tls=true"
+      - "traefik.http.routers.laravel-web.entrypoints=websecure"
+      - "traefik.http.services.laravel-web.loadbalancer.server.port=8080"
+      - "traefik.http.services.laravel-web.loadbalancer.server.scheme=http"
   node:
-    image: node:20
+    build:
+      target: development
+      args:
+        USER_ID: ${SPIN_USER_ID}
+        GROUP_ID: ${SPIN_GROUP_ID}
+      dockerfile: Dockerfile.node
     volumes:
       - .:/usr/src/app/
     working_dir: /usr/src/app/
-    networks: 
+    networks:
       - development
     labels:
       - "traefik.enable=true"
@@ -64,20 +56,45 @@ services:
       - "traefik.http.routers.vite.tls=true"
       - "traefik.http.services.vite.loadbalancer.server.port=5173"
       - "traefik.http.services.vite.loadbalancer.server.scheme=https"
-
   mailpit:
-      image: axllent/mailpit
-      networks:
-        - development
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.mailpit.rule=Host(`mailpit.dev.test`)"
-        - "traefik.http.routers.mailpit.entrypoints=websecure"
-        - "traefik.http.routers.mailpit.tls=true"
-        - "traefik.http.services.mailpit.loadbalancer.server.port=8025"
-        - "traefik.http.services.mailpit.loadbalancer.server.scheme=http"
-      depends_on:
-        - traefik
-
+    image: axllent/mailpit
+    networks:
+      - development
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mailpit.rule=Host(`mailpit.dev.test`)"
+      - "traefik.http.routers.mailpit.entrypoints=websecure"
+      - "traefik.http.routers.mailpit.tls=true"
+      - "traefik.http.services.mailpit.loadbalancer.server.port=8025"
+      - "traefik.http.services.mailpit.loadbalancer.server.scheme=http"
+  schedule:
+    build:
+      target: development
+      args:
+        USER_ID: ${SPIN_USER_ID}
+        GROUP_ID: ${SPIN_GROUP_ID}
+      dockerfile: Dockerfile.php
+    volumes:
+      - .:/var/www/html/
+    networks:
+      - development
+    depends_on:
+      php:
+        condition: service_started
+  queue:
+    build:
+      target: development
+      args:
+        USER_ID: ${SPIN_USER_ID}
+        GROUP_ID: ${SPIN_GROUP_ID}
+      dockerfile: Dockerfile.php
+    volumes:
+      - .:/var/www/html/
+    networks:
+      - development
+    depends_on:
+      php:
+        condition: service_started
 networks:
   development:
+    

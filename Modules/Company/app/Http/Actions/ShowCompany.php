@@ -15,6 +15,7 @@ class ShowCompany
 
     public function execute( $admin = false )
     {
+
         if( $admin ) {
             $this->company->load('offeringImportMap');
         }

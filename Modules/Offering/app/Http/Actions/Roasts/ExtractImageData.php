@@ -8,30 +8,16 @@ use OpenAI\Laravel\Facades\OpenAI;
 
 class ExtractImageData
 {
-    protected $prompt = 'Extract the following information from the image provided:
-        - What are the flavor notes of this coffee?
-        - What is the process of this coffee?
-        - What country is the coffee from?
-        - What varieties are in the coffee?
-        - What is the elevation the coffee was grown at?
-        
-        Return the information in the following format:
-        {
-            "flavor_notes": [],
-            "processes": [],
-            "countries": [],
-            "varieties": [],
-            "elevations": []
-        }
-
-        If the information is not available, feel free to return an empty string or array.';
+    protected $prompt = "";
     
     public function __construct(
-        protected string $image
+        protected string $image,
+        protected array $details = ['flavor_notes', 'processes', 'countries', 'varieties', 'elevations']
     ){}
 
     public function execute()
     {
+        $this->buildPrompt();
         $resizedImage = $this->resizeImage();
         $response = $this->sendToOpenAi( $resizedImage );
 
@@ -75,8 +61,72 @@ class ExtractImageData
                     ]
                 ],
             ],
+            'response_format' => ['type' => 'json_object']
         ]);
         
         return json_decode( $result->choices[0]->message->content, true );
+    }
+
+    protected function buildPrompt()
+    {
+        $this->prompt = 'Extract the following information from the image provided:';
+
+        if( in_array( 'flavor_notes', $this->details ) )
+        {
+            $this->prompt .= ' - What are the flavor notes of this coffee?';
+        }
+
+        if( in_array( 'processes', $this->details ) )
+        {
+            $this->prompt .= ' - What is the process of this coffee?';
+        }
+
+        if( in_array( 'countries', $this->details ) )
+        {
+            $this->prompt .= ' - What country is the coffee from?';
+        }
+
+        if( in_array( 'varieties', $this->details ) )
+        {
+            $this->prompt .= ' - What varieties are in the coffee?';
+        }
+
+        if( in_array( 'elevations', $this->details ) )
+        {
+            $this->prompt .= ' - What is the elevation the coffee was grown at?';
+        }
+
+        $this->prompt .= 'Return the information in the following JSON format:';
+
+        $this->prompt .= '{';
+
+        if( in_array( 'flavor_notes', $this->details ) )    
+        {
+            $this->prompt .= '"flavor_notes": [],';
+        }
+
+        if( in_array( 'processes', $this->details ) )
+        {
+            $this->prompt .= '"processes": [],';
+        }
+
+        if( in_array( 'countries', $this->details ) )
+        {
+            $this->prompt .= '"countries": [],';
+        }
+
+        if( in_array( 'varieties', $this->details ) )
+        {
+            $this->prompt .= '"varieties": [],';
+        }
+
+        if( in_array( 'elevations', $this->details ) )
+        {
+            $this->prompt .= '"elevations": [],';
+        }
+
+        $this->prompt .= '}';
+
+        $this->prompt .= 'If the information is not available, feel free to return an empty string or array.';
     }
 }
