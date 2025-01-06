@@ -1,14 +1,20 @@
 services:
   traefik:
-    image: traefik:v3.1
+    image: traefik:v3.2
   php:
+    environment:
+      SSL_MODE: "full"
     depends_on:
       - traefik
   schedule:
-    entrypoint: ''
     command: ["php", "/var/www/html/artisan", "schedule:work"]
-  queue:
-    entrypoint: ''
-    command: ["php", "/var/www/html/artisan", "queue:work", "--tries=3"]
+    stop_signal: SIGTERM
     healthcheck:
-      disable: true
+      test: ["CMD", "healthcheck-schedule"]
+      start_period: 10s
+  queue:
+    command: ["php", "/var/www/html/artisan", "queue:work", "--tries=3"]
+    stop_signal: SIGTERM
+    healthcheck:
+      test: ["CMD", "healthcheck-queue"]
+      start_period: 10s

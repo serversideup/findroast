@@ -32,6 +32,7 @@ services:
       AUTORUN_ENABLED: "true" # 👈 Remove this line if you don't want Laravel Automations
       APP_ENV: "${SPIN_DEPLOYMENT_ENVIRONMENT}"
       PHP_OPCACHE_ENABLE: "1"
+      HEALTHCHECK_PATH: "/up"
     networks:
       - web-public
     volumes:
@@ -57,15 +58,17 @@ services:
         - "traefik.http.routers.laravel-web.entrypoints=websecure"
         - "traefik.http.routers.laravel-web.tls=true"
         - "traefik.http.routers.laravel-web.tls.certresolver=letsencryptresolver"
-        - "traefik.http.services.laravel-web.loadbalancer.server.port=8080"
-        - "traefik.http.services.laravel-web.loadbalancer.server.scheme=http"
+        - "traefik.http.services.laravel-web.loadbalancer.server.port=8443"
+        - "traefik.http.services.laravel-web.loadbalancer.server.scheme=https"
         # Health check
-        - "traefik.http.services.laravel-web.loadbalancer.healthcheck.path=/healthcheck"
+        - "traefik.http.services.laravel-web.loadbalancer.healthcheck.path=/up"
         - "traefik.http.services.laravel-web.loadbalancer.healthcheck.interval=30s"
         - "traefik.http.services.laravel-web.loadbalancer.healthcheck.timeout=5s"
-        - "traefik.http.services.laravel-web.loadbalancer.healthcheck.scheme=http"
+        - "traefik.http.services.laravel-web.loadbalancer.healthcheck.scheme=https"
   schedule:
     image: ${SPIN_IMAGE_DOCKERFILE_PHP}
+    environment:
+      APP_ENV: "${SPIN_DEPLOYMENT_ENVIRONMENT}"
     networks:
       - web-public
     volumes:
@@ -90,6 +93,8 @@ services:
         window: 120s
   queue:
     image: ${SPIN_IMAGE_DOCKERFILE_PHP}
+    environment:
+      APP_ENV: "${SPIN_DEPLOYMENT_ENVIRONMENT}"
     networks:
       - web-public
     volumes:

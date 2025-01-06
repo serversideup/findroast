@@ -6,3 +6,4 @@
 Dockerfile
 docker-*.yml
 .spin*
+!.infrastructure/**/local-ca.pem

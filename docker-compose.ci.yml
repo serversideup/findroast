@@ -3,8 +3,6 @@ services:
     build:
       target: ci
       dockerfile: Dockerfile.php
-    networks:
-      - ci
     volumes:
       - .:/var/www/html/
   node:
@@ -13,28 +11,18 @@ services:
       dockerfile: Dockerfile.node
     volumes:
       - .:/usr/src/app/
-    networks:
-      - ci
     working_dir: /usr/src/app/
   mailpit:
     image: axllent/mailpit
-    networks:
-      - ci
   schedule:
     build:
       target: ci
       dockerfile: Dockerfile.php
     volumes:
       - .:/var/www/html/
-    networks:
-      - ci
   queue:
     build:
       target: ci
       dockerfile: Dockerfile.php
     volumes:
       - .:/var/www/html/
-    networks:
-      - ci
-networks:
-  ci:
