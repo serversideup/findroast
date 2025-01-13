@@ -14,6 +14,7 @@
         "ivopetkov/html5-dom-document-php": "2.*",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
+        "laravel/scout": "^10.11",
         "laravel/tinker": "^2.9",
         "nwidart/laravel-modules": "^11.0",
         "openai-php/laravel": "^0.10.1",
