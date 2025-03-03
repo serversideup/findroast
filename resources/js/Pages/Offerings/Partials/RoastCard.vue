@@ -12,19 +12,34 @@
                 More Info
             </Link>
         </div>
-        <div class="flex flex-1 flex-col space-y-2 p-4">
-            <h3 class="text-sm font-medium text-gray-900">
-                <a :href="roast.href">
-                    <span aria-hidden="true" class="absolute inset-0" />
-                    {{ roast.name }}
-                </a>
+        <div class="flex flex-1 flex-col p-4">
+            <h3 class="font-semibold text-gray-900 text-base">
+                {{ roast.name }}
             </h3>
-            <!-- <p class="text-sm text-gray-500">{{ product.description }}</p> -->
-            <div class="flex flex-1 flex-col justify-end">
-                <p class="text-sm font-medium text-gray-600">☀️ {{ roast.processes.map(process => process.name).join(', ') }}</p>
-                <p class="text-sm text-gray-500">😛 <span class="italic">{{ roast.flavor_notes.map(flavor_note => flavor_note.name).join(', ') }}</span></p>
-                <p class="text-sm text-gray-500">☕️ {{ roast.varieties.map(variety => variety.name).join(', ') }} {{ roast.countries.map(country => findFlag(country.name)+' '+country.name).join(', ') }}</p>
-                <p class="text-sm text-gray-500"></p>
+            <h4 class="text-gray-500 text-sm mb-2">
+                {{ roast.countries.map(country => findFlag(country.name)+' '+country.name).join(', ') }}
+            </h4>
+
+            <div class="flex flex-1 flex-col space-y-2">
+                <div class="w-full flex flex-col">
+                    <p class="font-semibold text-gray-900 text-sm">Flavor Notes</p>
+                    <div class="flex items-center flex-wrap gap-1">
+                        <span 
+                            v-for="note in roast.flavor_notes" 
+                            class="text-xs text-[#344054] bg-[#F9FAFB] border border-[#EAECF0] rounded-full px-1.5 py-0.5">{{ note.name }}</span>
+                    </div>
+                </div>
+
+                <div class="w-full grid grid-cols-2 gap-2">
+                    <div class="flex flex-col">
+                        <p class="font-semibold text-gray-900 text-sm">Processing</p>
+                        <p class="text-sm text-gray-500">{{ roast.processes.map(process => process.name).join(', ') }}</p>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="font-semibold text-gray-900 text-sm">Varietal</p>
+                        <p class="text-sm text-gray-500">{{ roast.varieties.map(variety => variety.name).join(', ') }}</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
