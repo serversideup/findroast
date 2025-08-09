@@ -8,6 +8,18 @@ use Inertia\Inertia;
 
 Route::get('/', [DashboardController::class, 'index']);
 
+use Modules\Offering\Http\Actions\Roasts\UniversalCoffeeScraper;
+
+Route::get('/scrape', function(){
+    $scraper = new UniversalCoffeeScraper();
+    
+
+    $collectionData = $scraper->scrapeCollection('https://www.blackwhiteroasters.com/collections/all-coffee');
+
+    echo '<pre>';
+    print_r($collectionData);
+    echo '</pre>';
+});
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
