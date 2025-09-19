@@ -20,8 +20,10 @@ class OfferingImportMap extends Model
         'company_id',
         'enabled',
         'day',
-        'collection_job_class',
-        'roast_job_class',
+        'collection_url',
+        'container_selector',
+        'product_list_item_selector',
+        'product_selector',
         'last_synced_at',
     ];
 

@@ -4,9 +4,11 @@ import { router } from '@inertiajs/vue3';
 const form = reactive({
     processes: [],
     origins: [],
-    flavorNotes: [],
+    flavor_notes: [],
     varieties: [],
-    elevations: []
+    elevations: [],
+    countries: [],
+    companies: []
 });
 
 const offeringsLoading = ref(false);

@@ -18,9 +18,12 @@
             <InputLabel for="slug">Slug</InputLabel>
             <TextInput name="slug" class="w-full mt-1" v-model="form.slug"/>
         </div>
-        <div class="max-w-md mt-6 flex items-center justify-end gap-x-6">
-            <Link href="/platform/flavor-notes" class="text-sm font-semibold leading-6 text-gray-900">Cancel</Link>
-            <PrimaryButton>Update</PrimaryButton>
+        <div class="max-w-md mt-6 flex items-center justify-between gap-x-6">
+            <DangerButton type="button" @click="deleteFlavorNote()">Delete</DangerButton>
+            <div class="flex items-center gap-x-6">
+                <Link href="/platform/flavor-notes" class="text-sm font-semibold leading-6 text-gray-900">Cancel</Link>
+                <PrimaryButton>Update</PrimaryButton>
+            </div>
         </div>
     </form>
 </template>
@@ -37,6 +40,7 @@ export default {
 import AdminHeader from '../Partials/AdminHeader.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import DangerButton from '@/Components/DangerButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { computed } from 'vue';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
@@ -57,6 +61,18 @@ const submit = () => {
         onSuccess: () => {
             notificationBus.emit('show', {
                 title: 'Flavor Note Updated',
+            });
+        }
+    });
+};
+
+const deleteFlavorNote = () => {
+    router.post('/platform/flavor-notes/'+flavorNote.value.id, {
+        _method: 'DELETE'
+    }, {
+        onSuccess: () => {
+            notificationBus.emit('show', {
+                title: 'Flavor Note Deleted',
             });
         }
     });

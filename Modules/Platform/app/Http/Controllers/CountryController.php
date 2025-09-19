@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Modules\Offering\Models\Country;
+use Modules\Platform\Http\Actions\Countries\DeleteCountry;
 use Modules\Platform\Http\Actions\Countries\UpdateCountry;
 
 class CountryController extends Controller
@@ -38,6 +39,16 @@ class CountryController extends Controller
     public function update( Request $request, Country $country )
     {
         ( new UpdateCountry() )->execute( $request, $country );
+
+        return redirect()->route('platform.countries.index');
+    }
+
+    /**
+     * Delete the specified resource in storage.
+     */
+    public function delete( Request $request, Country $country )
+    {
+        ( new DeleteCountry() )->execute( $country );
 
         return redirect()->route('platform.countries.index');
     }

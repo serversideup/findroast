@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Modules\Offering\Models\FlavorNote;
 use Modules\Platform\Http\Actions\FlavorNotes\UpdateFlavorNote;
+use Modules\Platform\Http\Actions\FlavorNotes\DeleteFlavorNote;
 
 class FlavorNoteController extends Controller
 {
@@ -38,6 +39,16 @@ class FlavorNoteController extends Controller
     public function update( Request $request, FlavorNote $flavorNote )
     {
         ( new UpdateFlavorNote() )->execute( $request, $flavorNote );
+
+        return redirect()->route('platform.flavor-notes.index');
+    }
+
+    /**
+     * Delete the specified resource in storage.
+     */
+    public function delete( Request $request, FlavorNote $flavorNote )
+    {
+        ( new DeleteFlavorNote() )->execute( $flavorNote );
 
         return redirect()->route('platform.flavor-notes.index');
     }

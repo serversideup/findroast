@@ -329,21 +329,36 @@
                         </div>
 
                         <div class="sm:col-span-4">
-                            <InputLabel value="Collection Job Class"/>
+                            <InputLabel value="Collection Url"/>
                             <TextInput
                                 class="mt-1 block w-full"
                                 id="name"
-                                v-model="form.offerings.collection_job_class"/>
+                                v-model="form.offerings.collection_url"/>
                         </div>
 
                         <div class="sm:col-span-4">
-                            <InputLabel value="Roast Job Class"/>
+                            <InputLabel value="Container Selector"/>
                             <TextInput
                                 class="mt-1 block w-full"
                                 id="name"
-                                v-model="form.offerings.roast_job_class"/>
+                                v-model="form.offerings.container_selector"/>
                         </div>
 
+                        <div class="sm:col-span-4">
+                            <InputLabel value="Product List Item Selector"/>
+                            <TextInput
+                                class="mt-1 block w-full"
+                                id="name"
+                                v-model="form.product_list_item_selector"/>
+                        </div>
+
+                        <div class="sm:col-span-4">
+                            <InputLabel value="Product Selector"/>
+                            <TextInput
+                                class="mt-1 block w-full"
+                                id="name"
+                                v-model="form.product_selector"/>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -405,8 +420,10 @@ const form = useForm({
     offerings: {
         enabled: 0,
         day: '',
-        collection_job_class: '',
-        roast_job_class: ''
+        collection_url: '',
+        container_selector: '',
+        product_list_item_selector: '',
+        product_selector: ''
     }
 });
 

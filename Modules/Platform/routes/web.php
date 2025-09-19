@@ -100,6 +100,8 @@ Route::middleware([Authenticate::class, CanManagePlatform::class])->group(functi
         ->name('platform.countries.edit');
     Route::put('/platform/countries/{country}', [CountryController::class, 'update'])
         ->name('platform.countries.update');
+    Route::delete('/platform/countries/{country}', [CountryController::class, 'delete'])
+        ->name('platform.countries.delete');
 
     Route::get('/platform/processes', [ProcessController::class, 'index'])
         ->name('platform.processes.index');
@@ -121,6 +123,8 @@ Route::middleware([Authenticate::class, CanManagePlatform::class])->group(functi
         ->name('platform.flavor-notes.edit');
     Route::put('/platform/flavor-notes/{flavorNote}', [FlavorNoteController::class, 'update'])
         ->name('platform.flavor-notes.update');
+    Route::delete('/platform/flavor-notes/{flavorNote}', [FlavorNoteController::class, 'delete'])
+        ->name('platform.flavor-notes.delete');
 
     Route::get('/platform/varieties', [VarietyController::class, 'index'])
         ->name('platform.varieties.index');

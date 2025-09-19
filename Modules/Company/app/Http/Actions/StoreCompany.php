@@ -80,8 +80,10 @@ class StoreCompany
             'company_id' => $company->id,
             'enabled' => $request->input('offerings.enabled'),
             'day' => $request->input('offerings.day'),
-            'collection_job_class' => $request->input('offerings.collection_job_class'),
-            'roast_job_class' => $request->input('offerings.roast_job_class'),
+            'collection_url' => $request->input('offerings.collection_url'),
+            'container_selector' => $request->input('offerings.container_selector'),
+            'product_list_item_selector' => $request->input('offerings.product_list_item_selector'),
+            'product_selector' => $request->input('offerings.product_selector'),
         ]);
     }
 }

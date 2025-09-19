@@ -1,5 +1,35 @@
 <template>
     <div>
+        <!-- Company Filter -->
+        <Disclosure as="div" 
+            class="border-b border-gray-200 py-6" 
+            v-slot="{ open }"
+            :default-open="true">
+                <h3 class="-my-3 flow-root">
+                    <DisclosureButton class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                        <span class="font-medium text-gray-900">Company</span>
+                        <span class="ml-6 flex items-center">
+                            <PlusIcon v-if="!open" class="h-5 w-5" aria-hidden="true" />
+                            <MinusIcon v-else class="h-5 w-5" aria-hidden="true" />
+                        </span>
+                    </DisclosureButton>
+                </h3>
+                <DisclosurePanel class="pt-6">
+                    <div class="space-y-4">
+                        <div v-for="(option, optionIdx) in availableCompanies" 
+                            :key="option.value" class="flex items-center">
+                                <input 
+                                    :id="`filter-company-${optionIdx}`" 
+                                    :value="option.value" 
+                                    type="checkbox" 
+                                    v-model="form.companies"
+                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                                <label :for="`filter-company-${optionIdx}`" class="ml-3 text-sm text-gray-600">{{ option.label }}</label>
+                        </div>
+                    </div>
+                </DisclosurePanel>
+        </Disclosure>
+
         <!-- Process Filter -->
         <Disclosure as="div" 
             class="border-b border-gray-200 py-6" 
@@ -52,7 +82,7 @@
                                     :value="option.value" 
                                     type="checkbox" 
                                     :checked="option.checked" 
-                                    v-model="form.flavorNotes"
+                                    v-model="form.flavor_notes"
                                     class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
                                 <label :for="`filter-flavor-note-${optionIdx}`" class="ml-3 text-sm text-gray-600">{{ option.label }}</label>
                         </div>
@@ -168,5 +198,10 @@ const availableFlavorNotes = computed(() => usePage().props.flavorNotes.map(flav
 const availableVarieties = computed(() => usePage().props.varieties.map(variety => ({ 
     value: variety.id, 
     label: variety.name + ' (' + variety.roasts_count + ')'
+})));
+
+const availableCompanies = computed(() => usePage().props.companies.map(company => ({ 
+    value: company.id, 
+    label: company.name + ' (' + company.roasts_count + ')'
 })));
 </script>

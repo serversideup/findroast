@@ -23,6 +23,10 @@ class IndexRoasts
 
         $this->filterByDates();
         $this->filterByProcesses();
+        $this->filterByFlavorNotes();
+        $this->filterByVarieties();
+        $this->filterByCountries();
+        $this->filterByCompanies();
 
         $this->appendCompany();
         $this->appendFlavorNotes();
@@ -31,7 +35,7 @@ class IndexRoasts
         $this->appendVarieties();
         $this->appendElevations();
 
-        return $this->query->get();
+        return $this->query->paginate(12);
     }
 
     protected function extractRequestVariables()
@@ -55,6 +59,40 @@ class IndexRoasts
             $this->query->whereHas('processes', function($query) {
                 $query->whereIn('processes.id', $this->request->get('processes'));
             });
+        }
+    }
+
+    protected function filterByFlavorNotes()
+    {
+        if( $this->request->has('flavor_notes') ){
+            $this->query->whereHas('flavorNotes', function($query) {
+                $query->whereIn('flavor_notes.id', $this->request->get('flavor_notes'));
+            });
+        }
+    }
+
+    protected function filterByVarieties()
+    {
+        if( $this->request->has('varieties') ){
+            $this->query->whereHas('varieties', function($query) {
+                $query->whereIn('varieties.id', $this->request->get('varieties'));
+            });
+        }
+    }
+
+    protected function filterByCountries()
+    {
+        if( $this->request->has('countries') ){
+            $this->query->whereHas('countries', function($query) {
+                $query->whereIn('countries.id', $this->request->get('countries'));
+            });
+        }
+    }
+
+    protected function filterByCompanies()
+    {
+        if( $this->request->has('companies') ){
+            $this->query->where('company_id', $this->request->get('companies'));
         }
     }
 

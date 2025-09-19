@@ -314,19 +314,35 @@
                         </div>
 
                         <div class="sm:col-span-4">
-                            <InputLabel value="Collection Job Class"/>
+                            <InputLabel value="Collection Url"/>
                             <TextInput
                                 class="mt-1 block w-full"
                                 id="name"
-                                v-model="form.offerings.collection_job_class"/>
+                                v-model="form.offerings.collection_url"/>
+                        </div>
+                        
+                        <div class="sm:col-span-4">
+                            <InputLabel value="Container Selector"/>
+                            <TextInput
+                                class="mt-1 block w-full"
+                                id="name"
+                                v-model="form.offerings.container_selector"/>
                         </div>
 
                         <div class="sm:col-span-4">
-                            <InputLabel value="Roast Job Class"/>
+                            <InputLabel value="Product List Item Selector"/>
                             <TextInput
                                 class="mt-1 block w-full"
                                 id="name"
-                                v-model="form.offerings.roast_job_class"/>
+                                v-model="form.product_list_item_selector"/>
+                        </div>
+
+                        <div class="sm:col-span-4">
+                            <InputLabel value="Product Selector"/>
+                            <TextInput
+                                class="mt-1 block w-full"
+                                id="name"
+                                v-model="form.product_selector"/>
                         </div>
 
                         <div class="sm:col-span-4">
@@ -408,8 +424,10 @@ const form = useForm({
     offerings: {
         enabled: company.value.offering_import_map?.enabled,
         day: company.value.offering_import_map?.day,
-        collection_job_class: company.value.offering_import_map?.collection_job_class,
-        roast_job_class: company.value.offering_import_map?.roast_job_class
+        collection_url: company.value.offering_import_map?.collection_url,
+        container_selector: company.value.offering_import_map?.container_selector,
+        product_list_item_selector: company.value.offering_import_map?.product_list_item_selector,
+        product_list_selector: company.value.offering_import_map?.product_selector
     }
 });
 
