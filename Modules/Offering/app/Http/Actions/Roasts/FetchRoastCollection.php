@@ -2,17 +2,17 @@
 
 namespace Modules\Offering\Http\Actions\Roasts;
 
-use OpenAI\Laravel\Facades\OpenAI;
+
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Exception;
 use Modules\Company\Models\Company;
 use Modules\Offering\Models\OfferingImportMap;
 
-class ScrapeCollection
+class FetchRoastCollection
 {
     protected array $config = [
-        'timeout' => 30,
+        'timeout' => 60,
         'max_retries' => 3,
         'user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'follow_redirects' => true,
@@ -20,9 +20,7 @@ class ScrapeCollection
     ];
 
     protected array $products = [];
-
-    // AI settings
-    protected string $openaiModel = 'gpt-4o';
+    protected array $processedProducts = [];
 
     protected array $collectionContainerSelectors = [
         '//div[contains(@class, "collection-products")]',
@@ -80,17 +78,7 @@ class ScrapeCollection
 
             $this->cleanProducts();
 
-            $prompt = $this->buildPrompt();
-            $response = $this->sendToOpenAI($prompt);
-
-            $validated = $this->validateCollectionResponse($response);
-
-            if( !$validated['success'] ){
-                throw new Exception($validated['error']);
-            }
-
-            return $validated['roasts'];
-
+            return $this->products;
         } catch (Exception $e) {
             Log::error('Collection scraping failed', [
                 'url' => $this->importMap->collection_url,
@@ -198,22 +186,18 @@ class ScrapeCollection
                 // Step 3: Extract all links (href and text)
                 $links = $xpath->query('.//a', $product);
                 foreach ($links as $link) {
-                    $linkData = [];
-
                     // Get the href attribute
                     $href = $link->getAttribute('href');
                     $linkText = trim($link->textContent);
 
                     // If the href is not a '#', add it to the product data
                     if ($href && $href != '#') {
-                        $linkData['href'] = $href;
+                        $productData['links'][] = $href;
 
                         if ($linkText) {
-                            $linkData['text'] = $this->cleanText($linkText);
+                            $productData['text'][] = $this->cleanText($linkText);
                         }
                     }
-
-                    $productData['links'][] = $linkData;
                 }
 
                 $this->products[] = $productData;
@@ -241,16 +225,20 @@ class ScrapeCollection
             }
 
             foreach ( $links as $linkKey => $link ) {
-                if (str_starts_with( $link['href'], '/')) {
-                    $link['href'] = $this->company->website . ltrim( $link['href'], "/" );
-                }
+                if( trim( $link ) == '' ) {
+                    unset( $links[$linkKey] );
+                } else {
+                    if (str_starts_with( $link, '/')) {
+                        $link = $this->company->website . ltrim( $link, "/" );
+                    }
 
-                $links[$linkKey] = $link;
+                    $links[$linkKey] = $link;
+                }
             }
 
             $product['text'] = $text;
             $product['images'] = $images;
-            $product['links'] = $links;
+            $product['links'] = array_values($links);
 
             $this->products[$key] = $product;
         }
@@ -284,7 +272,7 @@ class ScrapeCollection
         
         while ($attempts < $this->config['max_retries']) {
             try {
-                $response = Http::timeout($this->config['timeout'])
+                $response = Http::timeout(60)
                     ->withHeaders([
                         'User-Agent' => $this->config['user_agent'],
                         'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -325,132 +313,5 @@ class ScrapeCollection
         }
 
         throw new Exception("Failed to fetch URL after {$this->config['max_retries']} attempts: {$url}");
-    }
-
-    /**
-     * Build prompt for collection scraping
-     */
-    protected function buildPrompt(): string
-    {
-        $prompt = "The JSON is an array of data from a coffee company that sells their own roasts. Each item in the array is a roast.
-I've collected all the text, images, and links from the product listing in the JSON provided:
-```
-".json_encode($this->products)."
-```
-
-From the JSON provided, extract the following data from EACH roast in the array:
-- The name of the roast
-- The URL of the roast
-- The Price of the roast (if found)
-- Whether the roast is in stock or not
-- The product image of the roast 
-- The flavor notes of the roast
-- The processes of the roast
-- The countries of the roast
-
-Please return the data in the following format:
-```
-{
-    \"roasts\": [
-        {
-            \"name\": (string)\"Product Name\",
-            \"url\": (string)\"Product URL\",
-            \"price\": (float)\"Product price\",
-            \"in_stock\": (boolean)\"Whether the product is in stock or not.\",
-            \"image\": (string)\"URL of the product image\",
-            \"flavor_notes\": (array)\"Flavor notes of the roast\",
-            \"processes\": (array)\"Processes of the roast\",
-            \"countries\": (array)\"Countries of the roast\"
-        }
-    ]
-}
-```
-Return null, empty string, or empty array for each JSON value if it's not found.
-
-IMPORTANT: Process ALL items in the input array and return an array containing ALL of the roasts found.";
-
-        return $prompt;
-    }
-
-    /**
-     * Send prompt to OpenAI API with retry logic and token management
-     */
-    protected function sendToOpenAI(string $prompt): array
-    {
-        $attempts = 0;
-        
-        while ($attempts < $this->config['max_retries']) {
-            try {                
-                $result = OpenAI::chat()->create([
-                    'model' => $this->openaiModel,
-                    'messages' => [
-                        [
-                            'role' => 'user',
-                            'content' => $prompt
-                        ]
-                    ],
-                    'response_format' => ['type' => 'json_object'],
-                    'temperature' => 0.1, // Low temperature for consistent extraction
-                ]);
-
-                $content = $result->choices[0]->message->content;
-                $decoded = json_decode($content, true);
-
-                if (json_last_error() !== JSON_ERROR_NONE) {
-                    throw new Exception("Invalid JSON response from OpenAI: " . json_last_error_msg());
-                }
-
-                return $decoded;
-
-            } catch (Exception $e) {
-                $attempts++;
-                
-                // If it's a token limit error, try with shorter content
-                if (strpos($e->getMessage(), 'Request too large') !== false && $attempts < $this->config['max_retries']) {
-                    Log::warning("Token limit exceeded, retrying with shorter content", [
-                        'attempt' => $attempts,
-                        'prompt_length' => strlen($prompt)
-                    ]);
-                    
-                    // Truncate prompt further
-                    $prompt = substr($prompt, 0, 2000);
-                    continue;
-                }
-                
-                if ($attempts >= $this->config['max_retries']) {
-                    Log::error('OpenAI API call failed after retries', [
-                        'error' => $e->getMessage(),
-                        'prompt_length' => strlen($prompt),
-                        'attempts' => $attempts
-                    ]);
-                    
-                    throw new Exception("OpenAI API call failed after {$attempts} attempts: " . $e->getMessage());
-                }
-                
-                // Wait before retry
-                sleep(pow(2, $attempts));
-            }
-        }
-
-        throw new Exception("Failed to get response from OpenAI after {$this->config['max_retries']} attempts");
-    }
-
-    /**
-     * Validate collection response
-     */
-    protected function validateCollectionResponse(array $response): array
-    {
-        if (!isset($response['roasts']) || !is_array($response['roasts'])) {
-            return [
-                'success' => false,
-                'error' => 'Invalid response format from OpenAI',
-                'roasts' => []
-            ];
-        }
-
-        return [
-            'success' => true,
-            'roasts' => $response['roasts']
-        ];
     }
 }

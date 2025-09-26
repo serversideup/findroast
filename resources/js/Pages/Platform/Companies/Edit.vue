@@ -334,7 +334,7 @@
                             <TextInput
                                 class="mt-1 block w-full"
                                 id="name"
-                                v-model="form.product_list_item_selector"/>
+                                v-model="form.offerings.product_list_item_selector"/>
                         </div>
 
                         <div class="sm:col-span-4">
@@ -342,7 +342,7 @@
                             <TextInput
                                 class="mt-1 block w-full"
                                 id="name"
-                                v-model="form.product_selector"/>
+                                v-model="form.offerings.product_selector"/>
                         </div>
 
                         <div class="sm:col-span-4">

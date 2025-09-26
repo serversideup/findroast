@@ -2,14 +2,12 @@
 
 namespace Modules\Offering\Http\Actions\Roasts;
 
-use OpenAI\Laravel\Facades\OpenAI;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Exception;
 use Modules\Offering\Models\OfferingImportMap;
-use Modules\Offering\Models\Roast;
 
-class ScrapeRoast
+class FetchRoast
 {
     protected array $config = [
         'timeout' => 30,
@@ -30,7 +28,7 @@ class ScrapeRoast
 
     public function __construct(
         protected OfferingImportMap $importMap,
-        protected Roast $roast
+        protected string $url
     ){}
 
     public function execute()
@@ -38,10 +36,10 @@ class ScrapeRoast
         try {
             $this->appendSelectors();
 
-            $html = $this->fetchUrl($this->roast->url);
+            $html = $this->fetchUrl($this->url);
 
             if (empty($html)) {
-                throw new Exception("Failed to fetch roast URL: {$this->roast->url}");
+                throw new Exception("Failed to fetch roast URL: {$this->url}");
             }
 
             $this->extractProduct($html);
@@ -50,14 +48,12 @@ class ScrapeRoast
                 throw new Exception("No product data found on page");
             }
 
-            $prompt = $this->buildPrompt();
-            $response = $this->sendToOpenAI($prompt);
+            $this->cleanProduct();
 
-            return $response;
-
+            return $this->productData;
         } catch (Exception $e) {
             Log::error('Collection scraping failed', [
-                'url' => $this->importMap->collection_url,
+                'url' => $this->url,
                 'error' => $e->getMessage()
             ]);
             
@@ -113,7 +109,9 @@ class ScrapeRoast
         }
 
         // Step 1: Extract all text nodes
-        $textNodes = $xpath->query('.//text()[normalize-space()]', $mainContainer);
+        // Get all text nodes but exclude script and style content
+        $textNodes = $xpath->query('.//text()[normalize-space() and not(ancestor::script) and not(ancestor::style)]', $mainContainer);
+
         foreach ($textNodes as $node) {
             $text = trim($node->nodeValue);
                 
@@ -139,6 +137,25 @@ class ScrapeRoast
         return $this->productData;
     }
 
+    protected function cleanProduct()
+    {
+        $this->productData['text'] = array_unique($this->productData['text'], SORT_REGULAR);
+        $this->productData['images'] = array_unique($this->productData['images'], SORT_REGULAR);
+
+        foreach ($this->productData['images'] as $image) {
+            if (str_starts_with($image['src'], '//')) {
+                $image['src'] = 'https:' . $image['src'];
+            }
+
+            $this->productData['images'][] = $image;
+        }
+
+        $this->productData['text'] = array_values($this->productData['text']);
+        $this->productData['images'] = array_values($this->productData['images']);
+
+        return $this->productData;
+    }
+
     /**
      * Clean and normalize text content
      */
@@ -154,102 +171,6 @@ class ScrapeRoast
         $text = strip_tags($text);
         
         return trim($text);
-    }
-
-    protected function buildPrompt()
-    {
-        $prompt = "The provided data is the scrape of an individual coffee product from a coffee company that sells their own roasts.
-I've collected all the text & images from the product page and sent them to you in the JSON provided:
-```
-".json_encode($this->productData)."
-```
-
-From the JSON provided, extract the following data:
-- The flavor notes of the roast
-- The processes of the roast
-- The countries of the roast
-- The varieties of the roast
-- The elevations of the roast
-- The roast level of the roast
-
-Please return the data in the following format:
-```
-{
-    \"flavor_notes\": (array)\"Flavor notes of the roast\",
-    \"processes\": (array)\"Processes of the roast\",
-    \"countries\": (array)\"Countries of the roast\",
-    \"varieties\": (array)\"Varieties of the roast\",
-    \"elevations\": (array)\"Elevations of the roast\",
-    \"roast_level\": (string)\"Roast level of the roast\"
-}
-```
-
-Return null, empty string, or empty array for each JSON value if it's not found.";
-
-        return $prompt;
-    }
-
-    /**
-     * Send prompt to OpenAI API with retry logic and token management
-     */
-    protected function sendToOpenAI(string $prompt): array
-    {
-        $attempts = 0;
-        
-        while ($attempts < $this->config['max_retries']) {
-            try {                
-                $result = OpenAI::chat()->create([
-                    'model' => $this->openaiModel,
-                    'messages' => [
-                        [
-                            'role' => 'user',
-                            'content' => $prompt
-                        ]
-                    ],
-                    'response_format' => ['type' => 'json_object'],
-                    'temperature' => 0.1, // Low temperature for consistent extraction
-                ]);
-
-                $content = $result->choices[0]->message->content;
-                $decoded = json_decode($content, true);
-
-                if (json_last_error() !== JSON_ERROR_NONE) {
-                    throw new Exception("Invalid JSON response from OpenAI: " . json_last_error_msg());
-                }
-
-                return $decoded;
-
-            } catch (Exception $e) {
-                $attempts++;
-                
-                // If it's a token limit error, try with shorter content
-                if (strpos($e->getMessage(), 'Request too large') !== false && $attempts < $this->config['max_retries']) {
-                    Log::warning("Token limit exceeded, retrying with shorter content", [
-                        'attempt' => $attempts,
-                        'prompt_length' => strlen($prompt)
-                    ]);
-                    
-                    // Truncate prompt further
-                    $prompt = substr($prompt, 0, 2000);
-                    continue;
-                }
-                
-                if ($attempts >= $this->config['max_retries']) {
-                    Log::error('OpenAI API call failed after retries', [
-                        'error' => $e->getMessage(),
-                        'prompt_length' => strlen($prompt),
-                        'attempts' => $attempts
-                    ]);
-                    
-                    throw new Exception("OpenAI API call failed after {$attempts} attempts: " . $e->getMessage());
-                }
-                
-                // Wait before retry
-                sleep(pow(2, $attempts));
-            }
-        }
-
-        throw new Exception("Failed to get response from OpenAI after {$this->config['max_retries']} attempts");
     }
 
     /**

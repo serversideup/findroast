@@ -3,14 +3,14 @@
 namespace Modules\Offering\Jobs;
 
 use Modules\Company\Models\Company;
-use Modules\Offering\Models\Roast;
-use Modules\Offering\Http\Actions\Roasts\SyncCountries;
-use Modules\Offering\Http\Actions\Roasts\SyncElevations;
-use Modules\Offering\Http\Actions\Roasts\SyncProcesses;
-use Modules\Offering\Http\Actions\Roasts\SyncFlavorNotes;
-use Modules\Offering\Http\Actions\Roasts\SyncVarieties;
 use Modules\Offering\Models\OfferingImportMap;
-use Modules\Offering\Http\Actions\Roasts\ScrapeRoast;
+use Modules\Offering\Models\Batch;
+use Modules\Offering\Models\Roast;
+use Modules\Offering\Http\Actions\Roasts\FetchRoast;
+use Modules\Offering\Http\Actions\Roasts\MergeFetchedData;
+use Modules\Offering\Http\Actions\Roasts\ExtractImagesData;
+use Modules\Offering\Http\Actions\Roasts\ExtractRoastData;
+use Modules\Offering\Http\Actions\Roasts\ImportRoast;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -21,30 +21,53 @@ class SyncRoast implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $timeout = 300;
+    
     public function __construct(
         protected Company $company,
-        protected Roast $roast
+        protected OfferingImportMap $importMap,
+        protected Batch $batch,
+        protected array $collectionRoast
     ){}
     
     public function handle(): void
     {
-        $roastData = $this->loadRoastData();
+        $url = $this->collectionRoast['links'][0];
 
-        SyncFlavorNotes::execute($this->roast, $roastData['flavor_notes']);
-        SyncProcesses::execute($this->roast, $roastData['processes']);
-        SyncCountries::execute($this->roast, $roastData['countries']);
-        SyncVarieties::execute($this->roast, $roastData['varieties']);
-        SyncElevations::execute($this->roast, $roastData['elevations']);
-    }
+        $roast = Roast::where('url', $url)->first();
 
-    protected function loadRoastData()
-    {
-        $offeringImportMap = OfferingImportMap::where('company_id', $this->company->id)
-            ->first();
+        if( $roast ){
+            $this->batch->roasts()->attach([$roast->id => [
+                'company_id' => $this->company->id,
+            ]]);
+        }else{
+            $singleRoast = ( new FetchRoast(
+                $this->importMap, 
+                $url
+            ) )->execute();
 
-        $roastData = ( new ScrapeRoast($offeringImportMap, $this->roast) )
-            ->execute();
+            $mergedRoast = ( new MergeFetchedData(
+                $this->collectionRoast, 
+                $singleRoast
+            ) )->execute();
 
-        return $roastData;
+            $images = ( new ExtractImagesData(
+                $mergedRoast['images']
+            ) )->execute();
+
+            $roastData = ( new ExtractRoastData(
+                $mergedRoast,
+                $images
+            ) )->execute();
+
+            $roast = ( new ImportRoast(
+                $this->company,
+                $roastData
+            ) )->execute();
+
+            $this->batch->roasts()->attach([$roast->id => [
+                'company_id' => $this->company->id,
+            ]]);
+        }
     }
 }

@@ -2,7 +2,7 @@
     <a :href="roast.url+'?ref=findroast'" target="_blank"
         class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
         <div class="aspect-h-4 aspect-w-3 bg-gray-200 relative sm:aspect-none group-hover:opacity-75 sm:h-96">
-            <img :src="roast.primary_image" :alt="roast.name" class="h-full w-full object-cover object-center z-50 sm:h-full sm:w-full" />
+            <img :src="'/storage/'+roast.primary_image" :alt="roast.name" class="h-full w-full object-cover object-center z-50 sm:h-full sm:w-full" />
         </div>
         <div class="flex flex-1 flex-col p-4">
             <h3 class="font-semibold text-gray-900 text-base">

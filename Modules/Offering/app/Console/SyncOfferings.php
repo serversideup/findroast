@@ -5,10 +5,14 @@ namespace Modules\Offering\Console;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Modules\Company\Models\Company;
-use Modules\Offering\Jobs\SyncCollection;
+use Modules\Offering\Http\Actions\Roasts\FetchRoastCollection;
 use Modules\Offering\Models\OfferingImportMap;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Modules\Offering\Models\Batch;
+use Illuminate\Support\Str;
+use Modules\Offering\Jobs\SyncRoast;
+use Modules\Offering\Jobs\MarkMissingRoasts;
 
 class SyncOfferings extends Command
 {
@@ -43,14 +47,42 @@ class SyncOfferings extends Command
             ->get();
 
         foreach( $importMaps as $importMap ) {
-            $company = Company::find($importMap->company_id);
-
-            SyncCollection::dispatch($company);
-
-            $importMap->update([
-                'last_synced_at' => Carbon::now()
-            ]);
+            $this->fetchRoastCollection($importMap->company, $importMap);
         }
+    }
+
+    protected function fetchRoastCollection(Company $company, OfferingImportMap $importMap)
+    {
+        $roastsCollection = ( new FetchRoastCollection($company, $importMap) )
+                ->execute();
+
+        $batch = Batch::create([
+            'uuid' => Str::uuid(),
+            'company_id' => $company->id,
+            'scraped_data' => json_encode($roastsCollection)
+        ]);
+        
+        $delay = 30;
+        
+        foreach ($roastsCollection as $roastCollection) {
+            SyncRoast::dispatch(
+                $company, 
+                $importMap, 
+                $batch, 
+                $roastCollection
+            )->delay(now()->addSeconds($delay));
+
+            $delay += 30;
+        }
+
+        $delay += 100;
+
+        MarkMissingRoasts::dispatch($company, $batch)
+            ->delay(now()->addSeconds($delay));
+
+        $importMap->update([
+            'last_synced_at' => now()
+        ]);
     }
 
     /**
