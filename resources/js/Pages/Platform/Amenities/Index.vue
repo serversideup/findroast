@@ -8,14 +8,14 @@
             { label: 'Amenities', to: '#'}
         ]">
         <template #actions>
-            <PrimaryLink href="/platform/amenities/create">
+            <PrimaryButton @click="promptCreateAmenity()">
                 Create Amenity
-            </PrimaryLink>
+            </PrimaryButton>
         </template>
     </AdminHeader>
 
-    <div class="max-w-screen-xl mx-auto">
-        <div class="mt-8 flow-root">
+    <div class="max-w-screen-xl mx-auto mt-8 lg:px-8">
+        <div class="flow-root">
             <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                     <table class="min-w-full divide-y divide-gray-300">
@@ -39,9 +39,9 @@
                                     {{ amenity.name }}
                                 </td>
                                 <td class="pl-3 pr-4 py-3.5 whitespace-nowrap text-right text-sm font-medium">
-                                    <Link :href="`/platform/amenities/${amenity.id}/edit`" class="text-gray-600 hover:text-indigo-900">
+                                    <button @click="promptEditAmenity(amenity)" class="text-gray-600 hover:text-indigo-900">
                                         Edit
-                                    </Link>
+                                    </button>
                                 </td>
                             </tr>
                             <tr v-if="amenities.length === 0">
@@ -56,21 +56,32 @@
         </div>
     </div>
 
+    <CreateAmenityDrawer />
+    <EditAmenityDrawer />
 </template>
-
-<script>
-import AppLayout from '@/Layouts/AppLayout.vue';
-
-export default {
-    layout: AppLayout
-};
-</script>
 
 <script setup>
 import AdminHeader from '../Partials/AdminHeader.vue';
-import PrimaryLink from '@/Components/PrimaryLink.vue'
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import CreateAmenityDrawer from './Partials/CreateAmenityDrawer.vue';
+import EditAmenityDrawer from './Partials/EditAmenityDrawer.vue';
+import { useEventBus } from '@vueuse/core';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
+defineOptions({
+    layout: AdminLayout
+});
 const amenities = computed(() => usePage().props.amenities);
+
+const promptBus = useEventBus('roast-prompt-event-bus');
+
+const promptCreateAmenity = () => {
+    promptBus.emit('prompt-create-amenity');
+}
+
+const promptEditAmenity = (amenity) => {
+    promptBus.emit('prompt-edit-amenity', amenity);
+}
 </script>

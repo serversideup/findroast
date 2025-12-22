@@ -24,6 +24,11 @@ class OfferingImportMap extends Model
         'container_selector',
         'product_list_item_selector',
         'product_selector',
+        'is_shopify',
+        'shopify_product_types',
+        'shopify_tags_include',
+        'shopify_tags_exclude',
+        'shopify_collection_url',
         'last_synced_at',
     ];
 

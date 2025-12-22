@@ -58,20 +58,4 @@ class OfferingController extends Controller
             'companies' => $companies
         ]);
     }
-
-    public function show(Roast $roast)
-    {
-
-        $roast->load('flavorNotes');
-        $roast->load('varieties');
-        $roast->load('processes');
-        $roast->load('countries');
-        $roast->load('elevations');
-        
-        return Inertia::modal('Offerings/Show')
-            ->with([
-                'roast' => $roast
-            ])
-            ->baseRoute('offerings.index');
-    }
 }

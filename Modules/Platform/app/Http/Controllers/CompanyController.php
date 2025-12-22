@@ -19,40 +19,15 @@ class CompanyController extends Controller
      */
     public function index( Request $request )
     {
-        $companies = ( new IndexCompanies( $request ) )->execute();
+        $companies = ( new IndexCompanies( $request ) )->execute([
+            'offeringImportMap',
+        ]);
 
         return Inertia::render('Platform/Companies/Index', [
             'companies' => $companies,
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create( Request $request )
-    {
-        return Inertia::render('Platform/Companies/Create');
-    }
-
-    public function edit( Request $request, Company $company )
-    {
-        $company = ( new ShowCompany( $company ) )
-            ->execute(true);
-
-        return Inertia::render('Platform/Companies/Edit', [
-            'company' => $company,
-        ]);
-    }
-
-    public function show( Request $request, Company $company )
-    {
-        $company = ( new ShowCompany( $company ) )
-            ->execute(true);
-
-        return Inertia::render('Platform/Companies/Show', [
-            'company' => $company,
-        ]);
-    }
 
     public function store( StoreCompanyRequest $request )
     {
@@ -65,8 +40,6 @@ class CompanyController extends Controller
     {
         ( new UpdateCompany() )->execute( $request, $company );
 
-        return redirect()->route('platform.companies.show', [ 
-            'company' => $company
-        ]);
+        return redirect()->route('platform.companies.index');
     }
 }

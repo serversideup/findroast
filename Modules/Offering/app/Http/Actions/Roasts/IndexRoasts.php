@@ -27,6 +27,7 @@ class IndexRoasts
         $this->filterByVarieties();
         $this->filterByCountries();
         $this->filterByCompanies();
+        $this->filterByInStock();
 
         $this->appendCompany();
         $this->appendFlavorNotes();
@@ -35,7 +36,7 @@ class IndexRoasts
         $this->appendVarieties();
         $this->appendElevations();
 
-        return $this->query->paginate(12);
+        return $this->query->paginate(12)->withQueryString();
     }
 
     protected function extractRequestVariables()
@@ -124,5 +125,10 @@ class IndexRoasts
     protected function appendElevations()
     {
         $this->query->with('elevations');
+    }
+
+    protected function filterByInStock()
+    {
+        $this->query->where('in_stock', 1);
     }
 }

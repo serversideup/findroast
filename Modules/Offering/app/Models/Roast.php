@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Company\Models\Company;
 use Modules\Offering\Database\Factories\RoastFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Roast extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

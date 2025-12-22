@@ -77,11 +77,15 @@ class UpdateCompany
             'company_id' => $company->id,
         ], [
             'enabled' => $request->input('offerings.enabled'),
-            'day' => $request->input('offerings.day'),
             'collection_url' => $request->input('offerings.collection_url'),
             'container_selector' => $request->input('offerings.container_selector'),
             'product_list_item_selector' => $request->input('offerings.product_list_item_selector'),
             'product_selector' => $request->input('offerings.product_selector'),
+            'is_shopify' => $request->input('offerings.is_shopify'),
+            'shopify_product_types' => $request->input('offerings.shopify_product_types'),
+            'shopify_tags_include' => $request->input('offerings.shopify_tags_include'),
+            'shopify_tags_exclude' => $request->input('offerings.shopify_tags_exclude'),
+            'shopify_collection_url' => $request->input('offerings.shopify_collection_url'),
         ]);
     }
 }

@@ -14,7 +14,9 @@ use Modules\Platform\Http\Controllers\OfferingsController;
 use Modules\Platform\Http\Controllers\PlatformController;
 use Modules\Platform\Http\Controllers\ProcessController;
 use Modules\Platform\Http\Controllers\RoastController;
+use Modules\Platform\Http\Controllers\UsersController;
 use Modules\Platform\Http\Controllers\VarietyController;
+use Modules\Platform\Http\Controllers\MessagesController;
 use Modules\Platform\Http\Middleware\CanManagePlatform;
 
 /*
@@ -34,47 +36,29 @@ Route::middleware([Authenticate::class, CanManagePlatform::class])->group(functi
 
     Route::get('/platform/brew-methods', [BrewMethodController::class, 'index'])
         ->name('platform.brew-methods.index');
-    Route::get('/platform/brew-methods/create', [BrewMethodController::class, 'create'])
-        ->name('platform.brew-methods.create');
     Route::post('/platform/brew-methods', [BrewMethodController::class, 'store'])
         ->name('platform.brew-methods.store');
-    Route::get('/platform/brew-methods/{brewMethod}/edit', [BrewMethodController::class, 'edit'])
-        ->name('platform.brew-methods.edit');
     Route::put('/platform/brew-methods/{brewMethod}', [BrewMethodController::class, 'update'])
         ->name('platform.brew-methods.update');
 
     Route::get('/platform/drink-options', [DrinkOptionController::class, 'index'])
         ->name('platform.drink-options.index');
-    Route::get('/platform/drink-options/create', [DrinkOptionController::class, 'create'])
-        ->name('platform.drink-options.create');
     Route::post('/platform/drink-options', [DrinkOptionController::class, 'store'])
         ->name('platform.drink-options.store');
-    Route::get('/platform/drink-options/{drinkOption}/edit', [DrinkOptionController::class, 'edit'])
-        ->name('platform.drink-options.edit');
     Route::put('/platform/drink-options/{drinkOption}', [DrinkOptionController::class, 'update'])
         ->name('platform.drink-options.update');
 
     Route::get('/platform/amenities', [AmenityController::class, 'index'])
         ->name('platform.amenities.index');
-    Route::get('/platform/amenities/create', [AmenityController::class, 'create'])
-        ->name('platform.amenities.create');
     Route::post('/platform/amenities', [AmenityController::class, 'store'])
         ->name('platform.amenities.store');
-    Route::get('/platform/amenities/{amenity}/edit', [AmenityController::class, 'edit'])
-        ->name('platform.amenities.edit');
     Route::put('/platform/amenities/{amenity}', [AmenityController::class, 'update'])
         ->name('platform.amenities.update');
 
     Route::get('/platform/companies', [CompanyController::class, 'index'])
         ->name('platform.companies.index');
-    Route::get('/platform/companies/create', [CompanyController::class, 'create'])
-        ->name('platform.companies.create');
     Route::post('/platform/companies', [CompanyController::class, 'store'])
         ->name('platform.companies.store');
-    Route::get('/platform/companies/{company}', [CompanyController::class, 'show'])
-        ->name('platform.companies.show');
-    Route::get('/platform/companies/{company}/edit', [CompanyController::class, 'edit'])
-        ->name('platform.companies.edit');
     Route::put('/platform/companies/{company}', [CompanyController::class, 'update'])
         ->name('platform.companies.update');
 
@@ -105,22 +89,20 @@ Route::middleware([Authenticate::class, CanManagePlatform::class])->group(functi
 
     Route::get('/platform/processes', [ProcessController::class, 'index'])
         ->name('platform.processes.index');
-    Route::get('/platform/processes/{process}/edit', [ProcessController::class, 'edit'])
-        ->name('platform.processes.edit');
     Route::put('/platform/processes/{process}', [ProcessController::class, 'update'])
         ->name('platform.processes.update');
+    Route::delete('/platform/processes/{process}', [ProcessController::class, 'delete'])
+        ->name('platform.processes.delete');
 
     Route::get('/platform/elevations', [ElevationController::class, 'index'])
         ->name('platform.elevations.index');
-    Route::get('/platform/elevations/{elevation}/edit', [ElevationController::class, 'edit'])
-        ->name('platform.elevations.edit');
     Route::put('/platform/elevations/{elevation}', [ElevationController::class, 'update'])
         ->name('platform.elevations.update');
+    Route::delete('/platform/elevations/{elevation}', [ElevationController::class, 'delete'])
+        ->name('platform.elevations.delete');
 
     Route::get('/platform/flavor-notes', [FlavorNoteController::class, 'index'])
         ->name('platform.flavor-notes.index');
-    Route::get('/platform/flavor-notes/{flavorNote}/edit', [FlavorNoteController::class, 'edit'])
-        ->name('platform.flavor-notes.edit');
     Route::put('/platform/flavor-notes/{flavorNote}', [FlavorNoteController::class, 'update'])
         ->name('platform.flavor-notes.update');
     Route::delete('/platform/flavor-notes/{flavorNote}', [FlavorNoteController::class, 'delete'])
@@ -128,11 +110,26 @@ Route::middleware([Authenticate::class, CanManagePlatform::class])->group(functi
 
     Route::get('/platform/varieties', [VarietyController::class, 'index'])
         ->name('platform.varieties.index');
-    Route::get('/platform/varieties/{variety}/edit', [VarietyController::class, 'edit'])
-        ->name('platform.varieties.edit');
     Route::put('/platform/varieties/{variety}', [VarietyController::class, 'update'])
         ->name('platform.varieties.update');
+    Route::delete('/platform/varieties/{variety}', [VarietyController::class, 'delete'])
+        ->name('platform.varieties.delete');
 
     Route::get('/platform/roasts', [RoastController::class, 'index'])
         ->name('platform.roasts.index');
+    Route::put('/platform/roasts/{roast}', [RoastController::class, 'update'])
+        ->name('platform.roasts.update');
+    Route::delete('/platform/roasts/{roast}', [RoastController::class, 'delete'])
+        ->name('platform.roasts.delete');
+
+    Route::post('/platform/offerings/preview', [OfferingsController::class, 'preview'])
+        ->name('platform.offerings.preview');
+
+    Route::get('/platform/messages', [MessagesController::class, 'index'])
+        ->name('platform.messages.index');
+    Route::put('/platform/messages/{message}', [MessagesController::class, 'update'])
+        ->name('platform.messages.update');
+
+    Route::get('/platform/users', [UsersController::class, 'index'])
+        ->name('platform.users.index');
 });

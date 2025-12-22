@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Modules\Offering\Models\Process;
 use Modules\Platform\Http\Actions\Processes\UpdateProcess;
+use Modules\Platform\Http\Actions\Processes\DeleteProcess;
 
 class ProcessController extends Controller
 {
@@ -23,21 +24,21 @@ class ProcessController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit( Request $request, Process $process )
-    {
-        return Inertia::render('Platform/Processes/Edit', [
-            'process' => $process
-        ]);
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update( Request $request, Process $process )
     {
         ( new UpdateProcess() )->execute( $request, $process );
+
+        return redirect()->route('platform.processes.index');
+    }
+
+    /**
+     * Delete the specified resource in storage.
+     */
+    public function delete( Request $request, Process $process )
+    {
+        ( new DeleteProcess() )->execute( $process );
 
         return redirect()->route('platform.processes.index');
     }

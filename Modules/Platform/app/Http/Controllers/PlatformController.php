@@ -4,7 +4,6 @@ namespace Modules\Platform\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class PlatformController extends Controller
 {
@@ -13,6 +12,6 @@ class PlatformController extends Controller
      */
     public function index( Request $request )
     {
-        return Inertia::render('Platform/Index');
+        return redirect()->route('platform.companies.index');
     }
 }

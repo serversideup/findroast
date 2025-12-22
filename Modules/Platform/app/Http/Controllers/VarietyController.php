@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Modules\Offering\Models\Variety;
 use Modules\Platform\Http\Actions\Varieties\UpdateVariety;
+use Modules\Platform\Http\Actions\Varieties\DeleteVariety;
 
 class VarietyController extends Controller
 {
@@ -23,21 +24,21 @@ class VarietyController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit( Request $request, Variety $variety )
-    {
-        return Inertia::render('Platform/Varieties/Edit', [
-            'variety' => $variety
-        ]);
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update( Request $request, Variety $variety )
     {
         ( new UpdateVariety() )->execute( $request, $variety );
+
+        return redirect()->route('platform.varieties.index');
+    }
+
+    /**
+     * Delete the specified resource in storage.
+     */
+    public function delete( Request $request, Variety $variety )
+    {
+        ( new DeleteVariety() )->execute( $variety );
 
         return redirect()->route('platform.varieties.index');
     }

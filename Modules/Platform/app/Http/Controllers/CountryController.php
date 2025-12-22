@@ -16,20 +16,10 @@ class CountryController extends Controller
      */
     public function index( Request $request )
     {
-        $countries = Country::orderBy('name', 'DESC')->get();
+        $countries = Country::orderBy('name', 'ASC')->get();
 
         return Inertia::render('Platform/Countries/Index', [
             'countries' => $countries
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit( Request $request, Country $country )
-    {
-        return Inertia::render('Platform/Countries/Edit', [
-            'country' => $country
         ]);
     }
 

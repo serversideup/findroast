@@ -80,10 +80,6 @@ class ExtractImagesData
 
         $chat = $this->buildChat($prompt, $imageContent);
 
-        \Log::info('Sending to OpenAI', [
-            'chat' => $chat
-        ]);
-
         $result = OpenAI::chat()->create($chat);
         
         return json_decode( $result->choices[0]->message->content, true );
@@ -116,7 +112,7 @@ class ExtractImagesData
         We are looking for two images:
             - The primary image of the roast
             - The details image for the roast
-        The primary image is the main image of the roast preferably is a coffee bag image.
+        The primary image is the main image of the roast preferably is a coffee bag image. If there's two images that contain a coffee bag, return the image that contains the most text.
         The details image contains flavor notes, processes, countries, varieties, or elevations of the roast.
         Sometimes the bag of coffee contains the details. If that's the case, the primary image and the details image are the same.
         If there's no details image, return null for the details image.

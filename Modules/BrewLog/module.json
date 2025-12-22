@@ -1,0 +1,11 @@
+{
+    "name": "BrewLog",
+    "alias": "brewlog",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\BrewLog\\Providers\\BrewLogServiceProvider"
+    ],
+    "files": []
+}

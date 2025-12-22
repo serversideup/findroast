@@ -33,9 +33,9 @@
                                     {{ elevation.name }}
                                 </td>
                                 <td class="pl-3 pr-4 py-3.5 whitespace-nowrap text-right text-sm font-medium">
-                                    <Link :href="`/platform/elevations/${elevation.id}/edit`" class="text-gray-600 hover:text-indigo-900">
+                                    <button @click="editElevation(elevation)" class="text-gray-600 hover:text-indigo-900">
                                         Edit
-                                    </Link>
+                                    </button>
                                 </td>
                             </tr>
                             <tr v-if="elevations.length === 0">
@@ -50,20 +50,26 @@
         </div>
     </div>
 
+    <EditElevationDrawer />
 </template>
-
-<script>
-import AppLayout from '@/Layouts/AppLayout.vue';
-
-export default {
-    layout: AppLayout
-};
-</script>
 
 <script setup>
 import AdminHeader from '../Partials/AdminHeader.vue';
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import { useEventBus } from '@vueuse/core';
+import EditElevationDrawer from './Partials/EditElevationDrawer.vue';
+
+defineOptions({
+    layout: AdminLayout
+});
 
 const elevations = computed(() => usePage().props.elevations);
+
+const promptBus = useEventBus('roast-prompt-event-bus');
+
+const editElevation = (elevation) => {
+    promptBus.emit('prompt-edit-elevation', elevation);
+}
 </script>

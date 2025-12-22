@@ -25,24 +25,6 @@ class BrewMethodController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create( Request $request )
-    {
-        return Inertia::render('Platform/BrewMethods/Create');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit( Request $request, BrewMethod $brewMethod )
-    {
-        return Inertia::render('Platform/BrewMethods/Edit', [
-            'brewMethod' => $brewMethod
-        ]);
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store( StoreBrewMethodRequest $request )

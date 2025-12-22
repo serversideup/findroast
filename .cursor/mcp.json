@@ -1,0 +1,9 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "spin",
+            "args": ["exec", "-T", "php", "php", "artisan", "boost:mcp"],
+            "cwd": "/Volumes/Development/findroast-inertia"
+        }
+    }
+}

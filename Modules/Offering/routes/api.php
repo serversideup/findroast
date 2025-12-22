@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Offering\Http\Controllers\OfferingController;
+
 
 /*
  *--------------------------------------------------------------------------
@@ -15,5 +15,5 @@ use Modules\Offering\Http\Controllers\OfferingController;
 */
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('offering', OfferingController::class)->names('offering');
+    
 });

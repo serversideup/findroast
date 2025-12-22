@@ -10,9 +10,9 @@
         <template #actions>
             <TextInput v-model="search" @keydown="searchCompanies" placeholder="Search companies..." class="mr-3"/>
 
-            <PrimaryLink href="/platform/companies/create">
+            <PrimaryButton @click="addCompany()">
                 Add Company
-            </PrimaryLink>
+            </PrimaryButton>
         </template>
     </AdminHeader>
 
@@ -72,9 +72,9 @@
                                     {{ company.roaster == 1 ? 'Yes' : 'No' }}
                                 </td>
                                 <td class="pl-3 pr-4 py-3.5 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                    <Link :href="`/platform/companies/${company.id}`" class="text-gray-600 hover:text-indigo-900">
-                                        View
-                                    </Link>
+                                    <button @click="editCompany(company)" class="text-gray-600 hover:text-indigo-900">
+                                        Edit
+                                    </button>
                                 </td>
                             </tr>
                             <tr v-if="companies.data.length === 0">
@@ -103,31 +103,35 @@
                             </p>
                         </div>
                         <div class="flex flex-1 justify-between sm:justify-end">
-                            <Link :href="companies.prev_page_url" class="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0">Previous</Link>
-                            <Link :href="companies.next_page_url" class="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0">Next</Link>
+                            <!-- <Link :href="companies.prev_page_url" class="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0">Previous</Link>
+                            <Link :href="companies.next_page_url" class="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0">Next</Link> -->
                         </div>
                     </nav>
                 </div>
             </div>
         </div>
     </div>
+
+    <EditCompanyDrawer />
+    <AddCompanyDrawer />
+    <PreviewScrapeModal />
 </template>
 
-<script>
-import AppLayout from '@/Layouts/AppLayout.vue';
-
-export default {
-    layout: AppLayout
-};
-</script>
-
 <script setup>
+import AdminLayout from '@/Layouts/AdminLayout.vue';
 import AdminHeader from '../Partials/AdminHeader.vue';
-import PrimaryLink from '@/Components/PrimaryLink.vue'
 import TextInput from '@/Components/TextInput.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import EditCompanyDrawer from './Partials/EditCompanyDrawer.vue';
+import AddCompanyDrawer from './Partials/AddCompanyDrawer.vue';
+import PreviewScrapeModal from './Partials/PreviewScrapeModal.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
-import { useDebounceFn } from '@vueuse/core'
+import { useDebounceFn, useEventBus } from '@vueuse/core'
+
+defineOptions({
+    layout: AdminLayout
+});
 
 const companies = computed(() => usePage().props.companies);
 
@@ -143,5 +147,15 @@ const searchCompanies = useDebounceFn(() => {
         replace: true
     });
 }, 500)
+
+const promptBus = useEventBus('roast-prompt-event-bus');
+
+const addCompany = () => {
+    promptBus.emit('prompt-add-company');
+}
+
+const editCompany = (company) => {
+    promptBus.emit('prompt-edit-company', company);
+};
 
 </script>

@@ -34,7 +34,7 @@
                 </div> -->
                 <div class="py-1 space-y-[2px] px-[6px]" v-if="user.permission == 'admin'">
                     <MenuItem v-slot="{ active }">
-                        <Link href="/platform" 
+                        <Link href="/platform/companies" 
                             class="flex items-center p-[10px] font-sans text-[#475467] text-sm rounded-md" 
                             :class="{ 
                                 'bg-[#F9FAFB]': active 

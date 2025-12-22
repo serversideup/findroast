@@ -5,5 +5,7 @@
     "Submission": true,
     "Profile": true,
     "Offering": true,
-    "ModifiedRoastImages": true
+    "ModifiedRoastImages": true,
+    "Recipe": true,
+    "BrewLog": true
 }

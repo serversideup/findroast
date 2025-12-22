@@ -16,7 +16,7 @@ class IndexCompanies
         $this->query = Company::query();
     }
 
-    public function execute()
+    public function execute( $with = [] )
     {
         $this->applySearch();
         $this->applyRoaster();
@@ -24,7 +24,13 @@ class IndexCompanies
         $this->applySubscription();
         $this->applyOrder();
 
-        return $this->query->paginate();
+        if( !empty( $with ) ) {
+            $this->query->with( $with );
+        }
+
+        $results = $this->query->paginate();
+
+        return $results;
     }
 
     private function applySearch()

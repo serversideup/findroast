@@ -1,4 +1,6 @@
 <template>
+    <Head title="View current coffee offerings, log brews, save recipes, and more!" />
+
     <Hero/>
     <!-- <Features/> -->
 </template>
@@ -14,4 +16,5 @@ export default {
 <script setup>
 import Hero from './Partials/Hero.vue';
 // import Features from './Partials/Features.vue';
+import { Head } from '@inertiajs/vue3';
 </script>

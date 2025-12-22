@@ -34,7 +34,9 @@ class SyncRoast implements ShouldQueue
     {
         $url = $this->collectionRoast['links'][0];
 
-        $roast = Roast::where('url', $url)->first();
+        $roast = Roast::where('url', $url)
+            ->where('in_stock', 1)
+            ->first();
 
         if( $roast ){
             $this->batch->roasts()->attach([$roast->id => [

@@ -41,9 +41,9 @@
                                     {{ flavorNote.slug }}
                                 </td>
                                 <td class="pl-3 pr-4 py-3.5 whitespace-nowrap text-right text-sm font-medium">
-                                    <Link :href="`/platform/flavor-notes/${flavorNote.id}/edit`" class="text-gray-600 hover:text-indigo-900">
+                                    <button @click="editFlavorNote(flavorNote)" class="text-gray-600 hover:text-indigo-900">
                                         Edit
-                                    </Link>
+                                    </button>
                                 </td>
                             </tr>
                             <tr v-if="flavorNotes.length === 0">
@@ -58,20 +58,26 @@
         </div>
     </div>
 
+    <EditFlavorNoteDrawer />
 </template>
-
-<script>
-import AppLayout from '@/Layouts/AppLayout.vue';
-
-export default {
-    layout: AppLayout
-};
-</script>
 
 <script setup>
 import AdminHeader from '../Partials/AdminHeader.vue';
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { useEventBus } from '@vueuse/core';
+import EditFlavorNoteDrawer from './Partials/EditFlavorNoteDrawer.vue';
+
+defineOptions({
+    layout: AdminLayout
+});
+
+const promptBus = useEventBus('roast-prompt-event-bus');
 
 const flavorNotes = computed(() => usePage().props.flavorNotes);
+
+const editFlavorNote = (flavorNote) => {
+    promptBus.emit('prompt-edit-flavor-note', flavorNote);
+}
 </script>

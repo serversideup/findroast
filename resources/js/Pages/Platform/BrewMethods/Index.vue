@@ -8,14 +8,14 @@
             { label: 'Brew Methods', to: '#'}
         ]">
         <template #actions>
-            <PrimaryLink href="/platform/brew-methods/create">
+            <PrimaryButton @click="promptCreateBrewMethod()">
                 Create Brew Method
-            </PrimaryLink>
+            </PrimaryButton>
         </template>
     </AdminHeader>
 
-    <div class="max-w-screen-xl mx-auto">
-        <div class="mt-8 flow-root">
+    <div class="max-w-screen-xl mx-auto mt-8 lg:px-8">
+        <div class="flow-root">
             <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                     <table class="min-w-full divide-y divide-gray-300">
@@ -39,9 +39,9 @@
                                     {{ brewMethod.name }}
                                 </td>
                                 <td class="pl-3 pr-4 py-3.5 whitespace-nowrap text-right text-sm font-medium">
-                                    <Link :href="`/platform/brew-methods/${brewMethod.id}/edit`" class="text-gray-600 hover:text-indigo-900">
+                                    <button @click="promptEditBrewMethod(brewMethod)" class="text-gray-600 hover:text-indigo-900">
                                         Edit
-                                    </Link>
+                                    </button>
                                 </td>
                             </tr>
                             <tr v-if="brewMethods.length === 0">
@@ -56,21 +56,33 @@
         </div>
     </div>
 
+    <CreateBrewMethodDrawer />
+    <EditBrewMethodDrawer />
 </template>
-
-<script>
-import AppLayout from '@/Layouts/AppLayout.vue';
-
-export default {
-    layout: AppLayout
-};
-</script>
 
 <script setup>
 import AdminHeader from '../Partials/AdminHeader.vue';
-import PrimaryLink from '@/Components/PrimaryLink.vue'
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import CreateBrewMethodDrawer from './Partials/CreateBrewMethodDrawer.vue';
+import EditBrewMethodDrawer from './Partials/EditBrewMethodDrawer.vue';
+import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import { useEventBus } from '@vueuse/core';
+
+defineOptions({
+    layout: AdminLayout
+});
 
 const brewMethods = computed(() => usePage().props.brewMethods);
+
+const promptBus = useEventBus('roast-prompt-event-bus');
+
+const promptCreateBrewMethod = () => {
+    promptBus.emit('prompt-create-brew-method');
+}
+
+const promptEditBrewMethod = (brewMethod) => {
+    promptBus.emit('prompt-edit-brew-method', brewMethod);
+}
 </script>

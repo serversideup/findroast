@@ -15,6 +15,3 @@ use Modules\Offering\Http\Controllers\OfferingController;
 */
 Route::get('/offerings', [OfferingController::class, 'index'])
     ->name('offerings.index');
-
-Route::get('/offerings/{roast}', [OfferingController::class, 'show'])
-    ->name('offerings.show');

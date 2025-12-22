@@ -41,8 +41,7 @@
 import { useCountries } from '@/Composables/useCountries';
 
 const props = defineProps({
-    roast: Object,
-    moreInfo: String
+    roast: Object
 });
 
 const {

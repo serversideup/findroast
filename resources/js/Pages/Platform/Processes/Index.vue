@@ -41,9 +41,9 @@
                                     {{ process.slug }}
                                 </td>
                                 <td class="pl-3 pr-4 py-3.5 whitespace-nowrap text-right text-sm font-medium">
-                                    <Link :href="`/platform/processes/${process.id}/edit`" class="text-gray-600 hover:text-indigo-900">
+                                    <button @click="editProcess(process)" class="text-gray-600 hover:text-indigo-900">
                                         Edit
-                                    </Link>
+                                    </button>
                                 </td>
                             </tr>
                             <tr v-if="processes.length === 0">
@@ -58,20 +58,26 @@
         </div>
     </div>
 
+    <EditProcessDrawer />
 </template>
-
-<script>
-import AppLayout from '@/Layouts/AppLayout.vue';
-
-export default {
-    layout: AppLayout
-};
-</script>
 
 <script setup>
 import AdminHeader from '../Partials/AdminHeader.vue';
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { useEventBus } from '@vueuse/core';
+import EditProcessDrawer from './Partials/EditProcessDrawer.vue';
+
+defineOptions({
+    layout: AdminLayout
+});
 
 const processes = computed(() => usePage().props.processes);
+
+const promptBus = useEventBus('roast-prompt-event-bus');
+
+const editProcess = (process) => {
+    promptBus.emit('prompt-edit-process', process);
+}
 </script>

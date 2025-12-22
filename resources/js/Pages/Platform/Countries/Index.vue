@@ -41,9 +41,9 @@
                                     {{ country.slug }}
                                 </td>
                                 <td class="pl-3 pr-4 py-3.5 whitespace-nowrap text-right text-sm font-medium">
-                                    <Link :href="`/platform/countries/${country.id}/edit`" class="text-gray-600 hover:text-indigo-900">
+                                    <button @click="editCountry(country)" class="text-gray-600 hover:text-indigo-900">
                                         Edit
-                                    </Link>
+                                    </button>
                                 </td>
                             </tr>
                             <tr v-if="countries.length === 0">
@@ -58,20 +58,26 @@
         </div>
     </div>
 
+    <EditCountryDrawer />
 </template>
 
-<script>
-import AppLayout from '@/Layouts/AppLayout.vue';
-
-export default {
-    layout: AppLayout
-};
-</script>
-
 <script setup>
+import AdminLayout from '@/Layouts/AdminLayout.vue';
 import AdminHeader from '../Partials/AdminHeader.vue';
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import EditCountryDrawer from './Partials/EditCountryDrawer.vue';
+import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import { useEventBus } from '@vueuse/core';
+
+const promptBus = useEventBus('roast-prompt-event-bus');
+
+defineOptions({
+    layout: AdminLayout
+});
 
 const countries = computed(() => usePage().props.countries);
+
+const editCountry = (country) => {
+    promptBus.emit('prompt-edit-country', country);
+}
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white w-full flex items-center justify-between px-5 border-b border-gray-100 z-50 fixed h-16">
+    <div class="bg-white w-full hidden lg:flex items-center justify-between px-5 border-b border-gray-100 z-50 fixed h-16">
         <div class="flex items-center justify-between mx-auto w-full max-w-screen-xxl">
             <div class="flex items-center w-64">
                 <Link href="/">
