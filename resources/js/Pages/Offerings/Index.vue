@@ -50,6 +50,9 @@
                     </div>
                 </div>
 
+                <!-- Active Filters Bar -->
+                <ActiveFiltersBar />
+
                 <section aria-labelledby="offerings-heading" class="pt-6">
                     <h2 id="offerings-heading" class="sr-only">Offerings</h2>
 
@@ -80,6 +83,7 @@ export default {
 </script>
 
 <script setup>
+import ActiveFiltersBar from './Partials/ActiveFiltersBar.vue';
 import Filters from './Partials/Filters.vue';
 import MobileFilters from './Partials/MobileFilters.vue';
 import Roasts from './Partials/Roasts.vue';
