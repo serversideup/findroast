@@ -4,7 +4,7 @@ namespace Modules\Platform\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Modules\BrewMethod\Database\Factories\BrewMethodFactory;
+use Modules\Platform\Database\Factories\BrewMethodFactory;
 
 class BrewMethod extends Model
 {
@@ -23,8 +23,8 @@ class BrewMethod extends Model
      */
     protected $table = 'brew_methods';
 
-    // protected static function newFactory(): BrewMethodFactory
-    // {
-    //     //return BrewMethodFactory::new();
-    // }
+    protected static function newFactory(): BrewMethodFactory
+    {
+        return BrewMethodFactory::new();
+    }
 }

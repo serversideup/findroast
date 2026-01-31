@@ -4,8 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Modules\Recipe\Models\Recipe;
 
 class User extends Authenticatable
 {
@@ -56,5 +59,16 @@ class User extends Authenticatable
         }else{
             return '';
         }
+    }
+
+    public function recipes(): HasMany
+    {
+        return $this->hasMany(Recipe::class);
+    }
+
+    public function savedRecipes(): BelongsToMany
+    {
+        return $this->belongsToMany(Recipe::class, 'user_saved_recipes')
+            ->withTimestamps();
     }
 }

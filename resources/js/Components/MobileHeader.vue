@@ -83,15 +83,10 @@
             </div>
         </Dialog>
     </TransitionRoot>
-
-    <LoginModal/>
-    <RegisterModal/>
 </template>
 
 <script setup>
-import LoginModal from './Auth/LoginModal.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import RegisterModal from './Auth/RegisterModal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { computed, ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
