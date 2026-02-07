@@ -21,6 +21,7 @@ class IndexRoasts
 
         $this->extractRequestVariables();
 
+        $this->filterBySearch();
         $this->filterByDates();
         $this->filterByProcesses();
         $this->filterByFlavorNotes();
@@ -42,6 +43,26 @@ class IndexRoasts
     protected function extractRequestVariables()
     {
         $this->createdAt = $this->request->get('created_at', null);
+    }
+
+    protected function filterBySearch()
+    {
+        $search = $this->request->get('search', '');
+
+        if ($search !== '') {
+            $this->query->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhereHas('company', function ($q) use ($search) {
+                        $q->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('countries', function ($q) use ($search) {
+                        $q->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('flavorNotes', function ($q) use ($search) {
+                        $q->where('name', 'like', '%' . $search . '%');
+                    });
+            });
+        }
     }
 
     protected function filterByDates()

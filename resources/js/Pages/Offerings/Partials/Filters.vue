@@ -1,207 +1,129 @@
 <template>
-    <div>
-        <!-- Company Filter -->
-        <Disclosure as="div" 
-            class="border-b border-gray-200 py-6" 
-            v-slot="{ open }"
-            :default-open="true">
-                <h3 class="-my-3 flow-root">
-                    <DisclosureButton class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                        <span class="font-medium text-gray-900">Company</span>
-                        <span class="ml-6 flex items-center">
-                            <PlusIcon v-if="!open" class="h-5 w-5" aria-hidden="true" />
-                            <MinusIcon v-else class="h-5 w-5" aria-hidden="true" />
-                        </span>
-                    </DisclosureButton>
-                </h3>
-                <DisclosurePanel class="pt-6">
-                    <div class="space-y-4">
-                        <div v-for="(option, optionIdx) in availableCompanies" 
-                            :key="option.value" class="flex items-center">
-                                <input 
-                                    :id="`filter-company-${optionIdx}`" 
-                                    :value="option.value" 
-                                    type="checkbox" 
-                                    v-model="form.companies"
-                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                                <label :for="`filter-company-${optionIdx}`" class="ml-3 text-sm text-gray-600">{{ option.label }}</label>
-                        </div>
-                    </div>
-                </DisclosurePanel>
-        </Disclosure>
+    <div class="flex items-center gap-2 py-2 overflow-visible no-scrollbar">
+        <!-- Origin -->
+        <FilterPopover
+            label="Origin"
+            :options="availableCountries"
+            v-model="form.countries"
+            search-placeholder="Search origins..."
+        >
+            <template #option-label="{ option }">
+                {{ findFlag(option.name) }} {{ option.name }}
+            </template>
+        </FilterPopover>
 
-        <!-- Process Filter -->
-        <Disclosure as="div" 
-            class="border-b border-gray-200 py-6" 
-            v-slot="{ open }"
-            :default-open="true">
-                <h3 class="-my-3 flow-root">
-                    <DisclosureButton class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                        <span class="font-medium text-gray-900">Process</span>
-                        <span class="ml-6 flex items-center">
-                            <PlusIcon v-if="!open" class="h-5 w-5" aria-hidden="true" />
-                            <MinusIcon v-else class="h-5 w-5" aria-hidden="true" />
-                        </span>
-                    </DisclosureButton>
-                </h3>
-                <DisclosurePanel class="pt-6">
-                    <div class="space-y-4">
-                        <div v-for="(option, optionIdx) in availableProcesses" 
-                            :key="option.value" class="flex items-center">
-                                <input 
-                                    :id="`filter-process-${optionIdx}`" 
-                                    :value="option.value" 
-                                    type="checkbox" 
-                                    v-model="form.processes"
-                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                                <label :for="`filter-process-${optionIdx}`" class="ml-3 text-sm text-gray-600">{{ option.label }}</label>
-                        </div>
-                    </div>
-                </DisclosurePanel>
-        </Disclosure>
+        <!-- Process -->
+        <FilterPopover
+            label="Process"
+            :options="availableProcesses"
+            v-model="form.processes"
+            search-placeholder="Search processes..."
+        />
 
-        <!-- Flavor Note Filter -->
-        <Disclosure as="div" 
-            class="border-b border-gray-200 py-6" 
-            v-slot="{ open }">
-                <h3 class="-my-3 flow-root">
-                    <DisclosureButton class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                        <span class="font-medium text-gray-900">Flavor Notes</span>
-                        <span class="ml-6 flex items-center">
-                            <PlusIcon v-if="!open" class="h-5 w-5" aria-hidden="true" />
-                            <MinusIcon v-else class="h-5 w-5" aria-hidden="true" />
-                        </span>
-                    </DisclosureButton>
-                </h3>
-                <DisclosurePanel class="pt-6">
-                    <div class="space-y-4">
-                        <div v-for="(option, optionIdx) in availableFlavorNotes" 
-                            :key="option.value" class="flex items-center">
-                                <input 
-                                    :id="`filter-flavor-note-${optionIdx}`" 
-                                    :value="option.value" 
-                                    type="checkbox" 
-                                    :checked="option.checked" 
-                                    v-model="form.flavor_notes"
-                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                                <label :for="`filter-flavor-note-${optionIdx}`" class="ml-3 text-sm text-gray-600">{{ option.label }}</label>
-                        </div>
-                    </div>
-                </DisclosurePanel>
-        </Disclosure>
+        <!-- Flavor Notes -->
+        <FilterPopover
+            label="Flavor"
+            :options="availableFlavorNotes"
+            v-model="form.flavor_notes"
+            search-placeholder="Search flavors..."
+        />
 
-        <!-- Variety Filter -->
-        <Disclosure as="div" 
-            class="border-b border-gray-200 py-6" 
-            v-slot="{ open }">
-                <h3 class="-my-3 flow-root">
-                    <DisclosureButton class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                        <span class="font-medium text-gray-900">Varieties</span>
-                        <span class="ml-6 flex items-center">
-                            <PlusIcon v-if="!open" class="h-5 w-5" aria-hidden="true" />
-                            <MinusIcon v-else class="h-5 w-5" aria-hidden="true" />
-                        </span>
-                    </DisclosureButton>
-                </h3>
-                <DisclosurePanel class="pt-6">
-                    <div class="space-y-4">
-                        <div v-for="(option, optionIdx) in availableVarieties" 
-                            :key="option.value" class="flex items-center">
-                                <input 
-                                    :id="`filter-variety-${optionIdx}`" 
-                                    :value="option.value" 
-                                    type="checkbox" 
-                                    :checked="option.checked" 
-                                    v-model="form.varieties"
-                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                                <label :for="`filter-variety-${optionIdx}`" class="ml-3 text-sm text-gray-600">{{ option.label }}</label>
-                        </div>
-                    </div>
-                </DisclosurePanel>
-        </Disclosure>
-        
-        <!-- Country Filter -->
-        <Disclosure as="div" 
-            class="border-b border-gray-200 py-6" 
-            v-slot="{ open }">
-                <h3 class="-my-3 flow-root">
-                    <DisclosureButton class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                        <span class="font-medium text-gray-900">Origin</span>
-                        <span class="ml-6 flex items-center">
-                            <PlusIcon v-if="!open" class="h-5 w-5" aria-hidden="true" />
-                            <MinusIcon v-else class="h-5 w-5" aria-hidden="true" />
-                        </span>
-                    </DisclosureButton>
-                </h3>
-                <DisclosurePanel class="pt-6">
-                    <div class="space-y-4">
-                        <div v-for="(option, optionIdx) in availableCountries" 
-                            :key="option.value" class="flex items-center">
-                                <input 
-                                    :id="`filter-country-${optionIdx}`" 
-                                    :value="option.value" 
-                                    type="checkbox" 
-                                    :checked="option.checked" 
-                                    v-model="form.countries"
-                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                                <label :for="`filter-country-${optionIdx}`" class="ml-3 text-sm text-gray-600">{{ findFlag(option.label) }} {{ option.label }}</label>
-                        </div>
-                    </div>
-                </DisclosurePanel>
-        </Disclosure>
+        <!-- Variety -->
+        <FilterPopover
+            label="Variety"
+            :options="availableVarieties"
+            v-model="form.varieties"
+            search-placeholder="Search varieties..."
+        />
+
+        <!-- Company -->
+        <FilterPopover
+            label="Roaster"
+            :options="availableCompanies"
+            v-model="form.companies"
+            search-placeholder="Search roasters..."
+            align="right"
+        />
+
+        <!-- Sort -->
+        <div class="ml-auto flex-shrink-0">
+            <Menu as="div" class="relative">
+                <MenuButton class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border border-stone-200 bg-white text-stone-600 hover:border-stone-300 hover:text-stone-800 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-amber-500/40">
+                    <ArrowsUpDownIcon class="h-3.5 w-3.5" />
+                    Sort
+                </MenuButton>
+
+                <transition
+                    enter-active-class="transition ease-out duration-100"
+                    enter-from-class="transform opacity-0 scale-95"
+                    enter-to-class="transform opacity-100 scale-100"
+                    leave-active-class="transition ease-in duration-75"
+                    leave-from-class="transform opacity-100 scale-100"
+                    leave-to-class="transform opacity-0 scale-95"
+                >
+                    <MenuItems class="absolute right-0 z-50 mt-1.5 w-44 origin-top-right rounded-xl bg-white shadow-lg border border-stone-200 focus:outline-none py-1">
+                        <MenuItem v-for="option in sortOptions" :key="option.name" v-slot="{ active }">
+                            <button
+                                type="button"
+                                :class="[
+                                    'block w-full text-left px-3 py-1.5 text-sm',
+                                    option.current ? 'font-medium text-amber-800 bg-amber-50' : 'text-stone-600',
+                                    active && !option.current ? 'bg-stone-50' : ''
+                                ]"
+                            >
+                                {{ option.name }}
+                            </button>
+                        </MenuItem>
+                    </MenuItems>
+                </transition>
+            </Menu>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { useOfferings } from '@/Composables/useOfferings';
 import { useCountries } from '@/Composables/useCountries';
+import FilterPopover from '@/Components/FilterPopover.vue';
 
 import {
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
 } from '@headlessui/vue';
 
-import {
-    PlusIcon,
-    MinusIcon,
-} from '@heroicons/vue/24/outline';
+import { ArrowsUpDownIcon } from '@heroicons/vue/20/solid';
 
-const { 
-    form
-} = useOfferings();
+const { form } = useOfferings();
+const { findFlag } = useCountries();
 
-const {
-    findFlag
-} = useCountries();
+const availableProcesses = computed(() =>
+    usePage().props.processes.map(p => ({ id: p.id, name: p.name, roasts_count: p.roasts_count }))
+);
 
-/**
- * Define the filters
- */
-const availableProcesses = computed(() => usePage().props.processes.map(process => ({ 
-    value: process.id, 
-    label: process.name + ' (' + process.roasts_count + ')'
-})));
+const availableCountries = computed(() =>
+    usePage().props.countries.map(c => ({ id: c.id, name: c.name, roasts_count: c.roasts_count }))
+);
 
-const availableCountries = computed(() => usePage().props.countries.map(country => ({ 
-    value: country.id, 
-    label: country.name + ' (' + country.roasts_count + ')'
-})));
+const availableFlavorNotes = computed(() =>
+    usePage().props.flavorNotes.map(f => ({ id: f.id, name: f.name, roasts_count: f.roasts_count }))
+);
 
-const availableFlavorNotes = computed(() => usePage().props.flavorNotes.map(flavorNote => ({ 
-    value: flavorNote.id, 
-    label: flavorNote.name + ' (' + flavorNote.roasts_count + ')'
-})));
+const availableVarieties = computed(() =>
+    usePage().props.varieties.map(v => ({ id: v.id, name: v.name, roasts_count: v.roasts_count }))
+);
 
-const availableVarieties = computed(() => usePage().props.varieties.map(variety => ({ 
-    value: variety.id, 
-    label: variety.name + ' (' + variety.roasts_count + ')'
-})));
+const availableCompanies = computed(() =>
+    usePage().props.companies.map(c => ({ id: c.id, name: c.name, roasts_count: c.roasts_count }))
+);
 
-const availableCompanies = computed(() => usePage().props.companies.map(company => ({ 
-    value: company.id, 
-    label: company.name + ' (' + company.roasts_count + ')'
-})));
+const sortOptions = [
+    { name: 'Newest', href: '#', current: true },
+    { name: 'Price: Low to High', href: '#', current: false },
+    { name: 'Price: High to Low', href: '#', current: false },
+    { name: 'Name A-Z', href: '#', current: false },
+];
 </script>

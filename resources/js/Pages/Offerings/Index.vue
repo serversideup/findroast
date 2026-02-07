@@ -1,77 +1,47 @@
 <template>
-    <Head title="Current Offerings" />
+    <Head title="Find Your Perfect Roast" />
 
-    <div class="bg-white">
-        <div>
-            <!-- Mobile filter dialog -->
-            <MobileFilters />
+    <div class="bg-stone-50 min-h-screen">
+        <!-- Hero / Search Section -->
+        <div class="bg-gradient-to-b from-amber-50/80 to-stone-50 border-b border-stone-200">
+            <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-4 lg:py-5">
+                <h1 class="text-lg sm:text-xl font-bold text-stone-900 tracking-tight">
+                    Find Your Perfect Roast
+                </h1>
+                <p class="text-xs sm:text-sm text-stone-500 mt-0.5">
+                    Discover specialty coffees from top roasters worldwide
+                </p>
 
-            <div class="w-full relative h-96 bg-cover bg-center bg-no-repeat lg:h-80 bg-[url(/stock/coffee-beans.jpg)]">
-                <div class="absolute inset-0 bg-black bg-opacity-50" />
-                <div class="absolute inset-0 flex items-center justify-center">
-                    <h1 class="text-4xl font-bold tracking-tight text-white">Explore Current Offerings</h1>
+                <!-- Search Bar -->
+                <div class="mt-3 max-w-lg">
+                    <div class="relative">
+                        <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+                        <input
+                            type="text"
+                            v-model="form.search"
+                            placeholder="Search by name, origin, flavor..."
+                            class="w-full pl-9 pr-4 py-2 text-sm bg-white border border-stone-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 placeholder:text-stone-400"
+                        />
+                    </div>
                 </div>
-                <a target="_blank" href="https://www.pexels.com/photo/shallow-focus-photo-of-coffee-beans-894695/" class="text-white text-xs underline font-medium absolute bottom-2 right-2">📷: Juan Pablo Serrano</a>
             </div>
-            
-            <main class="px-4 sm:px-6 lg:px-8">
-                <div class="flex items-baseline justify-between border-b border-gray-200 py-6">
-                    <h1 class="text-4xl font-bold tracking-tight text-gray-900">Offerings</h1>
+        </div>
 
-                    <div class="flex items-center">
-                        <Menu as="div" class="relative inline-block text-left">
-                            <div>
-                                <MenuButton class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                                    Sort
-                                    <ChevronDownIcon class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
-                                </MenuButton>
-                            </div>
+        <!-- Sticky Filter Bar -->
+        <div class="border-b border-stone-200 bg-white/95 backdrop-blur-sm sticky top-14 lg:top-16 z-40 overflow-visible">
+            <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+                <Filters />
+            </div>
+        </div>
 
-                            <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
-                                <MenuItems class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                    <div class="py-1">
-                                        <MenuItem v-for="option in sortOptions" :key="option.name" v-slot="{ active }">
-                                            <a :href="option.href" :class="[option.current ? 'font-medium text-gray-900' : 'text-gray-500', active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm']">{{ option.name }}</a>
-                                        </MenuItem>
-                                    </div>
-                                </MenuItems>
-                            </transition>
-                        </Menu>
-
-                        <button type="button" class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
-                            <span class="sr-only">View grid</span>
-                            <Squares2X2Icon class="h-5 w-5" aria-hidden="true" />
-                        </button>
-
-                        <button type="button" class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden" @click="mobileFiltersOpen = true">
-                            <span class="sr-only">Filters</span>
-                            <FunnelIcon class="h-5 w-5" aria-hidden="true" />
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Active Filters Bar -->
-                <ActiveFiltersBar />
-
-                <section aria-labelledby="offerings-heading" class="pt-6">
-                    <h2 id="offerings-heading" class="sr-only">Offerings</h2>
-
-                    <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-                        <!-- Filters -->
-                        <form class="hidden lg:block overflow-y-auto h-[calc(100vh-177px)] px-1">
-                            <Filters />
-                        </form>
-
-                        <!-- Roasts -->
-                        <div class="lg:col-span-3 overflow-y-auto h-[calc(100vh-177px)] px-1">
-                            <Roasts />
-                        </div>
-                    </div>
-                </section>
-            </main>
+        <!-- Active Filters + Results -->
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+            <ActiveFiltersBar />
+            <div class="pt-3">
+                <Roasts />
+            </div>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -85,28 +55,10 @@ export default {
 <script setup>
 import ActiveFiltersBar from './Partials/ActiveFiltersBar.vue';
 import Filters from './Partials/Filters.vue';
-import MobileFilters from './Partials/MobileFilters.vue';
 import Roasts from './Partials/Roasts.vue';
 import { Head } from '@inertiajs/vue3';
+import { useOfferings } from '@/Composables/useOfferings';
+import { MagnifyingGlassIcon } from '@heroicons/vue/20/solid';
 
-import {
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuItems,
-} from '@headlessui/vue'
-
-import { 
-    ChevronDownIcon,
-    FunnelIcon,
-    Squares2X2Icon
-} from '@heroicons/vue/24/outline'
-
-const sortOptions = [
-    { name: 'Most Popular', href: '#', current: true },
-    { name: 'Best Rating', href: '#', current: false },
-    { name: 'Newest', href: '#', current: false },
-    { name: 'Price: Low to High', href: '#', current: false },
-    { name: 'Price: High to Low', href: '#', current: false },
-]
+const { form } = useOfferings();
 </script>
