@@ -50,9 +50,8 @@ const user = computed(() => usePage().props.auth.user);
 
 const links = [
     {
-        name: 'Current Offerings',
-        path: '/offerings',
-        route: 'offerings.index'
+        name: 'Offerings',
+        path: '/'
     },
     {
         name: 'Companies',
@@ -61,15 +60,6 @@ const links = [
     {
         name: 'Map',
         path: '/map'
-    },
-    {
-        name: 'Brew Log'
-    },
-    {
-        name: 'Recipes'
-    },
-    {
-        name: 'Blog'
     },
     {
         name: 'Contact',

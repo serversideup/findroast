@@ -100,15 +100,19 @@ const openMenu = ref(false);
 const links = [
     {
         name: 'Offerings',
-        path: '/offerings',
+        path: '/',
     },
     {
-        name: 'Recipes',
-        path: '/recipes',
+        name: 'Companies',
+        path: '/companies',
     },
     {
         name: 'Map',
         path: '/map',
+    },
+    {
+        name: 'Contact',
+        path: '/contact',
     },
 ];
 

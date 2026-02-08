@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FilterSubscriptionController;
+use App\Http\Controllers\MapController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [DashboardController::class, 'index']);
+Route::get('/map', [MapController::class, 'index']);
 
 // use Modules\Company\Models\Company;
 // use Modules\Offering\Models\OfferingImportMap;
