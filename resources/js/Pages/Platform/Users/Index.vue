@@ -1,60 +1,48 @@
 <template>
     <Head title="Users" />
 
-    <AdminHeader 
+    <AdminHeader
         :title="'Users'"
-        :breadcrumbs="[
-            { label: 'Platform Settings', to: '/platform'},
-            { label: 'Users', to: '#'}
-        ]">
-    </AdminHeader>
+        :count="users.length" />
 
-    <div class="max-w-screen-xl mx-auto mt-8 lg:px-8">
-        <div class="flow-root">
-            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                    <table class="min-w-full divide-y divide-gray-300">
-                        <thead>
-                            <tr>
-                                <th
-                                    scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                                        Name
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                                        Email
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                                        Created At
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            <tr v-for="user in users" :key="user.id"
-                                class="hover:bg-gray-50">
-                                <td class="pl-4 pr-3 py-3.5 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {{ user.name }}
-                                </td>
-                                <td class="pl-4 pr-4 py-3.5 whitespace-nowrap text-sm font-medium sm:pl-0">
-                                    {{ user.email }}
-                                </td>
-                                <td class="pl-4 pr-4 py-3.5 whitespace-nowrap text-sm font-medium sm:pl-0">
-                                    {{ user.created_at }}
-                                </td>
-                            </tr>
-                            <tr v-if="users.length === 0">
-                                <td class="pl-4 pr-3 py-3.5 whitespace-nowrap text-sm font-medium text-gray-900 text-center" colspan="5">
-                                    No users found.
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="bg-white border-t border-stone-200">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-stone-200">
+                <thead class="bg-stone-50">
+                    <tr>
+                        <th scope="col" class="px-4 py-2.5 text-left text-xs font-semibold text-stone-700 uppercase tracking-wider">
+                            Name
+                        </th>
+                        <th scope="col" class="px-4 py-2.5 text-left text-xs font-semibold text-stone-700 uppercase tracking-wider">
+                            Email
+                        </th>
+                        <th scope="col" class="px-4 py-2.5 text-left text-xs font-semibold text-stone-700 uppercase tracking-wider">
+                            Created At
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-stone-100">
+                    <tr
+                        v-for="user in users"
+                        :key="user.id"
+                        class="hover:bg-amber-50/50 transition-colors">
+                        <td class="px-4 py-2.5 text-sm font-medium text-stone-900">
+                            {{ user.name }}
+                        </td>
+                        <td class="px-4 py-2.5 text-sm text-stone-600">
+                            {{ user.email }}
+                        </td>
+                        <td class="px-4 py-2.5 text-sm text-stone-600">
+                            {{ user.created_at }}
+                        </td>
+                    </tr>
+                    <tr v-if="users.length === 0">
+                        <td colspan="3" class="px-4 py-8 text-center text-sm text-stone-500">
+                            No users found
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
@@ -70,5 +58,4 @@ defineOptions({
 });
 
 const users = computed(() => usePage().props.users);
-
 </script>

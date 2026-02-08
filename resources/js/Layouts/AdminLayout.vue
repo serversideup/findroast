@@ -1,10 +1,11 @@
 <template>
-    <div class="flex flex-col min-h-screen w-screen">
-        <Header />
-        <div class="flex items-start h-screen w-screen">
-            <Sidebar />
+    <div class="flex flex-col min-h-screen w-screen bg-stone-50">
+        <AdminHeader @toggle-sidebar="toggleSidebar" />
 
-            <main class="flex-1 pt-20 h-screen overflow-y-auto">
+        <div class="flex pt-14 h-screen">
+            <AdminSidebar :isCollapsed="sidebarCollapsed" />
+
+            <main class="flex-1 h-full overflow-y-auto">
                 <slot />
             </main>
         </div>
@@ -14,7 +15,14 @@
 </template>
 
 <script setup>
-import Header from '@/Components/Header.vue';
-import Sidebar from '@/Components/Admin/Sidebar.vue';
+import { ref } from 'vue';
+import AdminHeader from '@/Components/Admin/AdminHeader.vue';
+import AdminSidebar from '@/Components/Admin/AdminSidebar.vue';
 import Notification from '@/Components/Notification.vue';
+
+const sidebarCollapsed = ref(false);
+
+const toggleSidebar = () => {
+    sidebarCollapsed.value = !sidebarCollapsed.value;
+};
 </script>
