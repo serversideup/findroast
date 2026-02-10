@@ -65,18 +65,20 @@ Route::middleware([Authenticate::class, CanManagePlatform::class])->group(functi
     Route::put('/platform/companies/{company}/offerings/sync', [OfferingsController::class, 'sync'])
         ->name('platform.companies.offerings.sync');
 
-    Route::get('/platform/companies/{company}/cafes', [CafesController::class, 'index'])
-        ->name('platform.companies.cafes.index');
-    Route::get('/platform/companies/{company}/cafes/create', [CafesController::class, 'create'])
-        ->name('platform.companies.cafes.create');
-    Route::post('/platform/companies/{company}/cafes', [CafesController::class, 'store'])
-        ->name('platform.companies.cafes.store');
-    Route::get('/platform/companies/{company}/cafes/{cafe}', [CafesController::class, 'show'])
-        ->name('platform.companies.cafes.show');
-    Route::get('/platform/companies/{company}/cafes/{cafe}/edit', [CafesController::class, 'edit'])
-        ->name('platform.companies.cafes.edit');
-    Route::put('/platform/companies/{company}/cafes/{cafe}', [CafesController::class, 'update'])
-        ->name('platform.companies.cafes.update');
+    Route::get('/platform/cafes', [CafesController::class, 'index'])
+        ->name('platform.cafes.index');
+    Route::get('/platform/cafes/create', [CafesController::class, 'create'])
+        ->name('platform.cafes.create');
+    Route::post('/platform/cafes', [CafesController::class, 'store'])
+        ->name('platform.cafes.store');
+    Route::get('/platform/cafes/{cafe}', [CafesController::class, 'show'])
+        ->name('platform.cafes.show');
+    Route::get('/platform/cafes/{cafe}/edit', [CafesController::class, 'edit'])
+        ->name('platform.cafes.edit');
+    Route::put('/platform/cafes/{cafe}', [CafesController::class, 'update'])
+        ->name('platform.cafes.update');
+    Route::delete('/platform/cafes/{cafe}', [CafesController::class, 'destroy'])
+        ->name('platform.cafes.destroy');
 
     Route::get('/platform/countries', [CountryController::class, 'index'])
         ->name('platform.countries.index');

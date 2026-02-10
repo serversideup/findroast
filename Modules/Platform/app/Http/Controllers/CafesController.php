@@ -11,7 +11,6 @@ use Modules\Company\Http\Actions\ShowCafe;
 use Modules\Company\Http\Actions\StoreCafe;
 use Modules\Company\Http\Actions\UpdateCafe;
 use Modules\Company\Models\Cafe;
-use Modules\Company\Models\Company;
 use Modules\Platform\Models\Amenity;
 use Modules\Platform\Models\BrewMethod;
 use Modules\Platform\Models\DrinkOption;
@@ -21,78 +20,83 @@ class CafesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index( Request $request, Company $company )
+    public function index( Request $request )
     {
         $cafes = ( new IndexCafes( 
             $request, 
-            $company 
         ) )->execute();
 
         return Inertia::render('Platform/Cafes/Index', [
-            'company' => $company,
             'cafes' => $cafes,
         ]);
     }
 
-    public function create( Request $request, Company $company )
+    public function create( Request $request )
     {
+        $companies = \Modules\Company\Models\Company::orderBy('name')->get();
         $brewMethods = BrewMethod::all();
         $drinkOptions = DrinkOption::all();
         $amenities = Amenity::all();
 
         return Inertia::render('Platform/Cafes/Create', [
-            'company' => $company,
+            'companies' => $companies,
             'brewMethods' => $brewMethods,
             'drinkOptions' => $drinkOptions,
             'amenities' => $amenities,
         ]);
     }
 
-    public function edit( Request $request, Company $company, Cafe $cafe )
+    public function edit( Request $request, Cafe $cafe )
     {
-        $cafe = ( new ShowCafe( 
-            $cafe 
+        $cafe = ( new ShowCafe(
+            $cafe
         ) )->execute();
 
+        $companies = \Modules\Company\Models\Company::orderBy('name')->get();
         $brewMethods = BrewMethod::all();
         $drinkOptions = DrinkOption::all();
         $amenities = Amenity::all();
 
         return Inertia::render('Platform/Cafes/Edit', [
-            'company' => $company,
             'cafe' => $cafe,
+            'companies' => $companies,
             'brewMethods' => $brewMethods,
             'drinkOptions' => $drinkOptions,
             'amenities' => $amenities,
         ]);
     }
 
-    public function show( Request $request, Company $company, Cafe $cafe )
+    public function show( Request $request, Cafe $cafe )
     {
         $cafe = ( new ShowCafe( 
             $cafe 
         ) )->execute();
 
         return Inertia::render('Platform/Cafes/Show', [
-            'company' => $company,
             'cafe' => $cafe,
         ]);
     }
 
-    public function store( StoreCafeRequest $request, Company $company )
+    public function store( StoreCafeRequest $request )
     {
-        ( new StoreCafe() )->execute( $request, $company );
+        ( new StoreCafe() )->execute( $request );
 
-        return redirect()->route('platform.companies.cafes.index', $company);
+        return redirect()->route('platform.cafes.index');
     }
 
-    public function update( Request $request, Company $company, Cafe $cafe )
+    public function update( Request $request, Cafe $cafe )
     {
         ( new UpdateCafe() )->execute( $request, $cafe );
 
-        return redirect()->route('platform.companies.cafes.show', [
-            'company' => $company,
+        return redirect()->route('platform.cafes.show', [
             'cafe' => $cafe
         ]);
+    }
+
+    public function destroy( Request $request, Cafe $cafe )
+    {
+        $cafe->delete();
+
+        return redirect()->route('platform.cafes.index');
     }
 }
