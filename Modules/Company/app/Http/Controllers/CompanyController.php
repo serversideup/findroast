@@ -27,9 +27,9 @@ class CompanyController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show( Company $company )
+    public function show( $company )
     {
-        $company = Company::where('id', $company->id)
+        $company = Company::where('slug', $company)
             ->with('cafes')
             ->with([
                 'roasts' => function($query) {

@@ -1,9 +1,11 @@
 <template>
     <Head :title="company.name" />
 
-    <CompanyHeader />
+    <div class="bg-stone-50 min-h-screen">
+        <CompanyHeader />
 
-    <CompanyInfo />
+        <CompanyInfo />
+    </div>
 </template>
 
 <script>

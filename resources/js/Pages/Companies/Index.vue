@@ -1,22 +1,43 @@
 <template>
-    <Head title="Companies" />
-    <div class="bg-white">
-        <div class="w-full relative h-96 bg-cover bg-center bg-no-repeat lg:h-80 bg-[url(/stock/coffee-beans.jpg)]">
-            <div class="absolute inset-0 bg-black bg-opacity-50" />
-            <div class="absolute inset-0 flex flex-col items-center justify-center">
-                <h1 class="text-4xl font-bold tracking-tight text-white">Browse Companies</h1>
-                <!-- <button class="bg-white text-black px-4 py-2 rounded-md">Add Company</button> -->
+    <Head title="Browse Coffee Companies & Roasters" />
+
+    <div class="bg-stone-50 min-h-screen">
+        <!-- Hero / Search Section -->
+        <div class="bg-gradient-to-b from-amber-50/80 to-stone-50 border-b border-stone-200">
+            <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-4 lg:py-5">
+                <h1 class="text-lg sm:text-xl font-bold text-stone-900 tracking-tight">
+                    Browse Coffee Companies & Roasters
+                </h1>
+                <p class="text-xs sm:text-sm text-stone-500 mt-0.5">
+                    Discover specialty coffee roasters and cafes from around the world
+                </p>
+
+                <!-- Search Bar -->
+                <div class="mt-3 max-w-lg">
+                    <div class="relative">
+                        <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+                        <input
+                            type="text"
+                            v-model="form.search"
+                            placeholder="Search by company name..."
+                            class="w-full pl-9 pr-4 py-2 text-sm bg-white border border-stone-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 placeholder:text-stone-400"
+                        />
+                    </div>
+                </div>
             </div>
-            <a target="_blank" href="https://www.pexels.com/photo/shallow-focus-photo-of-coffee-beans-894695/" class="text-white text-xs underline font-medium absolute bottom-2 right-2">📷: Juan Pablo Serrano</a>
         </div>
 
-        <Filters />
+        <!-- Sticky Filter Bar -->
+        <div class="border-b border-stone-200 bg-white/95 backdrop-blur-sm sticky top-14 lg:top-16 z-40 overflow-visible">
+            <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+                <Filters />
+            </div>
+        </div>
 
-        <div class="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8 mt-8 pb-8">
-            <div class="grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 lg:gap-x-6">
-                <CompanyCard v-for="company in companies.data" 
-                    :key="company.id" 
-                    :company="company" />
+        <!-- Results -->
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+            <div class="pt-3">
+                <Companies />
             </div>
         </div>
     </div>
@@ -31,10 +52,11 @@ export default {
 </script>
 
 <script setup>
-import CompanyCard from './Partials/CompanyCard.vue';
+import Companies from './Partials/Companies.vue';
 import Filters from './Partials/Filters.vue';
-import { computed } from 'vue';
-import { Head, usePage } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
+import { useCompanies } from '@/Composables/useCompanies';
+import { MagnifyingGlassIcon } from '@heroicons/vue/20/solid';
 
-const companies = computed(() => usePage().props.companies);
+const { form } = useCompanies();
 </script>

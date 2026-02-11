@@ -9,28 +9,37 @@ const form = reactive({
 });
 
 const companiesLoading = ref(false);
+let watcherActive = false;
 
 export const useCompanies = () => {
-
-    watchDebounced(form, () => {
-        loadCompanies();
-    }, {
-        debounce: 500
-    });
+    // Only set up the watcher once
+    if (!watcherActive) {
+        watchDebounced(form, () => {
+            loadCompanies();
+        }, {
+            debounce: 300
+        });
+        watcherActive = true;
+    }
 
     const loadCompanies = () => {
+        companiesLoading.value = true;
         router.visit('/companies', {
             only: ['companies'],
             data: form,
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                companiesLoading.value = false
+                companiesLoading.value = false;
+            },
+            onError: () => {
+                companiesLoading.value = false;
             }
-        })
-    }
+        });
+    };
 
     return {
-        form
-    }
-}
+        form,
+        companiesLoading
+    };
+};

@@ -8,9 +8,9 @@ use Modules\Company\Models\Company;
 
 class StoreCafe
 {
-    public function execute( StoreCafeRequest $request, Company $company )
+    public function execute( StoreCafeRequest $request )
     {
-        $cafe = $this->persistCafe( $request, $company );
+        $cafe = $this->persistCafe( $request );
 
         $this->setPrimaryImage( $request, $cafe );
 
@@ -19,10 +19,10 @@ class StoreCafe
         $this->bindAmenities( $request, $cafe );
     }
 
-    private function persistCafe( $request, $company )
+    private function persistCafe( $request )
     {
         $cafe = Cafe::create([
-            'company_id' => $company->id,
+            'company_id' => $request->input('company_id'),
             'name' => $request->input('name'),
             'status' => $request->input('status'),
             'google_place_id' => $request->input('google_place_id'),
