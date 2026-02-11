@@ -14,7 +14,9 @@ class MessagesController extends Controller
      */
     public function index( Request $request )
     {
-        $messages = Message::all();
+        $messages = Message::orderBy('created_at', 'desc')
+            ->orderBy('responded_to', 'asc')
+            ->get();
 
         return Inertia::render('Platform/Messages/Index', [
             'messages' => $messages
@@ -29,6 +31,16 @@ class MessagesController extends Controller
         $message->update([
             'responded_to' => true,
         ]);
+
+        return redirect()->route('platform.messages.index');
+    }
+
+    /**
+     * Remove the specified resource.
+     */
+    public function destroy( Message $message )
+    {
+        $message->delete();
 
         return redirect()->route('platform.messages.index');
     }

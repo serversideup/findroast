@@ -1,33 +1,44 @@
 <template>
-    <Drawer :show="open" @close="close">
+    <Drawer :show="open" @close="close" max-width="xl" bg-color="bg-stone-50">
         <template #title>
             Edit Process
         </template>
 
-        <template #content>
-            <div class="w-full flex flex-col space-y-3">
-                <div class="w-full flex flex-col">
-                    <InputLabel for="name" value="Name"/>
-                    <TextInput 
-                        class="w-full block mt-1"
-                        id="name"
-                        v-model="form.name"/>
-                </div>
+        <template #subtitle>
+            Update processing method information
+        </template>
 
-                <div class="w-full flex flex-col">
-                    <InputLabel for="slug" value="Slug"/>
-                    <TextInput 
-                        class="w-full block mt-1"
-                        id="slug"
-                        v-model="form.slug"/>
+        <template #content>
+            <div class="w-full flex flex-col space-y-6">
+                <div class="bg-white rounded-lg border border-stone-200 shadow-sm p-6 space-y-5">
+                    <div>
+                        <InputLabel for="name" value="Name"/>
+                        <TextInput
+                            class="mt-1.5 block w-full"
+                            id="name"
+                            v-model="form.name"
+                            placeholder="e.g., Washed, Natural, Honey"/>
+                        <p class="mt-1.5 text-xs text-stone-500">
+                            The display name for this processing method
+                        </p>
+                    </div>
+
+                    <div>
+                        <InputLabel for="slug" value="Slug"/>
+                        <TextInput
+                            class="mt-1.5 block w-full"
+                            id="slug"
+                            v-model="form.slug"
+                            placeholder="e.g., washed, natural, honey"/>
+                        <p class="mt-1.5 text-xs text-stone-500">
+                            The slug is used to identify the process in the database
+                        </p>
+                    </div>
                 </div>
-                <p class="mt-1 text-sm text-gray-500">
-                    The slug is used to identify the process in the database.
-                </p>
             </div>
         </template>
         <template #footer>
-            <div class="w-full flex items-center justify-end gap-x-6 px-4 py-3">
+            <div class="w-full flex items-center justify-between gap-x-4 px-6 py-4 bg-white border-t border-stone-200">
                 <DangerButton @click="deleteProcess()">Delete</DangerButton>
                 <PrimaryButton @click="updateProcess()">Update Process</PrimaryButton>
             </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FilterSubscriptionController;
 use App\Http\Controllers\MapController;
@@ -8,6 +9,8 @@ use Inertia\Inertia;
 
 Route::get('/', [DashboardController::class, 'index']);
 Route::get('/map', [MapController::class, 'index']);
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 // use Modules\Company\Models\Company;
 // use Modules\Offering\Models\OfferingImportMap;

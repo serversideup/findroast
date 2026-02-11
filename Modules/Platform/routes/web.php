@@ -131,6 +131,8 @@ Route::middleware([Authenticate::class, CanManagePlatform::class])->group(functi
         ->name('platform.messages.index');
     Route::put('/platform/messages/{message}', [MessagesController::class, 'update'])
         ->name('platform.messages.update');
+    Route::delete('/platform/messages/{message}', [MessagesController::class, 'destroy'])
+        ->name('platform.messages.destroy');
 
     Route::get('/platform/users', [UsersController::class, 'index'])
         ->name('platform.users.index');

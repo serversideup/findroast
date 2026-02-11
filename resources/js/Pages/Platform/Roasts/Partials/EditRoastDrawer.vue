@@ -1,72 +1,94 @@
 <template>
-    <Drawer :show="open" @close="close">
+    <Drawer :show="open" @close="close" max-width="xl" bg-color="bg-stone-50">
         <template #title>
-            <div>
-                <div class="text-sm font-medium text-stone-500">{{ company }}</div>
-                <div class="text-lg font-semibold text-stone-900 mt-0.5">{{ form.name }}</div>
+            Edit Roast
+        </template>
+
+        <template #subtitle>
+            <div class="flex flex-col">
+                <span class="text-stone-600">{{ company }}</span>
+                <span class="text-stone-900 font-medium">{{ form.name }}</span>
             </div>
         </template>
 
         <template #content>
-            <div class="space-y-4">
-                <!-- Name -->
-                <div>
-                    <InputLabel for="name" value="Name" class="text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1.5"/>
-                    <TextInput
-                        id="name"
-                        v-model="form.name"
-                        class="w-full"/>
-                </div>
-
-                <!-- URL -->
-                <div>
-                    <InputLabel for="url" value="URL" class="text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1.5"/>
-                    <TextInput
-                        id="url"
-                        v-model="form.url"
-                        class="w-full"/>
-                    <a
-                        v-if="form.url"
-                        :href="form.url"
-                        class="inline-flex items-center gap-1 text-xs text-amber-700 hover:text-amber-800 mt-1.5"
-                        target="_blank">
-                        View on company website
-                        <ArrowTopRightOnSquareIcon class="h-3 w-3" />
-                    </a>
-                </div>
-
-                <!-- Price -->
-                <div>
-                    <InputLabel for="price" value="Price" class="text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1.5"/>
-                    <TextInput
-                        id="price"
-                        v-model="form.price"
-                        class="w-full"/>
-                </div>
-
-                <!-- Primary Image -->
-                <div>
-                    <InputLabel for="primary_image" value="Primary Image URL" class="text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1.5"/>
-                    <TextInput
-                        id="primary_image"
-                        v-model="form.new_primary_image"
-                        placeholder="https://..."
-                        class="w-full"/>
-
-                    <div v-if="form.new_primary_image || form.primary_image" class="mt-3">
-                        <img
-                            :src="form.new_primary_image || `/storage/${form.primary_image}`"
-                            class="w-24 h-24 rounded-lg object-cover border border-stone-200"
-                            @error="$event.target.src = ''" />
+            <div class="space-y-6">
+                <!-- Basic Information -->
+                <div class="bg-white rounded-lg border border-stone-200 shadow-sm p-6 space-y-5">
+                    <!-- Name -->
+                    <div>
+                        <InputLabel for="name" value="Name"/>
+                        <TextInput
+                            id="name"
+                            v-model="form.name"
+                            class="mt-1.5 block w-full"
+                            placeholder="e.g., Ethiopian Yirgacheffe"/>
+                        <p class="mt-1.5 text-xs text-stone-500">
+                            The display name for this coffee
+                        </p>
                     </div>
-                    <div v-else class="mt-3 w-24 h-24 rounded-lg bg-stone-100 flex items-center justify-center border border-stone-200">
-                        <span class="text-xs text-stone-400">No image</span>
+
+                    <!-- URL -->
+                    <div>
+                        <InputLabel for="url" value="Product URL"/>
+                        <TextInput
+                            id="url"
+                            v-model="form.url"
+                            class="mt-1.5 block w-full"
+                            placeholder="https://..."/>
+                        <a
+                            v-if="form.url"
+                            :href="form.url"
+                            class="inline-flex items-center gap-1 text-xs text-amber-700 hover:text-amber-800 mt-1.5"
+                            target="_blank">
+                            View on company website
+                            <ArrowTopRightOnSquareIcon class="h-3 w-3" />
+                        </a>
+                    </div>
+
+                    <!-- Price -->
+                    <div>
+                        <InputLabel for="price" value="Price"/>
+                        <TextInput
+                            id="price"
+                            v-model="form.price"
+                            class="mt-1.5 block w-full"
+                            placeholder="e.g., $18.00"/>
+                        <p class="mt-1.5 text-xs text-stone-500">
+                            Include currency symbol if available
+                        </p>
+                    </div>
+
+                    <!-- Primary Image -->
+                    <div>
+                        <InputLabel for="primary_image" value="Primary Image URL"/>
+                        <TextInput
+                            id="primary_image"
+                            v-model="form.new_primary_image"
+                            placeholder="https://..."
+                            class="mt-1.5 block w-full"/>
+                        <p class="mt-1.5 text-xs text-stone-500">
+                            URL to the product image
+                        </p>
+
+                        <div v-if="form.new_primary_image || form.primary_image" class="mt-3">
+                            <img
+                                :src="form.new_primary_image || `/storage/${form.primary_image}`"
+                                class="w-24 h-24 rounded-lg object-cover border-2 border-stone-200"
+                                @error="$event.target.src = ''" />
+                        </div>
+                        <div v-else class="mt-3 w-24 h-24 rounded-lg bg-stone-100 flex items-center justify-center border-2 border-dashed border-stone-300">
+                            <span class="text-xs text-stone-400">No image</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Flavor Notes -->
-                <div>
-                    <InputLabel for="flavorNotes" value="Flavor Notes" class="text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1.5"/>
+                <!-- Coffee Attributes -->
+                <div class="bg-white rounded-lg border border-stone-200 shadow-sm p-6 space-y-5">
+
+                    <!-- Flavor Notes -->
+                    <div>
+                        <InputLabel for="flavorNotes" value="Flavor Notes"/>
                     <ComboboxRoot
                         v-model="form.flavorNotes"
                         multiple
@@ -124,11 +146,11 @@
                             </ComboboxViewport>
                         </ComboboxContent>
                     </ComboboxRoot>
-                </div>
+                    </div>
 
-                <!-- Countries -->
-                <div>
-                    <InputLabel for="countries" value="Countries" class="text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1.5"/>
+                    <!-- Countries -->
+                    <div>
+                        <InputLabel for="countries" value="Countries"/>
                     <ComboboxRoot
                         v-model="form.countries"
                         multiple
@@ -186,11 +208,11 @@
                             </ComboboxViewport>
                         </ComboboxContent>
                     </ComboboxRoot>
-                </div>
+                    </div>
 
-                <!-- Processes -->
-                <div>
-                    <InputLabel for="processes" value="Processes" class="text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1.5"/>
+                    <!-- Processes -->
+                    <div>
+                        <InputLabel for="processes" value="Processes"/>
                     <ComboboxRoot
                         v-model="form.processes"
                         multiple
@@ -248,11 +270,11 @@
                             </ComboboxViewport>
                         </ComboboxContent>
                     </ComboboxRoot>
-                </div>
+                    </div>
 
-                <!-- Elevations -->
-                <div>
-                    <InputLabel for="elevations" value="Elevations" class="text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1.5"/>
+                    <!-- Elevations -->
+                    <div>
+                        <InputLabel for="elevations" value="Elevations"/>
                     <ComboboxRoot
                         v-model="form.elevations"
                         multiple
@@ -310,11 +332,11 @@
                             </ComboboxViewport>
                         </ComboboxContent>
                     </ComboboxRoot>
-                </div>
+                    </div>
 
-                <!-- Varieties -->
-                <div>
-                    <InputLabel for="varieties" value="Varieties" class="text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1.5"/>
+                    <!-- Varieties -->
+                    <div>
+                        <InputLabel for="varieties" value="Varieties"/>
                     <ComboboxRoot
                         v-model="form.varieties"
                         multiple
@@ -372,20 +394,21 @@
                             </ComboboxViewport>
                         </ComboboxContent>
                     </ComboboxRoot>
+                    </div>
                 </div>
             </div>
         </template>
 
         <template #footer>
-            <div class="flex items-center justify-between px-6 py-4 border-t border-stone-200 bg-stone-50">
+            <div class="flex items-center justify-between px-6 py-4 border-t border-stone-200 bg-white">
                 <button
                     @click="deleteRoast()"
-                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-red-700 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors">
+                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-red-700 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors">
                     Delete Roast
                 </button>
                 <button
                     @click="updateRoast()"
-                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-amber-700 hover:bg-amber-800 rounded-lg transition-colors">
+                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-amber-700 hover:bg-amber-800 rounded-lg shadow-sm transition-colors">
                     Save Changes
                 </button>
             </div>

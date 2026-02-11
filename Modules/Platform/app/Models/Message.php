@@ -12,8 +12,16 @@ class Message extends Model
     protected $fillable = [
         'name',
         'email',
+        'subject',
         'message',
+        'company_name',
+        'company_url',
+        'ip_address',
         'responded_to',
+    ];
+
+    protected $casts = [
+        'responded_to' => 'boolean',
     ];
 
     protected $table = 'messages';

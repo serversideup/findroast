@@ -1,6 +1,5 @@
 <template>
     <div id="app-layout" class="flex flex-col min-h-screen w-screen">
-        <!-- <GlobalSearchDropdown/>      -->
         <MobileHeader/>
         <Header/>
         
@@ -9,12 +8,6 @@
         </main>
 
         <Notification/>
-        <!-- <CompaniesCreateModal/>-->
-        <!-- <GlobalNotification/>
-        <ContributionsModal/>
-        <GlobalVerify/>
-        <GlobalFloatingMenu/>
-        <GlobalAppFooter v-show="showFooter" v-if="PLATFORM == 'web'"/> -->
     </div>
 </template>
 

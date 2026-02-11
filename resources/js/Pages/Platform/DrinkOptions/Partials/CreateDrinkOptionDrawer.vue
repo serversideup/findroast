@@ -1,51 +1,70 @@
 <template>
-    <Drawer :show="open" @close="close">
+    <Drawer :show="open" @close="close" max-width="xl" bg-color="bg-stone-50">
         <template #title>
             Create Drink Option
         </template>
 
+        <template #subtitle>
+            Add a new drink option for cafes
+        </template>
+
         <template #content>
-            <div class="w-full flex flex-col space-y-3">
-                <div class="w-full flex flex-col">
-                    <InputLabel for="name" value="Name"/>
-                    <TextInput name="name" class="w-full mt-1" v-model="form.name"/>
-                </div>
+            <div class="w-full flex flex-col space-y-6">
+                <div class="bg-white rounded-lg border border-stone-200 shadow-sm p-6 space-y-5">
+                    <div>
+                        <InputLabel for="name" value="Name"/>
+                        <TextInput
+                            name="name"
+                            class="mt-1.5 block w-full"
+                            v-model="form.name"
+                            placeholder="e.g., Espresso, Latte, Cold Brew"/>
+                        <p class="mt-1.5 text-xs text-stone-500">
+                            The display name for this drink option
+                        </p>
+                    </div>
 
-                <div class="w-full flex flex-col">
-                    <InputLabel for="icon">Icon</InputLabel>
-                    <div class="mt-2 flex items-center gap-x-3">
-                        <input
-                            class="absolute -top-[5000px]" 
-                            @change="handleIconChange( $event )" 
-                            accept="image/*" 
-                            id="drink-option-image" 
-                            type="file"
-                            ref="iconFile"/>
-                        
-                        <div 
-                            class="w-12 h-12 flex items-center justify-center"
-                            v-if="showIconPreview">
-                                <img :src="iconPreview"/>
+                    <div>
+                        <InputLabel for="icon" value="Icon"/>
+                        <div class="mt-2 flex items-center gap-x-4">
+                            <input
+                                class="sr-only"
+                                @change="handleIconChange( $event )"
+                                accept="image/*"
+                                id="drink-option-image"
+                                type="file"
+                                ref="iconFile"/>
+
+                            <div
+                                class="w-16 h-16 rounded-lg overflow-hidden bg-stone-100 flex items-center justify-center border-2 border-stone-200"
+                                v-if="showIconPreview">
+                                <img :src="iconPreview" class="w-full h-full object-cover"/>
+                            </div>
+
+                            <div
+                                class="w-16 h-16 rounded-lg bg-stone-100 flex items-center justify-center border-2 border-dashed border-stone-300"
+                                v-show="form.icon == ''">
+                                <PhotoIcon
+                                    class="h-10 w-10 text-stone-400"
+                                    aria-hidden="true" />
+                            </div>
+
+                            <button
+                                type="button"
+                                class="px-4 py-2 text-sm font-medium text-amber-900 bg-amber-50 border border-amber-200 rounded-lg hover:bg-amber-100 transition-colors"
+                                @click="selectIcon()">
+                                {{ form.icon === '' ? 'Upload Icon' : 'Change Icon' }}
+                            </button>
                         </div>
-
-                        <PhotoIcon
-                            class="h-12 w-12 text-gray-300"
-                            aria-hidden="true"
-                            v-show="form.icon == ''" />
-                        
-                        <button
-                            type="button"
-                            class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                            @click="selectIcon()">
-                            Change
-                        </button>
+                        <p class="mt-1.5 text-xs text-stone-500">
+                            PNG, JPG, or SVG recommended
+                        </p>
                     </div>
                 </div>
             </div>
         </template>
 
         <template #footer>
-            <div class="w-full flex items-center justify-end gap-x-6 px-4 py-3">
+            <div class="w-full flex items-center justify-between gap-x-4 px-6 py-4 bg-white border-t border-stone-200">
                 <SecondaryButton @click="close()">Cancel</SecondaryButton>
                 <PrimaryButton @click="createDrinkOption()">Create Drink Option</PrimaryButton>
             </div>
