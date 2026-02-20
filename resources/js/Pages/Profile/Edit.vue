@@ -1,8 +1,10 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
+import UpdateProfilePictureForm from './Partials/UpdateProfilePictureForm.vue';
+import ManageSubscriptionsForm from './Partials/ManageSubscriptionsForm.vue';
 import { Head } from '@inertiajs/vue3';
 
 defineProps({
@@ -12,35 +14,56 @@ defineProps({
     status: {
         type: String,
     },
+    subscriptions: {
+        type: Array,
+        default: () => []
+    }
 });
 </script>
 
 <template>
-    <Head title="Profile" />
+    <Head title="My Account" />
 
-    <AuthenticatedLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>
-        </template>
-
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <UpdateProfileInformationForm
-                        :must-verify-email="mustVerifyEmail"
-                        :status="status"
-                        class="max-w-xl"
-                    />
+    <AppLayout>
+        <div class="min-h-screen bg-stone-50 py-12">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Page Header -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-stone-900">My Account</h1>
+                    <p class="mt-2 text-stone-600">Manage your profile settings and preferences.</p>
                 </div>
 
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <UpdatePasswordForm class="max-w-xl" />
-                </div>
+                <!-- Cards Container -->
+                <div class="space-y-6">
+                    <!-- Profile Picture Card -->
+                    <div class="bg-white rounded-lg shadow-sm border border-stone-200 p-6">
+                        <UpdateProfilePictureForm />
+                    </div>
 
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <DeleteUserForm class="max-w-xl" />
+                    <!-- Personal Information Card -->
+                    <div class="bg-white rounded-lg shadow-sm border border-stone-200 p-6">
+                        <UpdateProfileInformationForm
+                            :must-verify-email="mustVerifyEmail"
+                            :status="status"
+                        />
+                    </div>
+
+                    <!-- Password Card -->
+                    <div class="bg-white rounded-lg shadow-sm border border-stone-200 p-6">
+                        <UpdatePasswordForm />
+                    </div>
+
+                    <!-- Subscriptions Card -->
+                    <div class="bg-white rounded-lg shadow-sm border border-stone-200 p-6">
+                        <ManageSubscriptionsForm :subscriptions="subscriptions" />
+                    </div>
+
+                    <!-- Delete Account Card -->
+                    <div class="bg-white rounded-lg shadow-sm border border-stone-200 p-6">
+                        <DeleteUserForm />
+                    </div>
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </AppLayout>
 </template>

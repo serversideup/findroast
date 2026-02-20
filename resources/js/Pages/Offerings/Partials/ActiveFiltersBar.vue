@@ -29,7 +29,7 @@
         <!-- Subscribe button -->
         <button
             type="button"
-            @click="showSubscribeModal = true"
+            @click="handleGetNotified"
             class="ml-auto text-xs font-medium text-amber-700 hover:text-amber-800 flex items-center gap-1 flex-shrink-0"
         >
             <BellIcon class="h-3.5 w-3.5" />
@@ -50,8 +50,14 @@
                 </div>
 
                 <div class="bg-stone-50 rounded-lg p-3 mb-4">
-                    <p class="text-xs text-stone-500 mb-2">You'll be notified when new coffees match:</p>
+                    <p class="text-xs text-stone-500 mb-2">You'll receive a daily digest when new coffees match:</p>
                     <div class="flex flex-wrap gap-1">
+                        <span
+                            v-if="form.search"
+                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-amber-100 text-amber-800"
+                        >
+                            Search: "{{ form.search }}"
+                        </span>
                         <span
                             v-for="filter in activeFilters"
                             :key="'modal-' + filter.type + '-' + filter.id"
@@ -64,38 +70,11 @@
 
                 <form @submit.prevent="subscribeToFilters">
                     <div class="mb-4">
-                        <InputLabel for="subscribe-email" value="Email address" />
-                        <TextInput
-                            id="subscribe-email"
-                            type="email"
-                            v-model="subscribeForm.email"
-                            placeholder="you@example.com"
-                            class="mt-1 block w-full"
-                            required
-                        />
-                        <InputError :message="subscribeForm.errors.email" class="mt-1" />
-                    </div>
-
-                    <div class="flex items-center gap-4 mb-4">
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input
-                                type="radio"
-                                value="instant"
-                                v-model="subscribeForm.frequency"
-                                class="h-4 w-4 border-stone-300 text-amber-700 focus:ring-amber-600"
-                            />
-                            <span class="text-sm text-stone-700">Instant alerts</span>
-                        </label>
-
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input
-                                type="radio"
-                                value="daily"
-                                v-model="subscribeForm.frequency"
-                                class="h-4 w-4 border-stone-300 text-amber-700 focus:ring-amber-600"
-                            />
-                            <span class="text-sm text-stone-700">Daily digest</span>
-                        </label>
+                        <InputLabel value="Notifications will be sent to" />
+                        <div class="mt-1 px-3 py-2 bg-stone-100 border border-stone-200 rounded-lg text-sm text-stone-700">
+                            {{ $page.props.auth.user.email }}
+                        </div>
+                        <p class="text-xs text-stone-500 mt-1">Daily digest emails will be sent to your account email</p>
                     </div>
 
                     <div class="flex justify-end gap-3">
@@ -124,6 +103,7 @@
 import { computed, ref } from 'vue';
 import { usePage, useForm } from '@inertiajs/vue3';
 import { useOfferings } from '@/Composables/useOfferings';
+import { useEventBus } from '@vueuse/core';
 import { XMarkIcon, BellIcon } from '@heroicons/vue/20/solid';
 import Modal from '@/Components/Modal.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -132,12 +112,23 @@ import InputError from '@/Components/InputError.vue';
 
 const { form } = useOfferings();
 const showSubscribeModal = ref(false);
+const promptBus = useEventBus('roast-prompt-bus');
 
 const subscribeForm = useForm({
-    email: '',
-    frequency: 'instant',
-    filters: {}
+    filters: {},
+    search: ''
 });
+
+const handleGetNotified = () => {
+    // Check if user is authenticated
+    if (!usePage().props.auth.user) {
+        // Trigger login modal
+        promptBus.emit('prompt-login');
+        return;
+    }
+
+    showSubscribeModal.value = true;
+};
 
 const activeFilters = computed(() => {
     const filters = [];
@@ -206,6 +197,7 @@ const subscribeToFilters = () => {
         varieties: [...form.varieties],
         countries: [...form.countries]
     };
+    subscribeForm.search = form.search;
 
     subscribeForm.post(route('subscriptions.store'), {
         onSuccess: () => {

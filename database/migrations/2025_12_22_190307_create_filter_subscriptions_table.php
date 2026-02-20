@@ -13,16 +13,12 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->string('email');
-            $table->string('frequency')->default('instant');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->json('filters');
-            $table->string('verification_token')->nullable();
-            $table->timestamp('verified_at')->nullable();
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('search')->nullable();
             $table->timestamps();
 
-            $table->index('email');
-            $table->index('frequency');
+            $table->index('user_id');
         });
     }
 
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('filter_subscriptions');
+        Schema::dropIfExists('subscriptions');
     }
 };

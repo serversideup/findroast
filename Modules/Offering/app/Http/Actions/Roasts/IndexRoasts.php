@@ -30,6 +30,8 @@ class IndexRoasts
         $this->filterByCompanies();
         $this->filterByInStock();
 
+        $this->applySort();
+
         $this->appendCompany();
         $this->appendFlavorNotes();
         $this->appendProcesses();
@@ -151,5 +153,20 @@ class IndexRoasts
     protected function filterByInStock()
     {
         $this->query->where('in_stock', 1);
+    }
+
+    protected function applySort()
+    {
+        $sort = $this->request->get('sort', 'newest');
+
+        switch ($sort) {
+            case 'a-z':
+                $this->query->orderBy('name', 'asc');
+                break;
+            case 'newest':
+            default:
+                $this->query->orderBy('created_at', 'desc');
+                break;
+        }
     }
 }

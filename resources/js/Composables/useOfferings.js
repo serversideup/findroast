@@ -3,6 +3,7 @@ import { router } from '@inertiajs/vue3';
 
 const form = reactive({
     search: '',
+    sort: 'newest',
     processes: [],
     origins: [],
     flavor_notes: [],

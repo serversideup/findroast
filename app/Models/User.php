@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_picture',
     ];
 
     /**
@@ -54,11 +55,11 @@ class User extends Authenticatable
 
     public function getAvatarAttribute()
     {
-        if( $this->profile_picture == '' ){
-            return 'https://www.gravatar.com/avatar/'.md5( strtolower( trim( $this->email ) ) ).'?s=200';
-        }else{
-            return '';
+        if ($this->profile_picture && $this->profile_picture !== '') {
+            return asset('storage/' . $this->profile_picture);
         }
+
+        return 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($this->email))) . '?s=200';
     }
 
     public function recipes(): HasMany
@@ -70,5 +71,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Recipe::class, 'user_saved_recipes')
             ->withTimestamps();
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
     }
 }

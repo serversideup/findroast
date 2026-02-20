@@ -59,9 +59,10 @@
                         leave-to-class="transform opacity-0 scale-95"
                     >
                         <MenuItems class="absolute right-0 z-50 mt-1.5 w-44 origin-top-right rounded-xl bg-white shadow-lg border border-stone-200 focus:outline-none py-1">
-                            <MenuItem v-for="option in sortOptions" :key="option.name" v-slot="{ active }">
+                            <MenuItem v-for="option in sortOptions" :key="option.value" v-slot="{ active }">
                                 <button
                                     type="button"
+                                    @click="setSort(option.value)"
                                     :class="[
                                         'block w-full text-left px-3 py-1.5 text-sm',
                                         option.current ? 'font-medium text-amber-800 bg-amber-50' : 'text-stone-600',
@@ -116,9 +117,10 @@
                         leave-to-class="transform opacity-0 scale-95"
                     >
                         <MenuItems class="absolute right-0 z-50 mt-1.5 w-44 origin-top-right rounded-xl bg-white shadow-lg border border-stone-200 focus:outline-none py-1">
-                            <MenuItem v-for="option in sortOptions" :key="option.name" v-slot="{ active }">
+                            <MenuItem v-for="option in sortOptions" :key="option.value" v-slot="{ active }">
                                 <button
                                     type="button"
+                                    @click="setSort(option.value)"
                                     :class="[
                                         'block w-full text-left px-3 py-1.5 text-sm',
                                         option.current ? 'font-medium text-amber-800 bg-amber-50' : 'text-stone-600',
@@ -319,10 +321,12 @@ const clearAllFilters = () => {
     form.countries = [];
 };
 
-const sortOptions = [
-    { name: 'Newest', href: '#', current: true },
-    { name: 'Price: Low to High', href: '#', current: false },
-    { name: 'Price: High to Low', href: '#', current: false },
-    { name: 'Name A-Z', href: '#', current: false },
-];
+const sortOptions = computed(() => [
+    { name: 'Newest', value: 'newest', current: form.sort === 'newest' },
+    { name: 'A-Z', value: 'a-z', current: form.sort === 'a-z' },
+]);
+
+const setSort = (value) => {
+    form.sort = value;
+};
 </script>
