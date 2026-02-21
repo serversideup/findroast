@@ -31,7 +31,8 @@ services:
     networks:
       - development
     depends_on:
-      - traefik
+      mariadb:
+        condition: service_started
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.roast-web.rule=Host(`roast.dev.test`) || HostRegexp(`^.+\\.ngrok-free\\.app$$`)"
@@ -46,6 +47,7 @@ services:
         USER_ID: ${SPIN_USER_ID}
         GROUP_ID: ${SPIN_GROUP_ID}
       dockerfile: Dockerfile.node
+    command: yarn run dev
     volumes:
       - .:/usr/src/app/
     working_dir: /usr/src/app/
@@ -83,12 +85,37 @@ services:
     depends_on:
       php:
         condition: service_started
+      mariadb:
+        condition: service_healthy
+  mariadb:
+    networks:
+      - development
+    volumes:
+      - ./.infrastructure/volume_data/mariadb/database_data/:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: "rootpassword"
+      MARIADB_DATABASE: "findroast"
+      MARIADB_USER: "findroast"
+      MARIADB_PASSWORD: "secret"
+    ports:
+      - target: 3306
+        published: 3306
+        mode: host
   meilisearch:
     volumes:
       - ./.infrastructure/volume_data/meilisearch/meilisearch_data:/meili_data
     networks:
       - development
-    depends_on: {}
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.meilisearch.rule=Host(`meilisearch.dev.test`)"
+      - "traefik.http.routers.meilisearch.entrypoints=websecure"
+      - "traefik.http.routers.meilisearch.tls=true"
+      - "traefik.http.services.meilisearch.loadbalancer.server.port=7700"
+      - "traefik.http.services.meilisearch.loadbalancer.server.scheme=http"
   queue:
     build:
       target: development
@@ -103,5 +130,7 @@ services:
     depends_on:
       php:
         condition: service_started
+      mariadb:
+        condition: service_healthy
 networks:
   development:

@@ -40,7 +40,6 @@ services:
       - "storage_public:/var/www/html/storage/app/public/"
       - "storage_sessions:/var/www/html/storage/framework/sessions"
       - "storage_logs:/var/www/html/storage/logs"
-      - "database_sqlite:/var/www/html/.infrastructure/volume_data/sqlite"
     deploy:
       replicas: 1
       update_config:
@@ -80,7 +79,6 @@ services:
       - "storage_public:/var/www/html/storage/app/public/"
       - "storage_sessions:/var/www/html/storage/framework/sessions"
       - "storage_logs:/var/www/html/storage/logs"
-      - "database_sqlite:/var/www/html/.infrastructure/volume_data/sqlite"
     deploy:
       replicas: 1
       update_config:
@@ -96,6 +94,40 @@ services:
         delay: 10s
         max_attempts: 3
         window: 120s
+  mariadb:
+    networks:
+      - web-public
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: "1"
+      MARIADB_DATABASE: "${DB_DATABASE}"
+      MARIADB_USER: "${DB_USERNAME}"
+      MARIADB_PASSWORD: "${DB_PASSWORD}"
+    deploy:
+      placement:
+        constraints:
+          - node.role==manager
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - mariadb_custom_conf:/etc/mysql/conf.d
+      - mariadb_shared:/shared
+  ssh:
+    # We use an SSH image so we can securely tunnel into the Docker network with 
+    # tools like Sequel Pro, TablePlus, Sequel Ace, etc.
+    # Learn more how to secure your tunnel here: https://github.com/serversideup/docker-ssh
+    image: serversideup/docker-ssh:v3
+    ports:
+      - target: 2222
+        published: 2222
+        mode: host
+    environment:
+      # Be sure to set the authorized keys in the .env file or GitHub Actions secrets
+      AUTHORIZED_KEYS: "${AUTHORIZED_KEYS}"
+      # You can lock to a specific IP too (AllowUsers tunnel@1.2.3.4)
+      ALLOWED_IPS: "AllowUsers tunnel"
+    volumes:
+      - tunnel_ssh_host_keys:/etc/ssh/ssh_host_keys
+    networks:
+      - web-public
   meilisearch:
     volumes:
       - meilisearch_data:/meili_data
@@ -118,7 +150,6 @@ services:
       - "storage_public:/var/www/html/storage/app/public/"
       - "storage_sessions:/var/www/html/storage/framework/sessions"
       - "storage_logs:/var/www/html/storage/logs"
-      - "database_sqlite:/var/www/html/.infrastructure/volume_data/sqlite"
     deploy:
       replicas: 1
       update_config:
@@ -144,7 +175,10 @@ volumes:
   storage_public:
   storage_sessions:
   storage_logs:
-  database_sqlite:
+  mariadb_data:
+  mariadb_custom_conf:
+  mariadb_shared:
+  tunnel_ssh_host_keys:
   meilisearch_data:
 networks:
   web-public:

@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile.php
     volumes:
       - .:/var/www/html/
+    depends_on:
+      - mariadb
   node:
     build:
       target: ci
@@ -20,6 +22,15 @@ services:
       dockerfile: Dockerfile.php
     volumes:
       - .:/var/www/html/
+  mariadb:
+    environment:
+      MARIADB_ROOT_PASSWORD: "cirootpassword"
+      MARIADB_DATABASE: "cidatabase"
+      MARIADB_USER: "ciuser"
+      MARIADB_PASSWORD: "cipassword"
+  meilisearch:
+    environment:
+      MEILI_MASTER_KEY: "developmentkey1234567890"
   queue:
     build:
       target: ci

@@ -1,6 +1,12 @@
 services:
   traefik:
     image: traefik:v3.6
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
   php:
     environment:
       SSL_MODE: "full"
@@ -12,8 +18,16 @@ services:
     healthcheck:
       test: ["CMD", "healthcheck-schedule"]
       start_period: 10s
+  mariadb:
+    image: mariadb:11.4
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
   meilisearch:
-    image: getmeili/meilisearch:v1.12
+    image: getmeili/meilisearch:v1.26
     environment:
       MEILI_NO_ANALYTICS: "true"
       MEILI_MASTER_KEY: "${MEILISEARCH_KEY}"
