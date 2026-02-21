@@ -30,6 +30,19 @@ const loadRoasts = () => {
     });
 };
 
+const reshuffleRandom = () => {
+    offeringsLoading.value = true;
+    router.visit('/', {
+        only: ['roasts'],
+        data: { ...form, reshuffle: 1 },
+        preserveScroll: false,
+        preserveState: true,
+        onSuccess: () => {
+            offeringsLoading.value = false;
+        }
+    });
+};
+
 export const useOfferings = () => {
     if (!watcherActive) {
         watcherActive = true;
@@ -41,6 +54,7 @@ export const useOfferings = () => {
 
     return {
         form,
-        offeringsLoading
+        offeringsLoading,
+        reshuffleRandom,
     };
 };

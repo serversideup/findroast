@@ -45,9 +45,15 @@
             <!-- Sort (desktop) -->
             <div class="ml-auto flex-shrink-0">
                 <Menu as="div" class="relative">
-                    <MenuButton class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border border-stone-200 bg-white text-stone-600 hover:border-stone-300 hover:text-stone-800 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-amber-500/40">
-                        <ArrowsUpDownIcon class="h-3.5 w-3.5" />
-                        Sort
+                    <MenuButton :class="[
+                        'inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-amber-500/40',
+                        form.sort === 'random'
+                            ? 'border-amber-300 bg-amber-50 text-amber-700 font-medium'
+                            : 'border-stone-200 bg-white text-stone-600 hover:border-stone-300 hover:text-stone-800'
+                    ]">
+                        <SparklesIcon v-if="form.sort === 'random'" class="h-3.5 w-3.5" />
+                        <ArrowsUpDownIcon v-else class="h-3.5 w-3.5" />
+                        {{ form.sort === 'random' ? 'Discover' : 'Sort' }}
                     </MenuButton>
 
                     <transition
@@ -64,12 +70,16 @@
                                     type="button"
                                     @click="setSort(option.value)"
                                     :class="[
-                                        'block w-full text-left px-3 py-1.5 text-sm',
-                                        option.current ? 'font-medium text-amber-800 bg-amber-50' : 'text-stone-600',
+                                        'flex items-center gap-2 w-full text-left px-3 py-1.5 text-sm',
+                                        option.current ? 'font-medium text-amber-800 bg-amber-50' : '',
+                                        !option.current && option.value === 'random' ? 'text-amber-700' : '',
+                                        !option.current && option.value !== 'random' ? 'text-stone-600' : '',
                                         active && !option.current ? 'bg-stone-50' : ''
                                     ]"
                                 >
-                                    {{ option.name }}
+                                    <SparklesIcon v-if="option.value === 'random'" class="h-3.5 w-3.5 flex-shrink-0 text-amber-500" />
+                                    <span class="flex-1">{{ option.name }}</span>
+                                    <span v-if="option.value === 'random' && option.current" class="text-xs text-amber-400 font-normal">reshuffle</span>
                                 </button>
                             </MenuItem>
                         </MenuItems>
@@ -103,9 +113,15 @@
             <!-- Sort (mobile) -->
             <div class="ml-auto flex-shrink-0">
                 <Menu as="div" class="relative">
-                    <MenuButton class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border border-stone-200 bg-white text-stone-600 whitespace-nowrap focus:outline-none">
-                        <ArrowsUpDownIcon class="h-3.5 w-3.5" />
-                        Sort
+                    <MenuButton :class="[
+                        'inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border transition-colors whitespace-nowrap focus:outline-none',
+                        form.sort === 'random'
+                            ? 'border-amber-300 bg-amber-50 text-amber-700 font-medium'
+                            : 'border-stone-200 bg-white text-stone-600'
+                    ]">
+                        <SparklesIcon v-if="form.sort === 'random'" class="h-3.5 w-3.5" />
+                        <ArrowsUpDownIcon v-else class="h-3.5 w-3.5" />
+                        {{ form.sort === 'random' ? 'Discover' : 'Sort' }}
                     </MenuButton>
 
                     <transition
@@ -122,12 +138,16 @@
                                     type="button"
                                     @click="setSort(option.value)"
                                     :class="[
-                                        'block w-full text-left px-3 py-1.5 text-sm',
-                                        option.current ? 'font-medium text-amber-800 bg-amber-50' : 'text-stone-600',
+                                        'flex items-center gap-2 w-full text-left px-3 py-1.5 text-sm',
+                                        option.current ? 'font-medium text-amber-800 bg-amber-50' : '',
+                                        !option.current && option.value === 'random' ? 'text-amber-700' : '',
+                                        !option.current && option.value !== 'random' ? 'text-stone-600' : '',
                                         active && !option.current ? 'bg-stone-50' : ''
                                     ]"
                                 >
-                                    {{ option.name }}
+                                    <SparklesIcon v-if="option.value === 'random'" class="h-3.5 w-3.5 flex-shrink-0 text-amber-500" />
+                                    <span class="flex-1">{{ option.name }}</span>
+                                    <span v-if="option.value === 'random' && option.current" class="text-xs text-amber-400 font-normal">reshuffle</span>
                                 </button>
                             </MenuItem>
                         </MenuItems>
@@ -279,10 +299,11 @@ import {
 import {
     ArrowsUpDownIcon,
     FunnelIcon,
+    SparklesIcon,
     XMarkIcon,
 } from '@heroicons/vue/20/solid';
 
-const { form } = useOfferings();
+const { form, reshuffleRandom } = useOfferings();
 const { findFlag } = useCountries();
 
 const mobileOpen = ref(false);
@@ -323,10 +344,15 @@ const clearAllFilters = () => {
 
 const sortOptions = computed(() => [
     { name: 'Newest', value: 'newest', current: form.sort === 'newest' },
-    { name: 'A-Z', value: 'a-z', current: form.sort === 'a-z' },
+    { name: 'A–Z', value: 'a-z', current: form.sort === 'a-z' },
+    { name: 'Discover', value: 'random', current: form.sort === 'random' },
 ]);
 
 const setSort = (value) => {
-    form.sort = value;
+    if (value === 'random' && form.sort === 'random') {
+        reshuffleRandom();
+    } else {
+        form.sort = value;
+    }
 };
 </script>

@@ -160,11 +160,20 @@ class IndexRoasts
         $sort = $this->request->get('sort', 'newest');
 
         switch ($sort) {
+            case 'random':
+                if ($this->request->boolean('reshuffle') || ! session()->has('roast_random_seed')) {
+                    session(['roast_random_seed' => rand(1, 999999)]);
+                }
+                $seed = session('roast_random_seed');
+                $this->query->orderByRaw("RAND({$seed})");
+                break;
             case 'a-z':
+                session()->forget('roast_random_seed');
                 $this->query->orderBy('name', 'asc');
                 break;
             case 'newest':
             default:
+                session()->forget('roast_random_seed');
                 $this->query->orderBy('created_at', 'desc');
                 break;
         }
