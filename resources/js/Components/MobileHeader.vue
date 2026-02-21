@@ -114,6 +114,10 @@ const links = [
         name: 'Contact',
         path: '/contact',
     },
+    {
+        name: 'Changelog',
+        path: '/changelog',
+    },
 ];
 
 const promptBus = useEventBus('roast-prompt-bus');

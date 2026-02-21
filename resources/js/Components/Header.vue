@@ -84,7 +84,11 @@ const links = [
     {
         name: 'Contact',
         path: '/contact'
-    }
+    },
+    {
+        name: 'Changelog',
+        path: '/changelog'
+    },
 ]
 
 const isActivePage = (path) => {

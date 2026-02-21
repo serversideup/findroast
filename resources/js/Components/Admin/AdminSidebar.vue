@@ -60,6 +60,7 @@ import {
     UsersIcon,
     ChatBubbleLeftIcon,
     ClipboardDocumentListIcon,
+    DocumentTextIcon,
 } from '@heroicons/vue/20/solid';
 import NavCategory from './NavCategory.vue';
 
@@ -93,5 +94,6 @@ const roastItems = [
 const platformItems = [
     { label: 'Users', href: '/platform/users', icon: UsersIcon },
     { label: 'Messages', href: '/platform/messages', icon: ChatBubbleLeftIcon },
+    { label: 'Changelog', href: '/platform/changelog', icon: DocumentTextIcon },
 ];
 </script>

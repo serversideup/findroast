@@ -16,6 +16,7 @@ use Modules\Platform\Http\Controllers\ProcessController;
 use Modules\Platform\Http\Controllers\RoastController;
 use Modules\Platform\Http\Controllers\UsersController;
 use Modules\Platform\Http\Controllers\VarietyController;
+use Modules\Platform\Http\Controllers\ChangelogController;
 use Modules\Platform\Http\Controllers\MessagesController;
 use Modules\Platform\Http\Middleware\CanManagePlatform;
 
@@ -136,4 +137,19 @@ Route::middleware([Authenticate::class, CanManagePlatform::class])->group(functi
 
     Route::get('/platform/users', [UsersController::class, 'index'])
         ->name('platform.users.index');
+
+    Route::get('/platform/changelog', [ChangelogController::class, 'index'])
+        ->name('platform.changelog.index');
+    Route::get('/platform/changelog/create', [ChangelogController::class, 'create'])
+        ->name('platform.changelog.create');
+    Route::post('/platform/changelog', [ChangelogController::class, 'store'])
+        ->name('platform.changelog.store');
+    Route::get('/platform/changelog/{changelog}/edit', [ChangelogController::class, 'edit'])
+        ->name('platform.changelog.edit');
+    Route::put('/platform/changelog/{changelog}', [ChangelogController::class, 'update'])
+        ->name('platform.changelog.update');
+    Route::put('/platform/changelog/{changelog}/publish', [ChangelogController::class, 'publish'])
+        ->name('platform.changelog.publish');
+    Route::delete('/platform/changelog/{changelog}', [ChangelogController::class, 'destroy'])
+        ->name('platform.changelog.destroy');
 });

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Modules\Platform\Models\ChangelogEntry;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -34,7 +35,11 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'google_maps_api_key' => config('services.google.maps.key')
+            'google_maps_api_key' => config('services.google.maps.key'),
+            'latest_changelog' => fn () => ChangelogEntry::published()
+                ->orderBy('date', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->first(['id', 'version', 'date', 'description']),
         ];
     }
 }

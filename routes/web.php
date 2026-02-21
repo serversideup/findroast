@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChangelogController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FilterSubscriptionController;
@@ -10,6 +11,7 @@ use Inertia\Inertia;
 
 Route::get('/', [DashboardController::class, 'index']);
 Route::get('/map', [MapController::class, 'index']);
+Route::get('/changelog', [ChangelogController::class, 'index'])->name('changelog.index');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
