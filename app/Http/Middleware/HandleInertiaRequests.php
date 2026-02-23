@@ -35,6 +35,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'app_url' => config('app.url'),
             'google_maps_api_key' => config('services.google.maps.key'),
             'latest_changelog' => fn () => ChangelogEntry::published()
                 ->orderBy('date', 'desc')

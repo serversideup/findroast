@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Modules\Offering\Http\Controllers\Api\RoastController;
 
 /*
  *--------------------------------------------------------------------------
@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
  *
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    
+Route::middleware(['auth:sanctum', 'throttle:60,1'])->prefix('v1')->group(function () {
+    Route::get('/roasts', [RoastController::class, 'index'])->name('roasts.index');
+    Route::get('/roasts/{roast}', [RoastController::class, 'show'])->name('roasts.show');
 });

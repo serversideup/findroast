@@ -5,6 +5,7 @@ import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 import UpdateProfilePictureForm from './Partials/UpdateProfilePictureForm.vue';
 import ManageSubscriptionsForm from './Partials/ManageSubscriptionsForm.vue';
+import ManageApiTokensForm from './Partials/ManageApiTokensForm.vue';
 import { Head } from '@inertiajs/vue3';
 
 defineProps({
@@ -17,6 +18,14 @@ defineProps({
     subscriptions: {
         type: Array,
         default: () => []
+    },
+    tokens: {
+        type: Array,
+        default: () => []
+    },
+    newToken: {
+        type: String,
+        default: null
     }
 });
 </script>
@@ -56,6 +65,11 @@ defineProps({
                     <!-- Subscriptions Card -->
                     <div class="bg-white rounded-lg shadow-sm border border-stone-200 p-6">
                         <ManageSubscriptionsForm :subscriptions="subscriptions" />
+                    </div>
+
+                    <!-- API Tokens Card -->
+                    <div class="bg-white rounded-lg shadow-sm border border-stone-200 p-6">
+                        <ManageApiTokensForm :tokens="tokens" :new-token="newToken" />
                     </div>
 
                     <!-- Delete Account Card -->

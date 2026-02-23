@@ -81,10 +81,17 @@ class ProfileController extends Controller
             $subscription->resolved_filters = $resolvedFilters;
         });
 
+        $tokens = $request->user()->tokens()
+            ->select(['id', 'name', 'last_used_at', 'created_at'])
+            ->orderByDesc('created_at')
+            ->get();
+
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
             'subscriptions' => $subscriptions,
+            'tokens' => $tokens,
+            'newToken' => session('new_token'),
         ]);
     }
 

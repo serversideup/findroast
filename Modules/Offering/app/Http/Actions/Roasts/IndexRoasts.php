@@ -42,6 +42,33 @@ class IndexRoasts
         return $this->query->paginate(12)->withQueryString();
     }
 
+    public function executeForApi(int $perPage = 12)
+    {
+        $this->query = Roast::query();
+
+        $this->extractRequestVariables();
+
+        $this->filterBySearch();
+        $this->filterByDates();
+        $this->filterByProcesses();
+        $this->filterByFlavorNotes();
+        $this->filterByVarieties();
+        $this->filterByCountries();
+        $this->filterByCompanies();
+        $this->filterByInStock();
+
+        $this->applySortForApi();
+
+        $this->appendCompany();
+        $this->appendFlavorNotes();
+        $this->appendProcesses();
+        $this->appendCountries();
+        $this->appendVarieties();
+        $this->appendElevations();
+
+        return $this->query->paginate($perPage)->withQueryString();
+    }
+
     protected function extractRequestVariables()
     {
         $this->createdAt = $this->request->get('created_at', null);
@@ -177,5 +204,15 @@ class IndexRoasts
                 $this->query->orderBy('created_at', 'desc');
                 break;
         }
+    }
+
+    protected function applySortForApi()
+    {
+        $sort = $this->request->get('sort', 'newest');
+
+        match ($sort) {
+            'a-z' => $this->query->orderBy('name', 'asc'),
+            default => $this->query->orderBy('created_at', 'desc'),
+        };
     }
 }

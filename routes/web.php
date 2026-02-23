@@ -5,6 +5,8 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FilterSubscriptionController;
 use App\Http\Controllers\MapController;
+use App\Http\Controllers\OgImageController;
+use App\Http\Controllers\PersonalAccessTokenController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -46,6 +48,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/subscriptions', [FilterSubscriptionController::class, 'store'])->name('subscriptions.store');
     Route::get('/subscriptions', [FilterSubscriptionController::class, 'index'])->name('subscriptions.index');
     Route::delete('/subscriptions/{subscription}', [FilterSubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
+
+    // Personal access tokens
+    Route::post('/profile/tokens', [PersonalAccessTokenController::class, 'store'])->name('tokens.store');
+    Route::delete('/profile/tokens/{tokenId}', [PersonalAccessTokenController::class, 'destroy'])->name('tokens.destroy');
 });
 
 require __DIR__.'/auth.php';
