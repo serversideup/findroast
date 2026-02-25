@@ -8,6 +8,7 @@ use App\Http\Controllers\MapController;
 use App\Http\Controllers\OgImageController;
 use App\Http\Controllers\PersonalAccessTokenController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransparencyController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -16,6 +17,7 @@ Route::get('/map', [MapController::class, 'index']);
 Route::get('/changelog', [ChangelogController::class, 'index'])->name('changelog.index');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/transparency', [TransparencyController::class, 'index'])->name('transparency.index');
 
 // use Modules\Company\Models\Company;
 // use Modules\Offering\Models\OfferingImportMap;

@@ -111,6 +111,10 @@ const links = [
         path: '/map',
     },
     {
+        name: 'Transparency',
+        path: '/transparency',
+    },
+    {
         name: 'Contact',
         path: '/contact',
     },

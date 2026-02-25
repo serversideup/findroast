@@ -3,9 +3,11 @@
         <MobileHeader/>
         <Header/>
 
-        <main class="pt-14 lg:pt-16">
+        <main class="pt-14 lg:pt-16 flex-grow">
             <slot />
         </main>
+
+        <Footer/>
 
         <Notification/>
 
@@ -14,6 +16,7 @@
 </template>
 
 <script setup>
+import Footer from '@/Components/Footer.vue';
 import Header from '@/Components/Header.vue';
 import MobileHeader from '@/Components/MobileHeader.vue';
 import Notification from '@/Components/Notification.vue';
