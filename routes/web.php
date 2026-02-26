@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiDocsController;
 use App\Http\Controllers\ChangelogController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
@@ -18,6 +19,7 @@ Route::get('/changelog', [ChangelogController::class, 'index'])->name('changelog
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 Route::get('/transparency', [TransparencyController::class, 'index'])->name('transparency.index');
+Route::get('/api-docs', [ApiDocsController::class, 'index'])->name('api-docs.index');
 
 // use Modules\Company\Models\Company;
 // use Modules\Offering\Models\OfferingImportMap;

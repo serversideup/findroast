@@ -30,7 +30,7 @@ class ContactController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'subject' => 'required|string|in:new_company,feature_request,bug_report,general_inquiry,other',
+            'subject' => 'required|string|in:new_company,feature_request,sponsor_inquiry,general_inquiry,other',
             'message' => 'required|string|max:5000',
             'company_name' => 'nullable|string|max:255',
             'company_url' => 'nullable|url|max:500',

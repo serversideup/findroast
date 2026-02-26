@@ -41,4 +41,10 @@ return [
             'key' => env('GOOGLE_MAPS_API_KEY'),
         ],
     ],
+
+    'plausible' => [
+        'enabled' => env('PLAUSIBLE_ENABLED', false),
+        'host' => env('PLAUSIBLE_HOST'),
+        'domain' => env('PLAUSIBLE_DOMAIN'),
+    ],
 ];

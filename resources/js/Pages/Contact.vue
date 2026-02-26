@@ -27,7 +27,7 @@ const subjects = [
     { value: 'general_inquiry', label: 'General Inquiry' },
     { value: 'new_company', label: 'Suggest a Coffee Roaster' },
     { value: 'feature_request', label: 'Feature Request' },
-    { value: 'bug_report', label: 'Bug Report' },
+    { value: 'sponsor_inquiry', label: 'Sponsor Inquiry' },
     { value: 'other', label: 'Other' },
 ];
 

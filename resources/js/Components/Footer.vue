@@ -60,6 +60,13 @@
                         </li>
                         <li>
                             <Link
+                                href="/api-docs"
+                                class="text-stone-600 hover:text-amber-700 transition-colors text-sm">
+                                API Docs
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
                                 href="/contact"
                                 class="text-stone-600 hover:text-amber-700 transition-colors text-sm">
                                 Contact
