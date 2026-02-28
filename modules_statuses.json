@@ -3,7 +3,7 @@
     "Directory": true,
     "Platform": true,
     "Submission": true,
-    "Profile": true,
+    "Profile": false,
     "Offering": true,
     "ModifiedRoastImages": true,
     "Recipe": true,

@@ -25,21 +25,6 @@ Route::get('/api-docs', [ApiDocsController::class, 'index'])->name('api-docs.ind
 Route::get('/terms', [TermsOfServiceController::class, 'index'])->name('terms.index');
 Route::get('/privacy', [PrivacyPolicyController::class, 'index'])->name('privacy.index');
 
-// use Modules\Company\Models\Company;
-// use Modules\Offering\Models\OfferingImportMap;
-// use Modules\Offering\Http\Actions\Roasts\FetchShopifyProducts;
-
-// Route::get('/test', function () {
-//     $company = Company::find(5);
-//     $importMap = OfferingImportMap::find(5);
-
-//     $products = ( new FetchShopifyProducts($company, $importMap) )
-//         ->execute();
-
-//     foreach( $products as $product ){
-//         echo $product['name'].' - '.$product['url'].'<br>';
-//     }
-// });
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
