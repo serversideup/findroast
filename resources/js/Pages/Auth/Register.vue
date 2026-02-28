@@ -4,16 +4,36 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
+
+const page = usePage();
+
+// Get reCAPTCHA config from shared page props
+const recaptchaSiteKey = computed(() => page.props.recaptchaSiteKey);
+const recaptchaEnabled = computed(() => page.props.recaptchaEnabled);
 
 const form = useForm({
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
+    recaptcha_token: '',
 });
 
-const submit = () => {
+const submit = async () => {
+    // Execute reCAPTCHA if enabled
+    if (recaptchaEnabled.value && recaptchaSiteKey.value && window.grecaptcha) {
+        try {
+            const token = await window.grecaptcha.execute(recaptchaSiteKey.value, { action: 'register' });
+            form.recaptcha_token = token;
+        } catch (error) {
+            console.error('reCAPTCHA error:', error);
+            // Continue with form submission even if reCAPTCHA fails
+            // The server will handle validation
+        }
+    }
+
     form.post(route('register'), {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
@@ -84,6 +104,12 @@ const submit = () => {
                 />
 
                 <InputError class="mt-2" :message="form.errors.password_confirmation" />
+            </div>
+
+            <div v-if="recaptchaEnabled" class="mt-4 text-xs text-gray-600">
+                This site is protected by reCAPTCHA and the Google
+                <a href="https://policies.google.com/privacy" target="_blank" class="underline hover:text-gray-900">Privacy Policy</a> and
+                <a href="https://policies.google.com/terms" target="_blank" class="underline hover:text-gray-900">Terms of Service</a> apply.
             </div>
 
             <div class="flex items-center justify-end mt-4">

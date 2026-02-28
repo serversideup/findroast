@@ -4,7 +4,7 @@
             <h2 class="text-lg font-medium text-stone-900">API Access Tokens</h2>
             <p class="mt-1 text-sm text-stone-600">
                 Create personal access tokens to query roast data from external applications.
-                <a href="#" class="text-amber-700 hover:text-amber-800 underline">View API documentation</a>.
+                <Link href="/api-docs" class="text-amber-700 hover:text-amber-800 underline">View API documentation</Link>.
             </p>
         </header>
 
@@ -131,7 +131,7 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue';
-import { useForm, router } from '@inertiajs/vue3';
+import { useForm, router, Link } from '@inertiajs/vue3';
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { KeyIcon, TrashIcon, ClipboardDocumentIcon, ClipboardDocumentCheckIcon } from '@heroicons/vue/24/outline';
 

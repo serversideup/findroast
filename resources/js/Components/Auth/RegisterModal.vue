@@ -67,6 +67,12 @@
                 <InputError class="mt-2" :message="form.errors.password_confirmation" />
             </div>
 
+            <div v-if="recaptchaEnabled" class="mt-4 text-xs text-gray-600">
+                This site is protected by reCAPTCHA and the Google
+                <a href="https://policies.google.com/privacy" target="_blank" class="underline hover:text-gray-900">Privacy Policy</a> and
+                <a href="https://policies.google.com/terms" target="_blank" class="underline hover:text-gray-900">Terms of Service</a> apply.
+            </div>
+
             <div class="flex items-center justify-end mt-4">
                 <button type="button"
                     @click="promptLogin()"
@@ -89,17 +95,23 @@ import InputLabel from '@/Components/InputLabel.vue';
 import Modal from '@/Components/Modal.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { ref } from 'vue';
-import { Link, useForm } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { useEventBus } from '@vueuse/core';
 
 const show = ref(false);
+const page = usePage();
+
+// Get reCAPTCHA config from page props if available
+const recaptchaSiteKey = computed(() => page.props.recaptchaSiteKey || null);
+const recaptchaEnabled = computed(() => page.props.recaptchaEnabled || false);
 
 const form = useForm({
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
+    recaptcha_token: '',
 });
 
 const bus = useEventBus('roast-prompt-bus')
@@ -116,7 +128,19 @@ const close = () => {
     form.reset();
 }
 
-const submit = () => {
+const submit = async () => {
+    // Execute reCAPTCHA if enabled
+    if (recaptchaEnabled.value && recaptchaSiteKey.value && window.grecaptcha) {
+        try {
+            const token = await window.grecaptcha.execute(recaptchaSiteKey.value, { action: 'register' });
+            form.recaptcha_token = token;
+        } catch (error) {
+            console.error('reCAPTCHA error:', error);
+            // Continue with form submission even if reCAPTCHA fails
+            // The server will handle validation
+        }
+    }
+
     form.post(route('register'), {
         onFinish: () => {
             close()

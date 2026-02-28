@@ -37,6 +37,8 @@ class HandleInertiaRequests extends Middleware
             ],
             'app_url' => config('app.url'),
             'google_maps_api_key' => config('services.google.maps.key'),
+            'recaptchaSiteKey' => config('services.recaptcha.site_key'),
+            'recaptchaEnabled' => config('services.recaptcha.enabled'),
             'latest_changelog' => fn () => ChangelogEntry::published()
                 ->orderBy('date', 'desc')
                 ->orderBy('created_at', 'desc')

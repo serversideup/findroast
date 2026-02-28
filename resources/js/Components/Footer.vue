@@ -112,9 +112,24 @@
             <!-- Bottom Bar -->
             <div class="mt-12 pt-8 border-t border-stone-200">
                 <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <p class="text-stone-500 text-sm text-center sm:text-left">
-                        &copy; {{ currentYear }} FindRoast. Built with love for the coffee community.
-                    </p>
+                    <div class="flex flex-col items-center sm:items-start gap-2">
+                        <p class="text-stone-500 text-sm text-center sm:text-left">
+                            &copy; {{ currentYear }} FindRoast. Built with love for the coffee community.
+                        </p>
+                        <div class="flex items-center gap-4">
+                            <Link
+                                href="/privacy"
+                                class="text-stone-500 hover:text-stone-700 transition-colors text-xs">
+                                Privacy Policy
+                            </Link>
+                            <span class="text-stone-300">•</span>
+                            <Link
+                                href="/terms"
+                                class="text-stone-500 hover:text-stone-700 transition-colors text-xs">
+                                Terms of Service
+                            </Link>
+                        </div>
+                    </div>
                     <div class="flex items-center gap-6">
                         <a
                             href="https://github.com/serversideup/findroast"
