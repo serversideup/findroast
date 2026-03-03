@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use Modules\Offering\Models\FlavorNote;
 use Modules\Platform\Http\Actions\FlavorNotes\UpdateFlavorNote;
 use Modules\Platform\Http\Actions\FlavorNotes\DeleteFlavorNote;
+use Modules\Platform\Http\Actions\FlavorNotes\MigrateFlavorNote;
 
 class FlavorNoteController extends Controller
 {
@@ -18,8 +19,14 @@ class FlavorNoteController extends Controller
     {
         $flavorNotes = FlavorNote::all();
 
+        $migratedFlavorNotes = FlavorNote::onlyTrashed()
+            ->whereNotNull('migrated_to_id')
+            ->with('migratedTo')
+            ->get();
+
         return Inertia::render('Platform/FlavorNotes/Index', [
-            'flavorNotes' => $flavorNotes
+            'flavorNotes' => $flavorNotes,
+            'migratedFlavorNotes' => $migratedFlavorNotes
         ]);
     }
 
@@ -29,6 +36,22 @@ class FlavorNoteController extends Controller
     public function update( Request $request, FlavorNote $flavorNote )
     {
         ( new UpdateFlavorNote() )->execute( $request, $flavorNote );
+
+        return redirect()->route('platform.flavor-notes.index');
+    }
+
+    /**
+     * Migrate a flavor note to another flavor note.
+     */
+    public function migrate( Request $request, FlavorNote $flavorNote )
+    {
+        $request->validate([
+            'target_flavor_note_id' => 'required|exists:flavor_notes,id'
+        ]);
+
+        $targetFlavorNote = FlavorNote::findOrFail($request->target_flavor_note_id);
+
+        ( new MigrateFlavorNote() )->execute( $flavorNote, $targetFlavorNote );
 
         return redirect()->route('platform.flavor-notes.index');
     }

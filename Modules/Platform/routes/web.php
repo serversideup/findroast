@@ -108,6 +108,8 @@ Route::middleware([Authenticate::class, CanManagePlatform::class])->group(functi
         ->name('platform.flavor-notes.index');
     Route::put('/platform/flavor-notes/{flavorNote}', [FlavorNoteController::class, 'update'])
         ->name('platform.flavor-notes.update');
+    Route::post('/platform/flavor-notes/{flavorNote}/migrate', [FlavorNoteController::class, 'migrate'])
+        ->name('platform.flavor-notes.migrate');
     Route::delete('/platform/flavor-notes/{flavorNote}', [FlavorNoteController::class, 'delete'])
         ->name('platform.flavor-notes.delete');
 
