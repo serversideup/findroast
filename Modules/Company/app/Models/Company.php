@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Offering\Models\OfferingImportMap;
+use Modules\Offering\Models\InvalidRoastUrl;
 // use Modules\Company\Database\Factories\CompanyFactory;
 
 class Company extends Model
@@ -81,6 +82,11 @@ class Company extends Model
     public function roasts(): HasMany
     {
         return $this->hasMany(Roast::class);
+    }
+
+    public function invalidRoastUrls(): HasMany
+    {
+        return $this->hasMany(InvalidRoastUrl::class);
     }
 
     // protected static function newFactory(): CompanyFactory

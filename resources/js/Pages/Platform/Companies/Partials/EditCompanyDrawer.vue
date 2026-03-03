@@ -654,7 +654,8 @@ const updateCompany = () => {
 const previewScrapeResults = () => {
     promptBus.emit('prompt-preview-scrape-results', {
         ...form.data().offerings,
-        website: form.data().website
+        website: form.data().website,
+        company_id: company.value?.id
     });
 }
 

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 use Modules\Company\Models\Company;
 use Modules\Offering\Models\OfferingImportMap;
+use Modules\Offering\Models\InvalidRoastUrl;
 
 class FetchRoastCollection
 {
@@ -21,6 +22,7 @@ class FetchRoastCollection
 
     protected array $products = [];
     protected array $processedProducts = [];
+    protected array $invalidUrls = [];
 
     protected array $collectionContainerSelectors = [
         '//div[contains(@class, "collection-products")]',
@@ -61,6 +63,11 @@ class FetchRoastCollection
     public function execute(): array
     {
         try {
+            // Load invalid URLs for this company
+            $this->invalidUrls = InvalidRoastUrl::where('company_id', $this->company->id)
+                ->pluck('url')
+                ->toArray();
+
             $this->appendSelectors();
 
             $html = $this->fetchUrl($this->importMap->collection_url);
@@ -220,7 +227,7 @@ class FetchRoastCollection
                 if (str_starts_with($image['src'], '//')) {
                     $image['src'] = 'https:' . $image['src'];
                 }
-                
+
                 $images[$imageKey] = $image;
             }
 
@@ -240,8 +247,26 @@ class FetchRoastCollection
             $product['images'] = $images;
             $product['links'] = array_values($links);
 
+            // Check if any link in this product is marked as invalid
+            $hasInvalidUrl = false;
+            foreach ($product['links'] as $link) {
+                if (in_array($link, $this->invalidUrls)) {
+                    $hasInvalidUrl = true;
+                    break;
+                }
+            }
+
+            // Skip this product if it contains an invalid URL
+            if ($hasInvalidUrl) {
+                unset($this->products[$key]);
+                continue;
+            }
+
             $this->products[$key] = $product;
         }
+
+        // Re-index array after unsetting products
+        $this->products = array_values($this->products);
 
         return true;
     }

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Modules\Offering\Http\Actions\Roasts\FetchShopifyProducts;
 use Modules\Company\Models\Company;
 use Modules\Offering\Models\OfferingImportMap;
+use Modules\Offering\Models\InvalidRoastUrl;
 use Modules\Offering\Jobs\Shopify\LoadShopifyProducts;
 use Modules\Offering\Jobs\Global\LoadGlobalProducts;
 
@@ -40,12 +41,43 @@ class OfferingsController extends Controller
         $offeringImportMap = new OfferingImportMap();
         $offeringImportMap->fill($request->all());
 
-        $company = new Company();
-        $company->website = $request->input('website');
+        if( $request->input('company_id') ){
+            $company = Company::find($request->input('company_id'));
+        }else{
+            $company = new Company();
+            $company->website = $request->input('website');
+        }
 
         $products = ( new FetchShopifyProducts($company, $offeringImportMap) )
             ->execute();
 
         return response()->json($products);
+    }
+
+    public function markInvalid( Request $request )
+    {
+        $validated = $request->validate([
+            'company_id' => 'required|exists:companies,id',
+            'urls' => 'required|array',
+            'urls.*.url' => 'required|string',
+            'urls.*.reason' => 'nullable|string',
+        ]);
+
+        foreach ($validated['urls'] as $urlData) {
+            InvalidRoastUrl::updateOrCreate(
+                [
+                    'company_id' => $validated['company_id'],
+                    'url' => $urlData['url']
+                ],
+                [
+                    'reason' => $urlData['reason'] ?? null
+                ]
+            );
+        }
+
+        return response()->json([
+            'message' => 'URLs marked as invalid successfully',
+            'count' => count($validated['urls'])
+        ]);
     }
 }

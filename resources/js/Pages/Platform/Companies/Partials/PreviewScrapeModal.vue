@@ -9,17 +9,58 @@
             </div>
 
             <div class="w-full grid grid-cols-3 gap-4 mt-5">
-                <div class="col-span-2 flex flex-col overflow-y-auto max-h-[500px]">
-                    <div v-show="!loading" class="w-full flex items-start" v-for="product in products" :key="product.id">
-                        <div class="w-6 h-6 text-gray-500">
-                            <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" />
+                <div class="col-span-2 flex flex-col">
+                    <div class="overflow-y-auto max-h-[500px] space-y-2">
+                        <div v-show="!loading" class="w-full flex items-start p-2 hover:bg-gray-50 rounded" v-for="(product, index) in products" :key="index">
+                            <div class="flex items-center h-6 mr-3">
+                                <input
+                                    type="checkbox"
+                                    :id="'product-' + index"
+                                    v-model="selectedProducts"
+                                    :value="product.url"
+                                    class="w-4 h-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                                />
+                            </div>
+                            <label :for="'product-' + index" class="flex-1 cursor-pointer">
+                                <h3 class="text-base font-bold">{{ product.name }}</h3>
+                                <p class="text-xs text-gray-500 truncate">{{ product.url }}</p>
+                            </label>
                         </div>
-                        <div class="w-full flex flex-col">
-                            <h3 class="text-base font-bold">{{ product.name }}</h3>
+                        <div v-show="loading" class="w-full flex items-center justify-center p-5">
+                            <div class="w-10 h-10 rounded-full border-2 border-gray-300 border-t-2 border-t-indigo-500 animate-spin"></div>
                         </div>
                     </div>
-                    <div v-show="loading" class="w-full flex items-center justify-center p-5">
-                        <div class="w-10 h-10 rounded-full border-2 border-gray-300 border-t-2 border-t-indigo-500 animate-spin"></div>
+
+                    <!-- Mark as Invalid Section -->
+                    <div v-if="selectedProducts.length > 0 && form.company_id" class="mt-4 p-4 border-t border-gray-200">
+                        <div class="flex flex-col space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-700">
+                                    {{ selectedProducts.length }} item(s) selected
+                                </span>
+                                <button
+                                    @click="clearSelection"
+                                    class="text-xs text-gray-500 hover:text-gray-700"
+                                >
+                                    Clear selection
+                                </button>
+                            </div>
+                            <div class="w-full flex flex-col">
+                                <InputLabel value="Reason (optional)" class="mb-1"/>
+                                <TextInput
+                                    class="block w-full text-sm"
+                                    v-model="invalidReason"
+                                    placeholder="e.g., gift card, apparel, merchandise"/>
+                            </div>
+                            <button
+                                @click="markAsInvalid"
+                                :disabled="markingInvalid"
+                                class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white rounded-md text-sm font-medium transition-colors"
+                            >
+                                <span v-if="!markingInvalid">Mark as Invalid</span>
+                                <span v-else>Marking...</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="col-span-1 flex flex-col space-y-3">
@@ -128,7 +169,8 @@ const form = useForm({
     shopify_product_types: '',
     shopify_tags_include: '',
     shopify_tags_exclude: '',
-    shopify_collection_url: ''
+    shopify_collection_url: '',
+    company_id: null
 });
 
 const promptBus = useEventBus('roast-prompt-event-bus');
@@ -152,6 +194,7 @@ const listener = ( event, data ) => {
         form.shopify_tags_include = data.shopify_tags_include;
         form.shopify_tags_exclude = data.shopify_tags_exclude;
         form.shopify_collection_url = data.shopify_collection_url;
+        form.company_id = data.company_id || null;
         previewData();
     }
 }
@@ -160,12 +203,60 @@ promptBus.on(listener);
 
 const products = ref([]);
 const loading = ref(false);
+const selectedProducts = ref([]);
+const invalidReason = ref('');
+const markingInvalid = ref(false);
 
 const previewData = async () => {
     loading.value = true;
+    selectedProducts.value = [];
+    invalidReason.value = '';
     const response = await axios.post('/platform/offerings/preview', form.data());
     products.value = response.data;
     loading.value = false;
+}
+
+const clearSelection = () => {
+    selectedProducts.value = [];
+    invalidReason.value = '';
+}
+
+const markAsInvalid = async () => {
+    if (selectedProducts.value.length === 0) {
+        return;
+    }
+
+    markingInvalid.value = true;
+
+    try {
+        // Get company_id from the form or current context
+        // We need to pass the company_id - for preview we'll need to add this
+        const urlsToMark = selectedProducts.value.map(url => ({
+            url: url,
+            reason: invalidReason.value || null
+        }));
+
+        await axios.post('/platform/offerings/mark-invalid', {
+            company_id: form.company_id,
+            urls: urlsToMark
+        });
+
+        // Remove marked products from the preview list
+        products.value = products.value.filter(
+            product => !selectedProducts.value.includes(product.url)
+        );
+
+        // Clear selection
+        clearSelection();
+
+        // Show success message (you can add a toast notification here if available)
+        alert(`Successfully marked ${urlsToMark.length} URL(s) as invalid`);
+    } catch (error) {
+        console.error('Error marking URLs as invalid:', error);
+        alert('Failed to mark URLs as invalid. Please try again.');
+    } finally {
+        markingInvalid.value = false;
+    }
 }
 
 const eventBus = useEventBus('roast-event-bus');

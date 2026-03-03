@@ -128,6 +128,9 @@ Route::middleware([Authenticate::class, CanManagePlatform::class])->group(functi
     Route::post('/platform/offerings/preview', [OfferingsController::class, 'preview'])
         ->name('platform.offerings.preview');
 
+    Route::post('/platform/offerings/mark-invalid', [OfferingsController::class, 'markInvalid'])
+        ->name('platform.offerings.mark-invalid');
+
     Route::get('/platform/messages', [MessagesController::class, 'index'])
         ->name('platform.messages.index');
     Route::put('/platform/messages/{message}', [MessagesController::class, 'update'])

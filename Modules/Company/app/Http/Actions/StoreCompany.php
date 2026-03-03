@@ -83,7 +83,7 @@ class StoreCompany
             'container_selector' => $request->input('offerings.container_selector'),
             'product_list_item_selector' => $request->input('offerings.product_list_item_selector'),
             'product_selector' => $request->input('offerings.product_selector'),
-            'is_shopify' => $request->input('offerings.is_shopify'),
+            'is_shopify' => $request->input('offerings.is_shopify', false),
             'shopify_product_types' => $request->input('offerings.shopify_product_types'),
             'shopify_tags_include' => $request->input('offerings.shopify_tags_include'),
             'shopify_tags_exclude' => $request->input('offerings.shopify_tags_exclude'),

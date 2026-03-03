@@ -4,6 +4,7 @@ namespace Modules\Offering\Http\Actions\Roasts;
 
 use Modules\Company\Models\Company;
 use Modules\Offering\Models\OfferingImportMap;
+use Modules\Offering\Models\InvalidRoastUrl;
 use Illuminate\Support\Facades\Http;
 
 class FetchShopifyProducts
@@ -14,6 +15,7 @@ class FetchShopifyProducts
     protected array $productTypes;
     protected array $tagsInclude;
     protected array $tagsExclude;
+    protected array $invalidUrls = [];
 
     public function __construct(
         protected Company $company,
@@ -25,6 +27,10 @@ class FetchShopifyProducts
         $this->productTypes = $this->importMap->shopify_product_types ? explode(',', $this->importMap->shopify_product_types) : [];
         $this->tagsInclude = $this->importMap->shopify_tags_include ? explode(',', $this->importMap->shopify_tags_include) : [];
         $this->tagsExclude = $this->importMap->shopify_tags_exclude ? explode(',', $this->importMap->shopify_tags_exclude) : [];
+
+        // Load invalid URLs for this company
+        $this->invalidUrls = InvalidRoastUrl::where('company_id', $this->company->id)->pluck('url')->toArray();
+
 
         $this->buildUrl();
 
@@ -112,8 +118,15 @@ class FetchShopifyProducts
                     ];
                 }
 
+                $productUrl = $this->company->website.'products/'.$product['handle'];
+
+                // Skip if URL is marked as invalid
+                if( in_array($productUrl, $this->invalidUrls) ){
+                    continue;
+                }
+
                 $shopifyProduct = [
-                    'url' => $this->company->website.'products/'.$product['handle'],
+                    'url' => $productUrl,
                     'price' => isset($product['variants'][0]['price']) ? $product['variants'][0]['price'] : '',
                     'name' => $product['title'],
                     'images' => $imageUrls,

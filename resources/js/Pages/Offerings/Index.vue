@@ -20,7 +20,7 @@
                             type="text"
                             v-model="form.search"
                             placeholder="Search by name, origin, flavor..."
-                            class="w-full pl-9 pr-4 py-2 text-sm bg-white border border-stone-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 placeholder:text-stone-400"
+                            class="w-full pl-9 pr-4 py-2 text-base bg-white border border-stone-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 placeholder:text-stone-400"
                         />
                     </div>
                 </div>
