@@ -39,6 +39,7 @@ class Company extends Model
         'territory',
         'country',
         'zip',
+        'default_currency',
         'facebook_url',
         'twitter_url',
         'instagram_url',

@@ -31,6 +31,7 @@ class StoreCompany
             'province' => $request->input('province'),
             'territory' => $request->input('territory'),
             'country' => $request->input('country'),
+            'default_currency' => $request->input('default_currency', 'USD'),
             'facebook_url' => $request->input('facebook_url'),
             'twitter_url' => $request->input('twitter_url'),
             'instagram_url' => $request->input('instagram_url'),

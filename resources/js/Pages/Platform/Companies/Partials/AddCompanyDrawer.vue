@@ -96,6 +96,23 @@
                                 </div>
                             </div>
 
+                            <!-- Default Currency -->
+                            <div>
+                                <InputLabel value="Default Currency"/>
+                                <select
+                                    v-model="form.default_currency"
+                                    class="mt-1.5 border-stone-300 focus:border-amber-500 focus:ring-amber-500 rounded-lg shadow-sm w-full text-sm">
+                                    <option value="USD">USD - US Dollar ($)</option>
+                                    <option value="GBP">GBP - British Pound (£)</option>
+                                    <option value="EUR">EUR - Euro (€)</option>
+                                    <option value="AUD">AUD - Australian Dollar (A$)</option>
+                                    <option value="CAD">CAD - Canadian Dollar (C$)</option>
+                                </select>
+                                <p class="mt-1.5 text-xs text-stone-500">
+                                    Default currency for this company's products (used when currency cannot be detected automatically)
+                                </p>
+                            </div>
+
                             <!-- Logo -->
                             <div>
                                 <InputLabel value="Company Logo"/>
@@ -466,6 +483,7 @@ const form = useForm({
     province: '',
     territory: '',
     country: '',
+    default_currency: 'USD',
     facebook_url: '',
     instagram_url: '',
     twitter_url: '',

@@ -37,7 +37,7 @@ class ImportRoast
         $roast->fill([
             'name' => $this->roastData['name'],
             'price' => $this->formatPrice($this->roastData['price']),
-            'currency' => 'USD',
+            'currency' => $this->roastData['currency'] ?? $this->company->default_currency ?? 'USD',
             'in_stock' => $this->roastData['in_stock'],
             'last_seen_at' => null,
             'last_synced_at' => now(),

@@ -128,6 +128,7 @@ class FetchShopifyProducts
                 $shopifyProduct = [
                     'url' => $productUrl,
                     'price' => isset($product['variants'][0]['price']) ? $product['variants'][0]['price'] : '',
+                    'currency' => isset($product['variants'][0]['currency_code']) ? $product['variants'][0]['currency_code'] : null,
                     'name' => $product['title'],
                     'images' => $imageUrls,
                     'rawText' => strip_tags($product['body_html']),

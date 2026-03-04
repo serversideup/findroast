@@ -114,7 +114,16 @@ const { findFlag } = useCountries();
 
 const formatPrice = (price, currency) => {
     if (!price) return '';
-    const symbol = currency === 'USD' || !currency ? '$' : currency;
+
+    const currencySymbols = {
+        'USD': '$',
+        'GBP': '£',
+        'EUR': '€',
+        'AUD': 'A$',
+        'CAD': 'C$',
+    };
+
+    const symbol = currencySymbols[currency] || currency || '$';
     return `${symbol}${parseFloat(price).toFixed(2)}`;
 };
 </script>
