@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use Modules\Offering\Models\Process;
 use Modules\Platform\Http\Actions\Processes\UpdateProcess;
 use Modules\Platform\Http\Actions\Processes\DeleteProcess;
+use Modules\Platform\Http\Actions\Processes\MigrateProcess;
 
 class ProcessController extends Controller
 {
@@ -18,8 +19,14 @@ class ProcessController extends Controller
     {
         $processes = Process::all();
 
+        $migratedProcesses = Process::onlyTrashed()
+            ->whereNotNull('migrated_to_id')
+            ->with('migratedTo')
+            ->get();
+
         return Inertia::render('Platform/Processes/Index', [
-            'processes' => $processes
+            'processes' => $processes,
+            'migratedProcesses' => $migratedProcesses
         ]);
     }
 
@@ -29,6 +36,22 @@ class ProcessController extends Controller
     public function update( Request $request, Process $process )
     {
         ( new UpdateProcess() )->execute( $request, $process );
+
+        return redirect()->route('platform.processes.index');
+    }
+
+    /**
+     * Migrate a process to another process.
+     */
+    public function migrate( Request $request, Process $process )
+    {
+        $request->validate([
+            'target_process_id' => 'required|exists:processes,id'
+        ]);
+
+        $targetProcess = Process::findOrFail($request->target_process_id);
+
+        ( new MigrateProcess() )->execute( $process, $targetProcess );
 
         return redirect()->route('platform.processes.index');
     }

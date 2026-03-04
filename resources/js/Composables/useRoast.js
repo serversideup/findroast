@@ -6,6 +6,7 @@ const form = useForm({
     url: '',
     price: '',
     primary_image: '',
+    new_primary_image: '',
     in_stock: null,
     flavor_notes: [],
     processes: [],

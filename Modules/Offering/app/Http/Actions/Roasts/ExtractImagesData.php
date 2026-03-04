@@ -102,21 +102,32 @@ class ExtractImagesData
         return $imageContent;
     }
 
-    protected function buildPrompt()
-    {
-        $prompt = "The attached images are from a coffee company that sells their own roasts. 
-        The JSON below contains the paths of the images that match the attached images:
-        ```
-        ".json_encode($this->cachedImages)."
+    protected function buildPrompt()                                                                                              
+    {                                                                                                                             
+        $prompt = "The attached images are from a coffee company that sells their own roasts.                                     
+        The JSON below contains the paths of the images that match the attached images:                                           
+        ```                                                                                                                       
+        ".json_encode($this->cachedImages)."                        
         ```
         We are looking for two images:
             - The primary image of the roast
             - The details image for the roast
-        The primary image is the main image of the roast preferably is a coffee bag image. If there's two images that contain a coffee bag, return the image that contains the most text.
-        The details image contains flavor notes, processes, countries, varieties, or elevations of the roast.
-        Sometimes the bag of coffee contains the details. If that's the case, the primary image and the details image are the same.
-        If there's no details image, return null for the details image.
-        If there's no primary image, return null for the primary image.
+     
+        PRIMARY IMAGE SELECTION (in order of priority):
+        1. First priority: A coffee bag product shot (packaging with branding/text visible)
+           - If multiple coffee bag images exist, choose the one with the most text and clearest product view
+        2. Fallback: If NO coffee bag image exists, choose the most artistic, visually appealing, or illustrated image
+           - This could be drawings, artwork, or stylized graphics related to the coffee
+           - Prioritize images that would look good as a product showcase
+        3. Last resort: Any clear, well-composed image of the product
+     
+        DETAILS IMAGE:
+        - Should contain visible flavor notes, processes, countries, varieties, elevations, or tasting information
+        - Often found on the back of the coffee bag or as a separate info card
+        - If the primary coffee bag image already contains all details clearly visible, the primary and details images can be the same
+     
+        If no suitable image exists for either category, return null for that field.
+     
         Please return the data in the following format:
         ```
         {
@@ -126,7 +137,7 @@ class ExtractImagesData
             }
         }
         ```";
-
+  
         return $prompt;
     }
 

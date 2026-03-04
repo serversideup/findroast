@@ -94,6 +94,8 @@ Route::middleware([Authenticate::class, CanManagePlatform::class])->group(functi
         ->name('platform.processes.index');
     Route::put('/platform/processes/{process}', [ProcessController::class, 'update'])
         ->name('platform.processes.update');
+    Route::post('/platform/processes/{process}/migrate', [ProcessController::class, 'migrate'])
+        ->name('platform.processes.migrate');
     Route::delete('/platform/processes/{process}', [ProcessController::class, 'delete'])
         ->name('platform.processes.delete');
 
@@ -117,6 +119,8 @@ Route::middleware([Authenticate::class, CanManagePlatform::class])->group(functi
         ->name('platform.varieties.index');
     Route::put('/platform/varieties/{variety}', [VarietyController::class, 'update'])
         ->name('platform.varieties.update');
+    Route::post('/platform/varieties/{variety}/migrate', [VarietyController::class, 'migrate'])
+        ->name('platform.varieties.migrate');
     Route::delete('/platform/varieties/{variety}', [VarietyController::class, 'delete'])
         ->name('platform.varieties.delete');
 

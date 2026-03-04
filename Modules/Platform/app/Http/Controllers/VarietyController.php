@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use Modules\Offering\Models\Variety;
 use Modules\Platform\Http\Actions\Varieties\UpdateVariety;
 use Modules\Platform\Http\Actions\Varieties\DeleteVariety;
+use Modules\Platform\Http\Actions\Varieties\MigrateVariety;
 
 class VarietyController extends Controller
 {
@@ -18,8 +19,14 @@ class VarietyController extends Controller
     {
         $varieties = Variety::all();
 
+        $migratedVarieties = Variety::onlyTrashed()
+            ->whereNotNull('migrated_to_id')
+            ->with('migratedTo')
+            ->get();
+
         return Inertia::render('Platform/Varieties/Index', [
-            'varieties' => $varieties
+            'varieties' => $varieties,
+            'migratedVarieties' => $migratedVarieties
         ]);
     }
 
@@ -29,6 +36,22 @@ class VarietyController extends Controller
     public function update( Request $request, Variety $variety )
     {
         ( new UpdateVariety() )->execute( $request, $variety );
+
+        return redirect()->route('platform.varieties.index');
+    }
+
+    /**
+     * Migrate a variety to another variety.
+     */
+    public function migrate( Request $request, Variety $variety )
+    {
+        $request->validate([
+            'target_variety_id' => 'required|exists:varieties,id'
+        ]);
+
+        $targetVariety = Variety::findOrFail($request->target_variety_id);
+
+        ( new MigrateVariety() )->execute( $variety, $targetVariety );
 
         return redirect()->route('platform.varieties.index');
     }
