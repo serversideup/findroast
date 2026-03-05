@@ -23,6 +23,7 @@ export const useRoast = () => {
         form.url = data.url;
         form.price = data.price;
         form.primary_image = data.primary_image;
+        form.new_primary_image = '';
         form.in_stock = data.in_stock;
         form.flavor_notes = data.flavor_notes;
         form.processes = data.processes;

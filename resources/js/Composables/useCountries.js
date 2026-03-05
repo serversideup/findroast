@@ -131,7 +131,7 @@ const countries = [
 	},
 	{ 
 		abbr: 'BO', 
-		name: 'Bolivia, Plurinational State of',
+		name: 'Bolivia',
 		flag: '🇧🇴'
 	},
 	{ 

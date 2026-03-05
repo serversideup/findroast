@@ -39,10 +39,10 @@ class IndexRoasts
         $this->appendVarieties();
         $this->appendElevations();
 
-        return $this->query->paginate(12)->withQueryString();
+        return $this->query->paginate(36)->withQueryString();
     }
 
-    public function executeForApi(int $perPage = 12)
+    public function executeForApi(int $perPage = 36)
     {
         $this->query = Roast::query();
 

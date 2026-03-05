@@ -16,6 +16,13 @@ class UpdateRoast
 
     public function update()
     {
+        // Update basic fields
+        $this->roast->update([
+            'name' => $this->request->get('name'),
+            'url' => $this->request->get('url'),
+            'price' => $this->request->get('price'),
+        ]);
+
         if( $this->request->has('new_primary_image') && $this->request->get('new_primary_image') != '' ){
             $this->setPrimaryImage( $this->request->get('new_primary_image') );
         }
@@ -29,19 +36,34 @@ class UpdateRoast
 
     public function setPrimaryImage( $url )
     {
-        $response = Http::withoutVerifying()
-            ->get( $url );
+        try {
+            $response = Http::withoutVerifying()
+                ->timeout(30)
+                ->get( $url );
 
-        if( $response->successful() ){
-            $image = $response->body();
+            if( $response->successful() ){
+                $image = $response->body();
 
-            $path = 'companies/'.$this->roast->company->slug.'/roasts/roast-primary-'.$this->roast->id.'.jpg';
+                $path = 'companies/'.$this->roast->company->slug.'/roasts/roast-primary-'.$this->roast->id.'.jpg';
 
-            Storage::disk('public')
-                ->put($path, $image);
+                Storage::disk('public')
+                    ->put($path, $image);
 
-            $this->roast->primary_image = $path;
-            $this->roast->save();
+                $this->roast->primary_image = $path;
+                $this->roast->save();
+            } else {
+                \Log::warning('Failed to download roast image', [
+                    'roast_id' => $this->roast->id,
+                    'url' => $url,
+                    'status' => $response->status()
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Error downloading roast image', [
+                'roast_id' => $this->roast->id,
+                'url' => $url,
+                'error' => $e->getMessage()
+            ]);
         }
     }
 

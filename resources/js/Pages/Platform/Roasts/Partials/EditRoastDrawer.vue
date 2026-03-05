@@ -90,13 +90,13 @@
                     <div>
                         <InputLabel for="flavorNotes" value="Flavor Notes"/>
                     <ComboboxRoot
-                        v-model="form.flavorNotes"
+                        v-model="form.flavor_notes"
                         multiple
                         ignore-filter
                         class="w-full relative">
                         <ComboboxAnchor class="w-full inline-flex min-h-[42px] items-center justify-between px-3 py-2 text-sm rounded-lg border border-stone-300 bg-white hover:border-stone-400 focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500 transition-colors">
                             <TagsInputRoot
-                                v-model="form.flavorNotes"
+                                v-model="form.flavor_notes"
                                 delimiter=""
                                 class="flex gap-1.5 items-center flex-wrap flex-1">
                                 <TagsInputItem
@@ -533,6 +533,6 @@ const flavorNotes = computed(() => usePage().props.flavorNotes);
 const flavorNoteQuery = ref('');
 const filteredFlavorNotes = computed(() => flavorNotes.value.filter(flavorNote => contains(flavorNote.name, flavorNoteQuery.value)));
 const removeFlavorNote = (flavorNote) => {
-    form.flavorNotes = form.flavorNotes.filter(f => f.id !== flavorNote.id);
+    form.flavor_notes = form.flavor_notes.filter(f => f.id !== flavorNote.id);
 }
 </script>
