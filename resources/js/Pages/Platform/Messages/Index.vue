@@ -3,7 +3,7 @@
 
     <AdminHeader
         :title="'Messages'"
-        :count="messages.length" />
+        :count="messages.total" />
 
     <div class="bg-white border-t border-stone-200">
         <div class="overflow-x-auto">
@@ -32,7 +32,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-stone-100">
                     <tr
-                        v-for="message in messages"
+                        v-for="message in messages.data"
                         :key="message.id"
                         class="hover:bg-amber-50/50 cursor-pointer transition-colors"
                         @click="viewMessage(message)">
@@ -70,7 +70,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr v-if="messages.length === 0">
+                    <tr v-if="messages.data.length === 0">
                         <td colspan="6" class="px-4 py-8 text-center text-sm text-stone-500">
                             No messages found
                         </td>
@@ -78,6 +78,8 @@
                 </tbody>
             </table>
         </div>
+
+        <Pagination :data="messages" />
     </div>
 
     <ViewMessageDrawer />
@@ -86,6 +88,7 @@
 <script setup>
 import AdminHeader from '../Partials/AdminHeader.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import Pagination from '@/Components/Admin/Pagination.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { useEventBus } from '@vueuse/core';

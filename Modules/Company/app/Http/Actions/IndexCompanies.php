@@ -28,7 +28,7 @@ class IndexCompanies
             $this->query->with( $with );
         }
 
-        $results = $this->query->paginate();
+        $results = $this->query->paginate(18);
 
         return $results;
     }

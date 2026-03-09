@@ -3,7 +3,7 @@
 
     <AdminHeader
         :title="'Brew Methods'"
-        :count="brewMethods.length">
+        :count="brewMethods.total">
         <template #actions>
             <button
                 @click="promptCreateBrewMethod()"
@@ -28,7 +28,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-stone-100">
                     <tr
-                        v-for="brewMethod in brewMethods"
+                        v-for="brewMethod in brewMethods.data"
                         :key="brewMethod.id"
                         class="hover:bg-amber-50/50 cursor-pointer transition-colors"
                         @click="promptEditBrewMethod(brewMethod)">
@@ -53,7 +53,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr v-if="brewMethods.length === 0">
+                    <tr v-if="brewMethods.data.length === 0">
                         <td colspan="2" class="px-4 py-8 text-center text-sm text-stone-500">
                             No brew methods found
                         </td>
@@ -61,6 +61,8 @@
                 </tbody>
             </table>
         </div>
+
+        <Pagination :data="brewMethods" />
     </div>
 
     <CreateBrewMethodDrawer />
@@ -72,6 +74,7 @@ import AdminHeader from '../Partials/AdminHeader.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import CreateBrewMethodDrawer from './Partials/CreateBrewMethodDrawer.vue';
 import EditBrewMethodDrawer from './Partials/EditBrewMethodDrawer.vue';
+import Pagination from '@/Components/Admin/Pagination.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { useEventBus } from '@vueuse/core';

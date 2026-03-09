@@ -16,7 +16,7 @@ class CountryController extends Controller
      */
     public function index( Request $request )
     {
-        $countries = Country::orderBy('name', 'ASC')->get();
+        $countries = Country::orderBy('name', 'ASC')->paginate(25)->withQueryString();
 
         return Inertia::render('Platform/Countries/Index', [
             'countries' => $countries

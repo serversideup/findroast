@@ -16,7 +16,7 @@ class ElevationController extends Controller
      */
     public function index( Request $request )
     {
-        $elevations = Elevation::all();
+        $elevations = Elevation::orderBy('name', 'asc')->paginate(25)->withQueryString();
 
         return Inertia::render('Platform/Elevations/Index', [
             'elevations' => $elevations

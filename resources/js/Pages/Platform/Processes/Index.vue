@@ -3,7 +3,7 @@
 
     <AdminHeader
         :title="'Processes'"
-        :count="processes.length" />
+        :count="processes.total" />
 
     <!-- Active Processes -->
     <div class="bg-white border-t border-stone-200">
@@ -24,7 +24,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-stone-100">
                     <tr
-                        v-for="process in processes"
+                        v-for="process in processes.data"
                         :key="process.id"
                         class="hover:bg-amber-50/50 transition-colors">
                         <td class="px-4 py-2.5 text-sm font-medium text-stone-900">
@@ -46,7 +46,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr v-if="processes.length === 0">
+                    <tr v-if="processes.data.length === 0">
                         <td colspan="3" class="px-4 py-8 text-center text-sm text-stone-500">
                             No processes found
                         </td>
@@ -54,6 +54,8 @@
                 </tbody>
             </table>
         </div>
+
+        <Pagination :data="processes" />
     </div>
 
     <!-- Migrated Processes -->
@@ -104,6 +106,7 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useEventBus } from '@vueuse/core';
 import EditProcessDrawer from './Partials/EditProcessDrawer.vue';
 import MigrateProcessDrawer from './Partials/MigrateProcessDrawer.vue';
+import Pagination from '@/Components/Admin/Pagination.vue';
 
 defineOptions({
     layout: AdminLayout
@@ -120,7 +123,7 @@ const editProcess = (process) => {
 
 const migrateProcess = (process) => {
     // Pass all processes except the one being migrated as potential targets
-    const targetProcesses = processes.value.filter(p => p.id !== process.id);
+    const targetProcesses = processes.value.data.filter(p => p.id !== process.id);
 
     promptBus.emit('prompt-migrate-process', {
         process,

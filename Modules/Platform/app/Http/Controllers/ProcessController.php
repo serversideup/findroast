@@ -17,7 +17,7 @@ class ProcessController extends Controller
      */
     public function index( Request $request )
     {
-        $processes = Process::all();
+        $processes = Process::orderBy('name', 'asc')->paginate(25)->withQueryString();
 
         $migratedProcesses = Process::onlyTrashed()
             ->whereNotNull('migrated_to_id')

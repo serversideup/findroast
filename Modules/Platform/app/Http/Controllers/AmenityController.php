@@ -17,7 +17,7 @@ class AmenityController extends Controller
      */
     public function index( Request $request )
     {
-        $amenities = Amenity::all();
+        $amenities = Amenity::orderBy('name', 'asc')->paginate(25)->withQueryString();
 
         return Inertia::render('Platform/Amenities/Index', [
             'amenities' => $amenities

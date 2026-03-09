@@ -3,7 +3,7 @@
 
     <AdminHeader
         :title="'Countries'"
-        :count="countries.length" />
+        :count="countries.total" />
 
     <div class="bg-white border-t border-stone-200">
         <div class="overflow-x-auto">
@@ -23,7 +23,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-stone-100">
                     <tr
-                        v-for="country in countries"
+                        v-for="country in countries.data"
                         :key="country.id"
                         class="hover:bg-amber-50/50 cursor-pointer transition-colors"
                         @click="editCountry(country)">
@@ -41,7 +41,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr v-if="countries.length === 0">
+                    <tr v-if="countries.data.length === 0">
                         <td colspan="3" class="px-4 py-8 text-center text-sm text-stone-500">
                             No countries found
                         </td>
@@ -49,6 +49,8 @@
                 </tbody>
             </table>
         </div>
+
+        <Pagination :data="countries" />
     </div>
 
     <EditCountryDrawer />
@@ -58,6 +60,7 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import AdminHeader from '../Partials/AdminHeader.vue';
 import EditCountryDrawer from './Partials/EditCountryDrawer.vue';
+import Pagination from '@/Components/Admin/Pagination.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { useEventBus } from '@vueuse/core';

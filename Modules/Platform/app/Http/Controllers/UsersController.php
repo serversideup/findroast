@@ -14,7 +14,7 @@ class UsersController extends Controller
      */
     public function index( Request $request )
     {
-        $users = User::all();
+        $users = User::orderBy('created_at', 'desc')->paginate(25)->withQueryString();
 
         return Inertia::render('Platform/Users/Index', [
             'users' => $users

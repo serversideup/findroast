@@ -3,7 +3,7 @@
 
     <AdminHeader
         :title="'Drink Options'"
-        :count="drinkOptions.length">
+        :count="drinkOptions.total">
         <template #actions>
             <button
                 @click="promptCreateDrinkOption()"
@@ -28,7 +28,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-stone-100">
                     <tr
-                        v-for="drinkOption in drinkOptions"
+                        v-for="drinkOption in drinkOptions.data"
                         :key="drinkOption.id"
                         class="hover:bg-amber-50/50 cursor-pointer transition-colors"
                         @click="promptEditDrinkOption(drinkOption)">
@@ -53,7 +53,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr v-if="drinkOptions.length === 0">
+                    <tr v-if="drinkOptions.data.length === 0">
                         <td colspan="2" class="px-4 py-8 text-center text-sm text-stone-500">
                             No drink options found
                         </td>
@@ -61,6 +61,8 @@
                 </tbody>
             </table>
         </div>
+
+        <Pagination :data="drinkOptions" />
     </div>
 
     <CreateDrinkOptionDrawer />
@@ -75,6 +77,7 @@ import { computed } from 'vue';
 import { useEventBus } from '@vueuse/core';
 import CreateDrinkOptionDrawer from './Partials/CreateDrinkOptionDrawer.vue';
 import EditDrinkOptionDrawer from './Partials/EditDrinkOptionDrawer.vue';
+import Pagination from '@/Components/Admin/Pagination.vue';
 
 defineOptions({
     layout: AdminLayout

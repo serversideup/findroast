@@ -13,7 +13,8 @@ class ChangelogController extends Controller
     {
         $entries = ChangelogEntry::orderBy('date', 'desc')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(25)
+            ->withQueryString();
 
         return Inertia::render('Platform/Changelog/Index', [
             'entries' => $entries,

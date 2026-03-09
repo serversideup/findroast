@@ -17,7 +17,7 @@ class DrinkOptionController extends Controller
      */
     public function index( Request $request )
     {
-        $drinkOptions = DrinkOption::all();
+        $drinkOptions = DrinkOption::orderBy('name', 'asc')->paginate(25)->withQueryString();
 
         return Inertia::render('Platform/DrinkOptions/Index', [
             'drinkOptions' => $drinkOptions

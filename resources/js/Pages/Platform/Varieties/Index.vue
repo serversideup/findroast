@@ -3,7 +3,7 @@
 
     <AdminHeader
         :title="'Varieties'"
-        :count="varieties.length" />
+        :count="varieties.total" />
 
     <!-- Active Varieties -->
     <div class="bg-white border-t border-stone-200">
@@ -24,7 +24,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-stone-100">
                     <tr
-                        v-for="variety in varieties"
+                        v-for="variety in varieties.data"
                         :key="variety.id"
                         class="hover:bg-amber-50/50 transition-colors">
                         <td class="px-4 py-2.5 text-sm font-medium text-stone-900">
@@ -46,7 +46,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr v-if="varieties.length === 0">
+                    <tr v-if="varieties.data.length === 0">
                         <td colspan="3" class="px-4 py-8 text-center text-sm text-stone-500">
                             No varieties found
                         </td>
@@ -54,6 +54,8 @@
                 </tbody>
             </table>
         </div>
+
+        <Pagination :data="varieties" />
     </div>
 
     <!-- Migrated Varieties -->
@@ -104,6 +106,7 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useEventBus } from '@vueuse/core';
 import EditVarietyDrawer from './Partials/EditVarietyDrawer.vue';
 import MigrateVarietyDrawer from './Partials/MigrateVarietyDrawer.vue';
+import Pagination from '@/Components/Admin/Pagination.vue';
 
 defineOptions({
     layout: AdminLayout
@@ -120,7 +123,7 @@ const editVariety = (variety) => {
 
 const migrateVariety = (variety) => {
     // Pass all varieties except the one being migrated as potential targets
-    const targetVarieties = varieties.value.filter(v => v.id !== variety.id);
+    const targetVarieties = varieties.value.data.filter(v => v.id !== variety.id);
 
     promptBus.emit('prompt-migrate-variety', {
         variety,

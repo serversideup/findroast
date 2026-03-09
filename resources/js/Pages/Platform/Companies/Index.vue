@@ -115,18 +115,7 @@
             </table>
         </div>
 
-        <!-- Pagination -->
-        <div v-if="companies.data.length > 0" class="flex items-center justify-between border-t border-stone-200 px-4 py-3 bg-stone-50">
-            <div class="text-sm text-stone-600">
-                Showing
-                <span class="font-medium text-stone-900">{{ companies.from }}</span>
-                to
-                <span class="font-medium text-stone-900">{{ companies.to }}</span>
-                of
-                <span class="font-medium text-stone-900">{{ companies.total }}</span>
-                results
-            </div>
-        </div>
+        <Pagination :data="companies" />
     </div>
 
     <EditCompanyDrawer />
@@ -140,6 +129,7 @@ import AdminHeader from '../Partials/AdminHeader.vue';
 import EditCompanyDrawer from './Partials/EditCompanyDrawer.vue';
 import AddCompanyDrawer from './Partials/AddCompanyDrawer.vue';
 import PreviewScrapeModal from './Partials/PreviewScrapeModal.vue';
+import Pagination from '@/Components/Admin/Pagination.vue';
 import { Head, router, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import { useDebounceFn, useEventBus } from '@vueuse/core'

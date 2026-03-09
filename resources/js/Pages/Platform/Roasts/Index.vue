@@ -3,7 +3,7 @@
 
     <AdminHeader
         :title="'Roasts'"
-        :count="roasts.data.length" />
+        :count="roasts.total" />
 
     <div class="bg-white border-t border-stone-200">
         <div class="overflow-x-auto">
@@ -117,6 +117,8 @@
                 </tbody>
             </table>
         </div>
+
+        <Pagination :data="roasts" />
     </div>
 
     <EditRoastDrawer />
@@ -126,6 +128,7 @@
 import AdminHeader from '../Partials/AdminHeader.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import EditRoastDrawer from './Partials/EditRoastDrawer.vue';
+import Pagination from '@/Components/Admin/Pagination.vue';
 import { computed } from 'vue';
 import { Head, router, usePage } from '@inertiajs/vue3';
 import { useEventBus } from '@vueuse/core';

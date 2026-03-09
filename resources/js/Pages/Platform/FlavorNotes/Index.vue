@@ -3,7 +3,7 @@
 
     <AdminHeader
         :title="'Flavor Notes'"
-        :count="flavorNotes.length" />
+        :count="flavorNotes.total" />
 
     <!-- Active Flavor Notes -->
     <div class="bg-white border-t border-stone-200">
@@ -24,7 +24,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-stone-100">
                     <tr
-                        v-for="flavorNote in flavorNotes"
+                        v-for="flavorNote in flavorNotes.data"
                         :key="flavorNote.id"
                         class="hover:bg-amber-50/50 transition-colors">
                         <td class="px-4 py-2.5 text-sm font-medium text-stone-900">
@@ -46,7 +46,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr v-if="flavorNotes.length === 0">
+                    <tr v-if="flavorNotes.data.length === 0">
                         <td colspan="3" class="px-4 py-8 text-center text-sm text-stone-500">
                             No flavor notes found
                         </td>
@@ -54,6 +54,8 @@
                 </tbody>
             </table>
         </div>
+
+        <Pagination :data="flavorNotes" />
     </div>
 
     <!-- Migrated Flavor Notes -->
@@ -104,6 +106,7 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useEventBus } from '@vueuse/core';
 import EditFlavorNoteDrawer from './Partials/EditFlavorNoteDrawer.vue';
 import MigrateFlavorNoteDrawer from './Partials/MigrateFlavorNoteDrawer.vue';
+import Pagination from '@/Components/Admin/Pagination.vue';
 
 defineOptions({
     layout: AdminLayout
@@ -120,7 +123,7 @@ const editFlavorNote = (flavorNote) => {
 
 const migrateFlavorNote = (flavorNote) => {
     // Pass all flavor notes except the one being migrated as potential targets
-    const targetFlavorNotes = flavorNotes.value.filter(fn => fn.id !== flavorNote.id);
+    const targetFlavorNotes = flavorNotes.value.data.filter(fn => fn.id !== flavorNote.id);
 
     promptBus.emit('prompt-migrate-flavor-note', {
         flavorNote,

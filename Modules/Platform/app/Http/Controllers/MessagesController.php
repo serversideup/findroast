@@ -16,7 +16,8 @@ class MessagesController extends Controller
     {
         $messages = Message::orderBy('created_at', 'desc')
             ->orderBy('responded_to', 'asc')
-            ->get();
+            ->paginate(25)
+            ->withQueryString();
 
         return Inertia::render('Platform/Messages/Index', [
             'messages' => $messages

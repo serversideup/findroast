@@ -1,7 +1,7 @@
 <template>
     <Head title="Changelog" />
 
-    <AdminHeader :title="'Changelog'" :count="entries.length">
+    <AdminHeader :title="'Changelog'" :count="entries.total">
         <template #actions>
             <Link
                 href="/platform/changelog/create"
@@ -36,7 +36,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-stone-100">
                     <tr
-                        v-for="entry in entries"
+                        v-for="entry in entries.data"
                         :key="entry.id"
                         class="hover:bg-amber-50/50 transition-colors">
                         <td class="px-4 py-2.5 text-sm font-semibold text-stone-900">
@@ -83,7 +83,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr v-if="entries.length === 0">
+                    <tr v-if="entries.data.length === 0">
                         <td colspan="5" class="px-4 py-8 text-center text-sm text-stone-500">
                             No changelog entries yet.
                             <Link href="/platform/changelog/create" class="text-amber-700 hover:text-amber-800 font-medium">Create one</Link>
@@ -92,12 +92,15 @@
                 </tbody>
             </table>
         </div>
+
+        <Pagination :data="entries" />
     </div>
 </template>
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import AdminHeader from '../Partials/AdminHeader.vue';
+import Pagination from '@/Components/Admin/Pagination.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { useEventBus } from '@vueuse/core';

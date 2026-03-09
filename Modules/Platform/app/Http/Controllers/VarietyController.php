@@ -17,7 +17,7 @@ class VarietyController extends Controller
      */
     public function index( Request $request )
     {
-        $varieties = Variety::all();
+        $varieties = Variety::orderBy('name', 'asc')->paginate(25)->withQueryString();
 
         $migratedVarieties = Variety::onlyTrashed()
             ->whereNotNull('migrated_to_id')

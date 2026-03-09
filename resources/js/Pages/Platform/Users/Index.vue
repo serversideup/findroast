@@ -3,7 +3,7 @@
 
     <AdminHeader
         :title="'Users'"
-        :count="users.length" />
+        :count="users.total" />
 
     <div class="bg-white border-t border-stone-200">
         <div class="overflow-x-auto">
@@ -23,7 +23,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-stone-100">
                     <tr
-                        v-for="user in users"
+                        v-for="user in users.data"
                         :key="user.id"
                         class="hover:bg-amber-50/50 transition-colors">
                         <td class="px-4 py-2.5 text-sm font-medium text-stone-900">
@@ -36,7 +36,7 @@
                             {{ user.created_at }}
                         </td>
                     </tr>
-                    <tr v-if="users.length === 0">
+                    <tr v-if="users.data.length === 0">
                         <td colspan="3" class="px-4 py-8 text-center text-sm text-stone-500">
                             No users found
                         </td>
@@ -44,12 +44,15 @@
                 </tbody>
             </table>
         </div>
+
+        <Pagination :data="users" />
     </div>
 </template>
 
 <script setup>
 import AdminHeader from '../Partials/AdminHeader.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import Pagination from '@/Components/Admin/Pagination.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 

@@ -49,7 +49,7 @@ export const useOfferings = () => {
         watch(form, () => {
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(loadRoasts, 300);
-        });
+        }, { deep: true });
     }
 
     return {

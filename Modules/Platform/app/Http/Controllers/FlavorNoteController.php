@@ -17,7 +17,7 @@ class FlavorNoteController extends Controller
      */
     public function index( Request $request )
     {
-        $flavorNotes = FlavorNote::all();
+        $flavorNotes = FlavorNote::orderBy('name', 'asc')->paginate(25)->withQueryString();
 
         $migratedFlavorNotes = FlavorNote::onlyTrashed()
             ->whereNotNull('migrated_to_id')

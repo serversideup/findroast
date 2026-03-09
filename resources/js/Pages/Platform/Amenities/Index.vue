@@ -3,7 +3,7 @@
 
     <AdminHeader
         :title="'Amenities'"
-        :count="amenities.length">
+        :count="amenities.total">
         <template #actions>
             <button
                 @click="promptCreateAmenity()"
@@ -28,7 +28,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-stone-100">
                     <tr
-                        v-for="amenity in amenities"
+                        v-for="amenity in amenities.data"
                         :key="amenity.id"
                         class="hover:bg-amber-50/50 cursor-pointer transition-colors"
                         @click="promptEditAmenity(amenity)">
@@ -53,7 +53,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr v-if="amenities.length === 0">
+                    <tr v-if="amenities.data.length === 0">
                         <td colspan="2" class="px-4 py-8 text-center text-sm text-stone-500">
                             No amenities found
                         </td>
@@ -61,6 +61,8 @@
                 </tbody>
             </table>
         </div>
+
+        <Pagination :data="amenities" />
     </div>
 
     <CreateAmenityDrawer />
@@ -72,6 +74,7 @@ import AdminHeader from '../Partials/AdminHeader.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import CreateAmenityDrawer from './Partials/CreateAmenityDrawer.vue';
 import EditAmenityDrawer from './Partials/EditAmenityDrawer.vue';
+import Pagination from '@/Components/Admin/Pagination.vue';
 import { useEventBus } from '@vueuse/core';
 import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';

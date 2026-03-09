@@ -17,7 +17,7 @@ class BrewMethodController extends Controller
      */
     public function index( Request $request )
     {
-        $brewMethods = BrewMethod::all();
+        $brewMethods = BrewMethod::orderBy('name', 'asc')->paginate(25)->withQueryString();
 
         return Inertia::render('Platform/BrewMethods/Index', [
             'brewMethods' => $brewMethods

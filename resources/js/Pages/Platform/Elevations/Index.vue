@@ -3,7 +3,7 @@
 
     <AdminHeader
         :title="'Elevations'"
-        :count="elevations.length" />
+        :count="elevations.total" />
 
     <div class="bg-white border-t border-stone-200">
         <div class="overflow-x-auto">
@@ -20,7 +20,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-stone-100">
                     <tr
-                        v-for="elevation in elevations"
+                        v-for="elevation in elevations.data"
                         :key="elevation.id"
                         class="hover:bg-amber-50/50 cursor-pointer transition-colors"
                         @click="editElevation(elevation)">
@@ -35,7 +35,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr v-if="elevations.length === 0">
+                    <tr v-if="elevations.data.length === 0">
                         <td colspan="2" class="px-4 py-8 text-center text-sm text-stone-500">
                             No elevations found
                         </td>
@@ -43,6 +43,8 @@
                 </tbody>
             </table>
         </div>
+
+        <Pagination :data="elevations" />
     </div>
 
     <EditElevationDrawer />
@@ -55,6 +57,7 @@ import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { useEventBus } from '@vueuse/core';
 import EditElevationDrawer from './Partials/EditElevationDrawer.vue';
+import Pagination from '@/Components/Admin/Pagination.vue';
 
 defineOptions({
     layout: AdminLayout
