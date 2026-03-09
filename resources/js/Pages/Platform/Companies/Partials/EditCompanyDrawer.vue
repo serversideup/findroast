@@ -211,7 +211,7 @@
                 </Disclosure>
 
                 <!-- Location Information Section -->
-                <Disclosure as="div" v-slot="{ open: isOpen }">
+                <Disclosure as="div" :default-open="true" v-slot="{ open: isOpen }">
                     <div class="bg-white rounded-lg border border-stone-200 shadow-sm overflow-hidden">
                         <DisclosureButton class="w-full px-6 py-4 flex items-center justify-between hover:bg-stone-50 transition-colors">
                             <div class="flex flex-col items-start">
@@ -299,7 +299,7 @@
                 </Disclosure>
 
                 <!-- Offerings Information Section -->
-                <Disclosure as="div" v-slot="{ open: isOpen }">
+                <Disclosure as="div" :default-open="true" v-slot="{ open: isOpen }">
                     <div class="bg-white rounded-lg border border-stone-200 shadow-sm overflow-hidden">
                         <DisclosureButton class="w-full px-6 py-4 flex items-center justify-between hover:bg-stone-50 transition-colors">
                             <div class="flex flex-col items-start">

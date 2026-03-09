@@ -1247,8 +1247,9 @@ const countries = [
 ];
 
 export const useCountries = () => {
-	const findFlag = ( name ) => {
-		return countries.find(country => country.name === name)?.flag;
+	const findFlag = (name) => {
+		const country = countries.find(country => country.name === name);
+		return country ? country.flag : '';
 	}
 
 	return {

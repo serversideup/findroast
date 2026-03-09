@@ -38,7 +38,8 @@ class CompanyController extends Controller
                     $query->with('processes');
                     $query->with('countries');
                     $query->with('elevations');
-                    $query->where('in_stock', 1);
+                    $query->where('in_stock', 1)
+                    ->orderBy('created_at', 'desc');
                 }
             ])
             ->first();

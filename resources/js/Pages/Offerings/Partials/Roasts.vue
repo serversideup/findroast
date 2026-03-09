@@ -67,6 +67,38 @@ import { Link, usePage } from '@inertiajs/vue3';
 const roasts = computed(() => usePage().props.roasts);
 
 const paginationLinks = computed(() => {
-    return roasts.value.links.slice(1, -1);
+    const links = roasts.value.links.slice(1, -1);
+    const currentPage = roasts.value.current_page;
+    const lastPage = roasts.value.last_page;
+
+    // On mobile, show condensed pagination: current ± 1 page, plus first/last with ellipsis
+    const isMobile = window.innerWidth < 1024;
+
+    if (!isMobile || lastPage <= 5) {
+        return links; // Show all on desktop or if few pages
+    }
+
+    const result = [];
+
+    links.forEach((link, idx) => {
+        const pageNum = idx + 1;
+
+        // Always show first page, last page, current page, and ±1 from current
+        if (
+            pageNum === 1 ||
+            pageNum === lastPage ||
+            Math.abs(pageNum - currentPage) <= 1
+        ) {
+            result.push(link);
+        } else if (
+            // Add ellipsis between gaps
+            result.length > 0 &&
+            result[result.length - 1].label !== '...'
+        ) {
+            result.push({ label: '...', url: null, active: false });
+        }
+    });
+
+    return result;
 });
 </script>

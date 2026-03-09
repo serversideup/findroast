@@ -68,7 +68,7 @@
                             v-model="searchQuery"
                             type="text"
                             :placeholder="searchPlaceholder"
-                            class="w-full text-sm border border-stone-200 rounded-lg pl-8 pr-3 py-1.5 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 placeholder:text-stone-400"
+                            class="w-full text-base lg:text-sm border border-stone-200 rounded-lg pl-8 pr-3 py-1.5 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 placeholder:text-stone-400"
                         />
                     </div>
 

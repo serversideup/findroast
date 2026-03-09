@@ -47,7 +47,7 @@
                     <div class="flex flex-wrap gap-2 mt-4">
                         <a
                             v-if="company.website"
-                            :href="company.website"
+                            :href="company.website+'?ref=findroast'"
                             target="_blank"
                             rel="noopener noreferrer"
                             class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border border-stone-200 bg-white text-stone-700 hover:border-amber-300 hover:text-amber-800 transition-colors"
