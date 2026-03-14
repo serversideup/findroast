@@ -67,6 +67,14 @@
                 {{ roast.name }}
             </h3>
 
+            <!-- Varietals -->
+            <p
+                v-if="roast.varieties?.length"
+                class="text-[11px] text-stone-400"
+            >
+                {{ roast.varieties.map(v => v.name).join(' · ') }}
+            </p>
+
             <!-- Origin -->
             <p
                 v-if="roast.countries?.length"

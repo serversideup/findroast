@@ -23,6 +23,16 @@
             />
         </div>
         <div
+            v-else-if="cafe.company?.logo"
+            :class="['w-14 h-14 rounded-lg flex-shrink-0 overflow-hidden flex items-center justify-center p-2', cafe.company.logo_background_color === 'black' ? 'bg-black' : 'bg-white']"
+        >
+            <img
+                :src="cafe.company.logo"
+                :alt="cafe.company.name"
+                class="w-full h-full object-contain"
+            />
+        </div>
+        <div
             v-else
             class="w-14 h-14 rounded-lg bg-stone-100 flex-shrink-0 flex items-center justify-center"
         >

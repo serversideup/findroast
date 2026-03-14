@@ -100,7 +100,7 @@ const setCookie = (name, value, days = 365) => {
 };
 
 const formatDate = (dateString) => {
-    const date = new Date(dateString + 'T00:00:00');
+    const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',

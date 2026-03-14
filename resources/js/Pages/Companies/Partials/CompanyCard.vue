@@ -4,7 +4,9 @@
         class="group flex flex-col overflow-hidden rounded-lg border border-stone-200 bg-white hover:border-amber-300 hover:shadow-sm transition-all"
     >
         <!-- Logo/Image -->
-        <div class="relative bg-stone-100 h-32 sm:h-36 overflow-hidden flex items-center justify-center">
+        <div
+            :class="['relative h-32 sm:h-36 overflow-hidden flex items-center justify-center', company.logo ? (company.logo_background_color === 'black' ? 'bg-black' : 'bg-white') : 'bg-stone-100']"
+        >
             <img
                 v-if="company.logo"
                 :src="company.logo"

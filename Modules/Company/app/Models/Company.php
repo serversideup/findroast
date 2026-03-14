@@ -27,6 +27,7 @@ class Company extends Model
         'status',
         'header_image',
         'logo',
+        'logo_background_color',
         'slug',
         'roaster',
         'subscription',

@@ -126,15 +126,15 @@
                                         ref="logoFile"/>
 
                                     <div
-                                        class="w-16 h-16 rounded-lg overflow-hidden bg-stone-100 flex items-center justify-center border-2 border-stone-200"
+                                        :class="['w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center border-2 border-stone-200 p-2', form.logo_background_color === 'black' ? 'bg-black' : 'bg-white']"
                                         v-if="logoState == 'company-logo'">
-                                        <img :src="company.logo" class="w-full h-full object-cover"/>
+                                        <img :src="company.logo" class="w-full h-full object-contain"/>
                                     </div>
 
                                     <div
-                                        class="w-16 h-16 rounded-lg overflow-hidden bg-stone-100 flex items-center justify-center border-2 border-stone-200"
+                                        :class="['w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center border-2 border-stone-200 p-2', form.logo_background_color === 'black' ? 'bg-black' : 'bg-white']"
                                         v-if="logoState == 'selected-logo'">
-                                        <img :src="logoPreview" class="w-full h-full object-cover"/>
+                                        <img :src="logoPreview" class="w-full h-full object-contain"/>
                                     </div>
 
                                     <div
@@ -152,6 +152,40 @@
                                         {{ logoState === 'no-logo' ? 'Upload Logo' : 'Change Logo' }}
                                     </button>
                                 </div>
+                            </div>
+
+                            <!-- Logo Background Color -->
+                            <div>
+                                <InputLabel value="Logo Background Color"/>
+                                <div class="mt-2 flex gap-x-4">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            v-model="form.logo_background_color"
+                                            value="white"
+                                            class="h-4 w-4 text-amber-600 border-stone-300 focus:ring-amber-500"
+                                        />
+                                        <span class="ml-2 flex items-center gap-2">
+                                            <span class="text-sm text-stone-700">White</span>
+                                            <span class="inline-block w-6 h-6 bg-white border border-stone-300 rounded"></span>
+                                        </span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            v-model="form.logo_background_color"
+                                            value="black"
+                                            class="h-4 w-4 text-amber-600 border-stone-300 focus:ring-amber-500"
+                                        />
+                                        <span class="ml-2 flex items-center gap-2">
+                                            <span class="text-sm text-stone-700">Black</span>
+                                            <span class="inline-block w-6 h-6 bg-black border border-stone-300 rounded"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <p class="mt-1.5 text-xs text-stone-500">
+                                    Choose a background color that provides the best contrast for your logo.
+                                </p>
                             </div>
 
                             <!-- Cover Photo -->
@@ -293,6 +327,66 @@
                                         :value="province.abbr"
                                         v-text="province.name"></option>
                                 </select>
+                            </div>
+                        </DisclosurePanel>
+                    </div>
+                </Disclosure>
+
+                <!-- Social Section -->
+                <Disclosure as="div" :default-open="true" v-slot="{ open: isOpen }">
+                    <div class="bg-white rounded-lg border border-stone-200 shadow-sm overflow-hidden">
+                        <DisclosureButton class="w-full px-6 py-4 flex items-center justify-between hover:bg-stone-50 transition-colors">
+                            <div class="flex flex-col items-start">
+                                <h3 class="text-base font-semibold text-stone-900">
+                                    Social Media
+                                </h3>
+                                <p class="mt-1 text-sm text-stone-600">
+                                    Social media profiles for this company
+                                </p>
+                            </div>
+                            <ChevronDownIcon
+                                :class="[isOpen ? 'rotate-180' : '', 'h-5 w-5 text-stone-500 transition-transform duration-200']"
+                            />
+                        </DisclosureButton>
+
+                        <DisclosurePanel class="px-6 pb-6 pt-4 space-y-5 border-t border-stone-100">
+                            <!-- Instagram -->
+                            <div>
+                                <InputLabel value="Instagram Profile"/>
+                                <TextInput
+                                    class="mt-1.5 block w-full"
+                                    id="instagram_url"
+                                    v-model="form.instagram_url"
+                                    placeholder="https://instagram.com/username"/>
+                                <p class="mt-1.5 text-xs text-stone-500">
+                                    Full URL to the company's Instagram profile
+                                </p>
+                            </div>
+
+                            <!-- Facebook -->
+                            <div>
+                                <InputLabel value="Facebook Profile"/>
+                                <TextInput
+                                    class="mt-1.5 block w-full"
+                                    id="facebook_url"
+                                    v-model="form.facebook_url"
+                                    placeholder="https://facebook.com/username"/>
+                                <p class="mt-1.5 text-xs text-stone-500">
+                                    Full URL to the company's Facebook profile
+                                </p>
+                            </div>
+
+                            <!-- Twitter -->
+                            <div>
+                                <InputLabel value="Twitter Profile"/>
+                                <TextInput
+                                    class="mt-1.5 block w-full"
+                                    id="twitter_url"
+                                    v-model="form.twitter_url"
+                                    placeholder="https://twitter.com/username"/>
+                                <p class="mt-1.5 text-xs text-stone-500">
+                                    Full URL to the company's Twitter profile
+                                </p>
                             </div>
                         </DisclosurePanel>
                     </div>
@@ -487,6 +581,7 @@ const form = useForm({
     status: 'draft',
     header_image: '',
     logo: '',
+    logo_background_color: 'white',
     roaster: 0,
     subscription: 0,
     description: '',
@@ -569,10 +664,11 @@ const setForm = (data) => {
     form.territory = data.territory;
     form.country = data.country;
     form.default_currency = data.default_currency || 'USD';
+    form.logo_background_color = data.logo_background_color || 'white';
     form.facebook_url = data.facebook_url;
     form.instagram_url = data.instagram_url;
     form.twitter_url = data.twitter_url;
-    
+
     form.offerings.enabled = data.offering_import_map?.enabled ?? 0;
     form.offerings.day = data.offering_import_map?.day ?? '';
     form.offerings.collection_url = data.offering_import_map?.collection_url ?? '';

@@ -71,11 +71,11 @@
                         </div>
                         <div v-else class="px-4 mt-auto border-t border-gray-100 pt-6">
                             <Link 
-                                href="/dashboard" 
+                                href="/profile" 
                                 class="block px-3 py-3 text-base font-medium text-gray-900 rounded-lg hover:bg-gray-50"
                                 @click="openMenu = false"
                             >
-                                Dashboard
+                                My Account
                             </Link>
                         </div>
                     </DialogPanel>

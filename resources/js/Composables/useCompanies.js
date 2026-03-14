@@ -17,7 +17,8 @@ export const useCompanies = () => {
         watchDebounced(form, () => {
             loadCompanies();
         }, {
-            debounce: 300
+            debounce: 300,
+            deep: true
         });
         watcherActive = true;
     }

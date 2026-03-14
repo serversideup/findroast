@@ -4,7 +4,9 @@
             <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
                 <!-- Logo -->
                 <div class="flex-shrink-0">
-                    <div class="h-24 w-24 sm:h-32 sm:w-32 rounded-xl bg-white border-2 border-white shadow-sm overflow-hidden flex items-center justify-center">
+                    <div
+                        :class="['h-24 w-24 sm:h-32 sm:w-32 rounded-xl border-2 border-white shadow-sm overflow-hidden flex items-center justify-center', company.logo ? (company.logo_background_color === 'black' ? 'bg-black' : 'bg-white') : 'bg-white']"
+                    >
                         <img
                             v-if="company.logo"
                             :src="company.logo"
