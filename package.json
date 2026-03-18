@@ -3,7 +3,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite --host",
-        "build": "vite build"
+        "build": "vite build && vite build --ssr resources/js/ssr.js"
     },
     "devDependencies": {
         "@inertiajs/vue3": "^2.0",

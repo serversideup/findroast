@@ -47,7 +47,18 @@ USER root
 # Production Image
 ############################################
 FROM base AS deploy
+
+# Install Node.js for Inertia SSR
+USER root
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY --chown=www-data:www-data . /var/www/html
+
+# Copy s6-overlay configuration for Inertia SSR service
+COPY --chown=root:root .infrastructure/s6-overlay /etc/s6-overlay
 
 # Create the SQLite directory and set the owner to www-data (remove this if you're not using SQLite)
 RUN mkdir -p /var/www/html/.infrastructure/volume_data/sqlite/ && \

@@ -1,0 +1,18 @@
+#!/command/with-contenv bash
+
+# Exit on error
+set -e
+
+# Only run if SSR is enabled
+if [ "$INERTIA_SSR_ENABLED" != "true" ]; then
+    echo "Inertia SSR is disabled. Exiting."
+    exit 0
+fi
+
+# Wait a bit for the app to be ready
+sleep 5
+
+cd /var/www/html
+
+echo "Starting Inertia SSR server..."
+exec s6-setuidgid www-data node bootstrap/ssr/ssr.js
