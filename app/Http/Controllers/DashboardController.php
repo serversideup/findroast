@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DailyDigestSubscriber;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Modules\Company\Models\Company;
 use Modules\Offering\Http\Actions\Processes\IndexProcesses;
@@ -47,6 +49,11 @@ class DashboardController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
+        // Check if user is subscribed to daily digest
+        $dailyDigestSubscribed = Auth::check()
+            ? DailyDigestSubscriber::where('user_id', Auth::id())->exists()
+            : false;
+
         return Inertia::render('Offerings/Index', [
             'processes' => $processes,
             'countries' => $countries,
@@ -54,6 +61,7 @@ class DashboardController extends Controller
             'varieties' => $varieties,
             'roasts' => $roasts,
             'companies' => $companies,
+            'dailyDigestSubscribed' => $dailyDigestSubscribed,
         ]);
     }
 }

@@ -42,8 +42,24 @@
                 align="right"
             />
 
-            <!-- Sort (desktop) -->
-            <div class="ml-auto flex-shrink-0">
+            <!-- Daily Digest + Sort (desktop) -->
+            <div class="ml-auto flex items-center gap-2 flex-shrink-0">
+                <!-- Daily Digest -->
+                <div class="text-right">
+                    <button
+                        @click="handleSubscribe"
+                        :disabled="isSubscribing"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                        :class="dailyDigestSubscribed
+                            ? 'bg-stone-100 text-stone-700 border-stone-300 hover:bg-stone-200'
+                            : 'bg-amber-700 text-white border-amber-700 hover:bg-amber-800'"
+                    >
+                        <EnvelopeIcon class="h-3.5 w-3.5" />
+                        {{ dailyDigestSubscribed ? 'Subscribed' : 'Subscribe for daily digest of new coffees' }}
+                    </button>
+                </div>
+
+                <!-- Sort -->
                 <Menu as="div" class="relative">
                     <MenuButton :class="[
                         'inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-amber-500/40',
@@ -88,7 +104,7 @@
             </div>
         </div>
 
-        <!-- Mobile: Compact bar with Filters button + Sort -->
+        <!-- Mobile: Compact bar with Filters button + Daily Digest + Sort -->
         <div class="flex lg:hidden items-center gap-2 py-2">
             <button
                 type="button"
@@ -108,6 +124,21 @@
                 >
                     {{ totalActiveCount }}
                 </span>
+            </button>
+
+            <!-- Daily Digest (mobile) -->
+            <button
+                @click="handleSubscribe"
+                :disabled="isSubscribing"
+                :class="[
+                    'inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm rounded-lg border transition-colors whitespace-nowrap focus:outline-none',
+                    dailyDigestSubscribed
+                        ? 'bg-stone-100 text-stone-700 border-stone-300'
+                        : 'bg-amber-700 text-white border-amber-700'
+                ]"
+            >
+                <EnvelopeIcon class="h-3.5 w-3.5" />
+                <span class="sr-only">{{ dailyDigestSubscribed ? 'Subscribed to daily digest' : 'Subscribe to daily digest' }}</span>
             </button>
 
             <!-- Sort (mobile) -->
@@ -301,10 +332,26 @@ import {
     FunnelIcon,
     SparklesIcon,
     XMarkIcon,
+    EnvelopeIcon,
 } from '@heroicons/vue/20/solid';
+
+const props = defineProps({
+    dailyDigestSubscribed: {
+        type: Boolean,
+        default: false
+    }
+});
+
+const emit = defineEmits(['subscribe']);
 
 const { form, reshuffleRandom } = useOfferings();
 const { findFlag } = useCountries();
+
+const isSubscribing = ref(false);
+
+const handleSubscribe = () => {
+    emit('subscribe');
+};
 
 const mobileOpen = ref(false);
 

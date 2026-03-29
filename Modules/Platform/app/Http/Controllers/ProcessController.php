@@ -37,7 +37,7 @@ class ProcessController extends Controller
     {
         ( new UpdateProcess() )->execute( $request, $process );
 
-        return redirect()->route('platform.processes.index');
+        return redirect()->back();
     }
 
     /**
@@ -53,7 +53,7 @@ class ProcessController extends Controller
 
         ( new MigrateProcess() )->execute( $process, $targetProcess );
 
-        return redirect()->route('platform.processes.index');
+        return redirect()->back();
     }
 
     /**
@@ -63,6 +63,6 @@ class ProcessController extends Controller
     {
         ( new DeleteProcess() )->execute( $process );
 
-        return redirect()->route('platform.processes.index');
+        return redirect()->back();
     }
 }

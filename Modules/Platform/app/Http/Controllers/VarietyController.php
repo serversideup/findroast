@@ -37,7 +37,7 @@ class VarietyController extends Controller
     {
         ( new UpdateVariety() )->execute( $request, $variety );
 
-        return redirect()->route('platform.varieties.index');
+        return redirect()->back();
     }
 
     /**
@@ -53,7 +53,7 @@ class VarietyController extends Controller
 
         ( new MigrateVariety() )->execute( $variety, $targetVariety );
 
-        return redirect()->route('platform.varieties.index');
+        return redirect()->back();
     }
 
     /**
@@ -63,6 +63,6 @@ class VarietyController extends Controller
     {
         ( new DeleteVariety() )->execute( $variety );
 
-        return redirect()->route('platform.varieties.index');
+        return redirect()->back();
     }
 }

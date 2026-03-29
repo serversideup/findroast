@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApiDocsController;
 use App\Http\Controllers\ChangelogController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DailyDigestController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FilterSubscriptionController;
 use App\Http\Controllers\MapController;
@@ -25,6 +26,9 @@ Route::get('/api-docs', [ApiDocsController::class, 'index'])->name('api-docs.ind
 Route::get('/terms', [TermsOfServiceController::class, 'index'])->name('terms.index');
 Route::get('/privacy', [PrivacyPolicyController::class, 'index'])->name('privacy.index');
 
+// Daily digest unsubscribe (public route with token)
+Route::get('/daily-digest/unsubscribe/{token}', [DailyDigestController::class, 'unsubscribe'])->name('daily-digest.unsubscribe');
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -45,6 +49,10 @@ Route::middleware('auth')->group(function () {
     // Personal access tokens
     Route::post('/profile/tokens', [PersonalAccessTokenController::class, 'store'])->name('tokens.store');
     Route::delete('/profile/tokens/{tokenId}', [PersonalAccessTokenController::class, 'destroy'])->name('tokens.destroy');
+
+    // Daily digest
+    Route::post('/daily-digest/subscribe', [DailyDigestController::class, 'subscribe'])->name('daily-digest.subscribe');
+    Route::get('/daily-digest/status', [DailyDigestController::class, 'checkSubscription'])->name('daily-digest.status');
 });
 
 require __DIR__.'/auth.php';

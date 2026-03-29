@@ -30,7 +30,7 @@ class ElevationController extends Controller
     {
         ( new UpdateElevation() )->execute( $request, $elevation );
 
-        return redirect()->route('platform.elevations.index');
+        return redirect()->back();
     }
 
     /**
@@ -40,6 +40,6 @@ class ElevationController extends Controller
     {
         ( new DeleteElevation() )->execute( $elevation );
 
-        return redirect()->route('platform.elevations.index');
+        return redirect()->back();
     }
 }

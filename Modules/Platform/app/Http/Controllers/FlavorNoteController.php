@@ -37,7 +37,7 @@ class FlavorNoteController extends Controller
     {
         ( new UpdateFlavorNote() )->execute( $request, $flavorNote );
 
-        return redirect()->route('platform.flavor-notes.index');
+        return redirect()->back();
     }
 
     /**
@@ -53,7 +53,7 @@ class FlavorNoteController extends Controller
 
         ( new MigrateFlavorNote() )->execute( $flavorNote, $targetFlavorNote );
 
-        return redirect()->route('platform.flavor-notes.index');
+        return redirect()->back();
     }
 
     /**
@@ -63,6 +63,6 @@ class FlavorNoteController extends Controller
     {
         ( new DeleteFlavorNote() )->execute( $flavorNote );
 
-        return redirect()->route('platform.flavor-notes.index');
+        return redirect()->back();
     }
 }

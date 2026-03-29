@@ -30,7 +30,10 @@
         <!-- Sticky Filter Bar -->
         <div class="border-b border-stone-200 bg-white/95 backdrop-blur-sm sticky top-14 lg:top-16 z-40 overflow-visible">
             <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
-                <Filters />
+                <Filters
+                    :dailyDigestSubscribed="dailyDigestSubscribed"
+                    @subscribe="handleDailyDigestClick"
+                />
             </div>
         </div>
 
@@ -56,9 +59,48 @@ export default {
 import ActiveFiltersBar from './Partials/ActiveFiltersBar.vue';
 import Filters from './Partials/Filters.vue';
 import Roasts from './Partials/Roasts.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, router, usePage } from '@inertiajs/vue3';
 import { useOfferings } from '@/Composables/useOfferings';
 import { MagnifyingGlassIcon } from '@heroicons/vue/20/solid';
+import { ref, computed } from 'vue';
+
+const props = defineProps({
+    dailyDigestSubscribed: {
+        type: Boolean,
+        default: false
+    }
+});
 
 const { form } = useOfferings();
+const page = usePage();
+const isSubscribing = ref(false);
+const dailyDigestSubscribed = ref(props.dailyDigestSubscribed);
+
+const handleDailyDigestClick = () => {
+    if (dailyDigestSubscribed.value) {
+        // Already subscribed, show a message
+        alert('You are already subscribed to the daily digest! Check your email at 8 AM for new coffees.');
+        return;
+    }
+
+    // Check if user is authenticated
+    if (!page.props.auth.user) {
+        // Redirect to login
+        router.visit(route('login'));
+        return;
+    }
+
+    // Subscribe
+    isSubscribing.value = true;
+    router.post(route('daily-digest.subscribe'), {}, {
+        preserveScroll: true,
+        onSuccess: () => {
+            dailyDigestSubscribed.value = true;
+            isSubscribing.value = false;
+        },
+        onError: () => {
+            isSubscribing.value = false;
+        }
+    });
+};
 </script>
