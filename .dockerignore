@@ -3,6 +3,7 @@
 .gitlab-ci.yml
 .vault-password
 !.infrastructure/conf/traefik/dev/certificates/ssu-ca.pem
+!.infrastructure/s6-overlay
 Dockerfile
 docker-*.yml
 .spin*
